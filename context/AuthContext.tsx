@@ -49,7 +49,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
       console.error("Sign Up Error:", error.message);
-      throw error;
     }
     setIsLoading(false);
   };
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
       console.error("Sign In Error:", error.message);
-      throw error;
     }
     setIsLoading(false);
   };

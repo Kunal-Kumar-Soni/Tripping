@@ -9,7 +9,7 @@ export default function Home() {
   const { handleLogout, user } = useAuth();
 
   useEffect(() => {
-    if (!user) router.push("/signup");
+    if (!user) router.push("/signin");
   }, [user]);
   return (
     <div>
