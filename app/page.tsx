@@ -1,5 +1,19 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return <div>Home</div>;
+  const router = useRouter();
+  const { handleLogout, user } = useAuth();
+
+  useEffect(() => {
+    if (!user) router.push("/signup");
+  }, [user]);
+  return (
+    <div>
+      <Button onClick={handleLogout}>Logout</Button>
+    </div>
+  );
 }
