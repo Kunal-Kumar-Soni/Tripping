@@ -27,8 +27,6 @@ const page = () => {
     if (user) router.push("/");
   }, [router, user]);
 
-  console.log(user);
-
   return (
     <section className="relative w-full min-h-screen overflow-hidden">
       <Image
