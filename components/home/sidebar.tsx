@@ -3,8 +3,9 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
-import { TRIPS } from "@/app/page";
+import { TRIPS, TripsType } from "@/app/page";
 import { SidebarModel } from "./sidebar-model";
+import { useState } from "react";
 
 type sidebarPropsType = {
   activeTripsId: number;
@@ -12,6 +13,12 @@ type sidebarPropsType = {
 };
 
 const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
+  const [searchData, setSearchData] = useState<string>("");
+
+  const filteredTripData: TripsType[] = TRIPS.filter((trip) =>
+    trip.title.toLowerCase().includes(searchData.toLowerCase()),
+  );
+
   return (
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
       {/* Logo */}
@@ -22,7 +29,12 @@ const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
 
       {/* Input */}
       <div className="relative w-full">
-        <Input className="bg-accent py-5 pr-10 rounded-full" placeholder="Text" />
+        <Input
+          onChange={(e) => setSearchData(e.target.value)}
+          value={searchData}
+          className="bg-accent py-5 pr-10 rounded-full"
+          placeholder="Text"
+        />
         <span className="top-1/2 right-3 absolute text-muted-foreground -translate-y-1/2">
           <Search size={18} />
         </span>
@@ -37,7 +49,7 @@ const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
 
       {/* Hardcoded data */}
       <div className="flex flex-col gap-0.5">
-        {TRIPS.map((trip) => (
+        {filteredTripData.map((trip) => (
           <div
             key={trip.id}
             onClick={() => setActiveTripsId(trip.id)}

@@ -13,16 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { differenceInDays } from "date-fns";
 
 export function SidebarModel() {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { tripName, startDate, endDate, personCount, estimatedPrice } =
-      Object.fromEntries(formData);
+    const { tripName, startDate, endDate, personCount, estimatedPrice } = Object.fromEntries(
+      formData,
+    ) as Record<string, string>;
 
-    console.log({ tripName, startDate, endDate, personCount, estimatedPrice });
+    const duration = differenceInDays(new Date(endDate), new Date(startDate)) + 1;
+
+    console.log({ tripName, startDate, endDate, duration, personCount, estimatedPrice });
     setIsOpen(false);
   };
 
