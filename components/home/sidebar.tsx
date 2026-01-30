@@ -3,21 +3,15 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
+import { TRIPS } from "@/app/page";
+import { SidebarModel } from "./sidebar-model";
 
-type TripsType = {
-  id: number;
-  title: string;
-  time: string;
-  person: number;
+type sidebarPropsType = {
+  activeTripsId: number;
+  setActiveTripsId: React.Dispatch<number>;
 };
 
-const Sidebar = () => {
-  const TRIPS: TripsType[] = [
-    { id: 1, title: "Wild West", time: "24 Jan '25 - 11 Feb '25", person: 5 },
-    { id: 2, title: "Backpacking Vietnam", time: "03 Apr '25 - 05 May '25", person: 2 },
-    { id: 3, title: "Family Retreat", time: "11 Nov '25 - 18 Nov '25", person: 4 },
-  ];
-
+const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
   return (
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
       {/* Logo */}
@@ -37,19 +31,24 @@ const Sidebar = () => {
       {/* Action */}
       <div className="flex justify-between items-center">
         <h1 className="font-semibold text-xl">Your Trips</h1>
-        <Plus className="p-2 border rounded-full" size={35} />
+
+        <SidebarModel />
       </div>
 
       {/* Hardcoded data */}
-      <div className="flex flex-col gap-0.5 min-h-[65vh]">
+      <div className="flex flex-col gap-0.5">
         {TRIPS.map((trip) => (
-          <div key={trip.id} className="flex justify-between px-4 py-2 border rounded-xl">
+          <div
+            key={trip.id}
+            onClick={() => setActiveTripsId(trip.id)}
+            className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors cursor-pointer ${activeTripsId === trip.id ? "bg-muted" : "hover:bg-accent"}`}
+          >
             <div className="leading-snug">
-              <h1 className="font-semibold">{trip.title}</h1>
-              <p className="text-muted-foreground">{trip.time}</p>
+              <h1 className="font-semibold text-sm">{trip.title}</h1>
+              <p className="text-muted-foreground text-xs">{trip.time}</p>
             </div>
             <div className="flex justify-between items-center gap-2">
-              <h1 className="font-semibold">{trip.person}</h1>
+              <h1 className="font-semibold text-sm">{trip.person}</h1>
               <HiUsers />
             </div>
           </div>
@@ -57,9 +56,11 @@ const Sidebar = () => {
       </div>
 
       {/*User Profile */}
-      <div className="flex items-center gap-4 px-4 py-3 border rounded-xl">
-        <FaUser />
-        <h1 className="font-semibold">User Profile</h1>
+      <div className="right-6 bottom-4 left-6 absolute">
+        <div className="flex items-center gap-3 hover:bg-accent px-4 py-3 border rounded-xl transition cursor-pointer">
+          <FaUser className="text-lg" />
+          <h1 className="font-semibold">User Profile</h1>
+        </div>
       </div>
     </section>
   );

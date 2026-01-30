@@ -6,21 +6,23 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 
-export function AvatarGroupCountExample() {
+export function AvatarGroupCountExample({ person }: { person: number }) {
+  const threePerson = Array.from({ length: person > 3 ? 3 : person });
+  const restPerson = person - 3;
   return (
     <AvatarGroup>
-      <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
-        <AvatarFallback>LR</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
-        <AvatarFallback>ER</AvatarFallback>
-      </Avatar>
+      {threePerson.map((_, i) => (
+        <Avatar key={i}>
+          <AvatarImage src="" alt="@shadcn" />
+          <AvatarFallback>C</AvatarFallback>
+        </Avatar>
+      ))}
+
+      {restPerson > 0 && (
+        <Avatar>
+          <AvatarGroupCount>+{restPerson}</AvatarGroupCount>
+        </Avatar>
+      )}
     </AvatarGroup>
   );
 }

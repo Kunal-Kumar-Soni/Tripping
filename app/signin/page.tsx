@@ -13,8 +13,7 @@ const page = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const { email, password } = Object.fromEntries(formData) as Record<string, string>;
 
     await handleSigninWithEmailAndPassword(email, password);
   };
