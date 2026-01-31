@@ -9,7 +9,7 @@ const TRIPS = [
     endDate: "2025-02-11",
     person: "5",
     estimatedPrice: "7,600",
-    duration: "18",
+    duration: 18,
   },
   {
     id: "2",
@@ -18,7 +18,7 @@ const TRIPS = [
     endDate: "2025-05-25",
     person: "3",
     estimatedPrice: "12,300",
-    duration: "32",
+    duration: 32,
   },
   {
     id: "3",
@@ -26,7 +26,7 @@ const TRIPS = [
     startDate: "2025-11-11",
     endDate: "2025-11-18",
     person: "4",
-    duration: "7",
+    duration: 7,
     estimatedPrice: "4,500",
   },
 ];
@@ -38,7 +38,7 @@ export type TripInfoType = {
   endDate: string;
   person: string;
   estimatedPrice: string;
-  duration: string;
+  duration: number;
 };
 type TripContextType = {
   // tripInfo: TripInfoType | null;
@@ -54,7 +54,7 @@ export const TripContext = createContext<TripContextType | null>(null);
 export const TripProvider = ({ children }: { children: ReactNode }) => {
   // const [tripInfo, setTripInfo] = useState<TripInfoType | null>(null);
   const [trips, setTrips] = useState<TripInfoType[] | null>(TRIPS);
-  const [activeTripInfo, setActiveTripInfo] = useState<TripInfoType | null>(TRIPS[0] ?? null);
+  const [activeTripInfo, setActiveTripInfo] = useState<TripInfoType | null>(null);
 
   const contextData = {
     // tripInfo,

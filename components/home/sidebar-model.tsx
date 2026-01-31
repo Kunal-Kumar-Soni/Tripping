@@ -35,7 +35,7 @@ export function SidebarModel() {
       tripName,
       startDate,
       endDate,
-      duration: duration.toString(),
+      duration,
       person,
       estimatedPrice,
     };
