@@ -14,19 +14,34 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { differenceInDays } from "date-fns";
+import { useTrip } from "@/hooks/useTrip";
+import { TripInfoType } from "@/context/TripContext";
 
 export function SidebarModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { setTrips } = useTrip();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { tripName, startDate, endDate, personCount, estimatedPrice } = Object.fromEntries(
+    const { tripName, startDate, endDate, person, estimatedPrice } = Object.fromEntries(
       formData,
     ) as Record<string, string>;
 
     const duration = differenceInDays(new Date(endDate), new Date(startDate)) + 1;
 
-    console.log({ tripName, startDate, endDate, duration, personCount, estimatedPrice });
+    const tripsDetail: TripInfoType = {
+      id: crypto.randomUUID(),
+      tripName,
+      startDate,
+      endDate,
+      duration: duration.toString(),
+      person,
+      estimatedPrice,
+    };
+
+    setTrips((prev) => (prev ? [...prev, tripsDetail] : [tripsDetail]));
+
     setIsOpen(false);
   };
 
@@ -63,8 +78,8 @@ export function SidebarModel() {
             </div>
 
             <div className="gap-3 grid">
-              <Label htmlFor="person-count">Person</Label>
-              <Input required type="number" id="person-count" name="personCount" />
+              <Label htmlFor="person">Person</Label>
+              <Input required type="number" id="person" name="person" />
             </div>
 
             <div className="gap-3 grid">

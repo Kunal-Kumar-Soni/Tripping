@@ -6,9 +6,10 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 
-export function AvatarGroupCountExample({ person }: { person: number }) {
-  const threePerson = Array.from({ length: person > 3 ? 3 : person });
-  const restPerson = person - 3;
+export function AvatarGroupCountExample({ person }: { person: string }) {
+  const changePersonType = Number(person);
+  const threePerson = Array.from({ length: changePersonType > 3 ? 3 : changePersonType });
+  const restPerson = changePersonType - 3;
   return (
     <AvatarGroup>
       {threePerson.map((_, i) => (

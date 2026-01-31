@@ -1,22 +1,29 @@
-import { Bell, Plus, Search } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
-import { TRIPS, TripsType } from "@/app/page";
 import { SidebarModel } from "./sidebar-model";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useTrip } from "@/hooks/useTrip";
+import type { TripInfoType } from "@/context/TripContext";
 
-type sidebarPropsType = {
-  activeTripsId: number;
-  setActiveTripsId: React.Dispatch<number>;
-};
-
-const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
+const Sidebar = () => {
   const [searchData, setSearchData] = useState<string>("");
+  const [activeTripsId, setActiveTripsId] = useState<string>("1");
+  const { setActiveTripInfo, trips } = useTrip();
 
-  const filteredTripData: TripsType[] = TRIPS.filter((trip) =>
-    trip.title.toLowerCase().includes(searchData.toLowerCase()),
+  if (!trips) return null;
+
+  useEffect(() => {
+    const activeInfo = trips.find((trip) => trip.id === activeTripsId) ?? null;
+
+    setActiveTripInfo(activeInfo);
+  }, [trips, setActiveTripInfo, activeTripsId]);
+
+  const filteredTripData: TripInfoType[] = trips.filter((trip) =>
+    trip.tripName.toLowerCase().includes(searchData.toLowerCase()),
   );
 
   return (
@@ -47,17 +54,21 @@ const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
         <SidebarModel />
       </div>
 
-      {/* Hardcoded data */}
+      {/* Trips List */}
       <div className="flex flex-col gap-0.5">
         {filteredTripData.map((trip) => (
           <div
             key={trip.id}
-            onClick={() => setActiveTripsId(trip.id)}
+            onClick={() => {
+              setActiveTripsId(trip.id);
+            }}
             className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors cursor-pointer ${activeTripsId === trip.id ? "bg-muted" : "hover:bg-accent"}`}
           >
             <div className="leading-snug">
-              <h1 className="font-semibold text-sm">{trip.title}</h1>
-              <p className="text-muted-foreground text-xs">{trip.time}</p>
+              <h1 className="font-semibold text-sm">{trip.tripName}</h1>
+              <p className="text-muted-foreground text-xs">
+                {trip.startDate} - {trip.endDate}
+              </p>
             </div>
             <div className="flex justify-between items-center gap-2">
               <h1 className="font-semibold text-sm">{trip.person}</h1>
@@ -69,10 +80,13 @@ const Sidebar = ({ activeTripsId, setActiveTripsId }: sidebarPropsType) => {
 
       {/*User Profile */}
       <div className="right-6 bottom-4 left-6 absolute">
-        <div className="flex items-center gap-3 hover:bg-accent px-4 py-3 border rounded-xl transition cursor-pointer">
+        <Link
+          href={"/dashboard"}
+          className="flex items-center gap-3 hover:bg-accent px-4 py-3 border rounded-xl transition cursor-pointer"
+        >
           <FaUser className="text-lg" />
           <h1 className="font-semibold">User Profile</h1>
-        </div>
+        </Link>
       </div>
     </section>
   );
