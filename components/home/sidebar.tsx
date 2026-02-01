@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTrip } from "@/hooks/useTrip";
 import type { TripInfoType } from "@/context/TripContext";
+import { dateFormatter } from "@/lib/date";
 
 const Sidebar = () => {
   const [searchData, setSearchData] = useState<string>("");
@@ -67,7 +68,7 @@ const Sidebar = () => {
             <div className="leading-snug">
               <h1 className="font-semibold text-sm">{trip.tripName}</h1>
               <p className="text-muted-foreground text-xs">
-                {trip.startDate} - {trip.endDate}
+                {dateFormatter(trip.startDate)} - {dateFormatter(trip.endDate)}
               </p>
             </div>
             <div className="flex justify-between items-center gap-2">
