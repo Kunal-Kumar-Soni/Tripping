@@ -2,6 +2,7 @@ import { ImMagicWand } from "react-icons/im";
 import { AvatarGroupCountExample } from "../ui/avatar-group-count-example";
 import TripView from "./trip-view";
 import { useTrip } from "@/hooks/useTrip";
+import { Button } from "../ui/button";
 
 const TripHeader = () => {
   const { activeTripInfo } = useTrip();
@@ -30,9 +31,12 @@ const TripHeader = () => {
 
           <AvatarGroupCountExample person={activeTripInfo.person} />
 
-          <button className="flex justify-center items-center bg-indigo-500 hover:bg-indigo-600 rounded-full w-9 h-9 transition">
-            <ImMagicWand size={18} />
-          </button>
+          <Button
+            size={"icon-lg"}
+            className="flex justify-center items-center bg-indigo-500 hover:bg-indigo-600 rounded-full transition"
+          >
+            <ImMagicWand />
+          </Button>
         </div>
       </header>
 

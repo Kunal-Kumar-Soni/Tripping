@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { BsPlusLg } from "react-icons/bs";
 import { useState } from "react";
 import { differenceInDays } from "date-fns";
 import { useTrip } from "@/hooks/useTrip";
@@ -48,9 +48,9 @@ export function SidebarModel() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="cursor-pointer">
-          <Plus className="p-2 border rounded-full" size={35} />
-        </button>
+        <Button variant={"outline"} size="icon-lg" className="rounded-full cursor-pointer">
+          <BsPlusLg />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit}>

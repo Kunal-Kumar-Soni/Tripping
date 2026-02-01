@@ -1,6 +1,7 @@
 import { useTrip } from "@/hooks/useTrip";
 import { daysGenerator } from "@/lib/date";
 import { SavedLocationCard } from "./saved-location-card";
+import ZoomControl from "./zoom-control";
 
 const TripView = () => {
   const { activeTripInfo } = useTrip();
@@ -23,8 +24,10 @@ const TripView = () => {
         ))}
       </div>
 
-      {/* Saved Locations */}
+      {/* Saved Location Card */}
       <SavedLocationCard />
+      {/* Zoom Control */}
+      <ZoomControl />
     </section>
   );
 };

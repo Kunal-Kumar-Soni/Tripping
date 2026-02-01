@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useTrip } from "@/hooks/useTrip";
 import type { TripInfoType } from "@/context/TripContext";
 import { dateFormatter } from "@/lib/date";
+import { Button } from "../ui/button";
 
 const Sidebar = () => {
   const [searchData, setSearchData] = useState<string>("");
@@ -32,7 +33,9 @@ const Sidebar = () => {
       {/* Logo */}
       <div className="flex justify-between items-center">
         <Image src="/home/Tripping.png" alt="tripping-logo" width={100} height={50} />
-        <Bell className="p-2 border rounded-full" size={35} />
+        <Button variant={"outline"} size="icon-lg" className="rounded-full cursor-pointer">
+          <Bell />
+        </Button>
       </div>
 
       {/* Input */}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BiSolidLandmark } from "react-icons/bi";
 import { IoMenu } from "react-icons/io5";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+import { Button } from "../ui/button";
 
 export const locationsData = [
   {
@@ -50,18 +51,17 @@ const LocationsList = () => {
 
       {/* Bottom Buttons */}
       <div className="flex justify-center items-center gap-2 w-full">
-        {buttonsIcon.map((btnInfo, i) => {
-          const Icon = btnInfo.icon;
-          return (
-            <button
-              key={i}
-              onClick={() => setIsActivated(btnInfo.id)}
-              className={`flex justify-center cursor-pointer items-center border rounded-full w-9 h-9 ${isActivated === btnInfo.id ? "bg-black text-white" : "bg-white text-black "}`}
-            >
-              <Icon size={20} />
-            </button>
-          );
-        })}
+        {buttonsIcon.map((btnInfo, i) => (
+          <Button
+            key={i}
+            onClick={() => setIsActivated(btnInfo.id)}
+            variant={isActivated === btnInfo.id ? "default" : "outline"}
+            size={"icon-lg"}
+            className="rounded-full"
+          >
+            <btnInfo.icon />
+          </Button>
+        ))}
       </div>
 
       <IoMenu className="mx-auto" size={20} />
