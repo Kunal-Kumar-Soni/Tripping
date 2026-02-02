@@ -1,15 +1,14 @@
 import { ImMagicWand } from "react-icons/im";
-import { AvatarGroupCountExample } from "../ui/avatar-group-count-example";
-import TripView from "./trip-view";
+import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
 import { useTrip } from "@/hooks/useTrip";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 const TripHeader = () => {
   const { activeTripInfo } = useTrip();
   if (!activeTripInfo) return null;
 
   return (
-    <div className="pl-100 min-h-screen">
+    <section className="top-0 right-0 left-100 z-50 fixed">
       {/* Header */}
       <header className="flex justify-between items-center bg-black/80 shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)] px-6 py-4 text-white">
         {/* Left */}
@@ -39,9 +38,7 @@ const TripHeader = () => {
           </Button>
         </div>
       </header>
-
-      <TripView />
-    </div>
+    </section>
   );
 };
 

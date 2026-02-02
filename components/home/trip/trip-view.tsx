@@ -1,7 +1,8 @@
 import { useTrip } from "@/hooks/useTrip";
 import { daysGenerator } from "@/lib/date";
-import { SavedLocationCard } from "./saved-location-card";
-import ZoomControl from "./zoom-control";
+import { SavedLocationCard } from "../saved-location-card";
+import ZoomControl from "../zoom-control";
+import DayColumn from "./day-column";
 
 const TripView = () => {
   const { activeTripInfo } = useTrip();
@@ -12,15 +13,11 @@ const TripView = () => {
   const days = daysGenerator(startDate, duration);
 
   return (
-    <section>
+    <section className="mt-18 overflow-y-auto">
       {/* Dates Header */}
-      <div className="flex flex-1 overflow-x-scroll text-white">
+      <div className="flex flex-1 text-white">
         {days.map((day) => (
-          <div key={day} className="min-h-[90vh]">
-            <header className="bg-black/80 p-2 border-black border-r min-w-80 text-sm whitespace-nowrap">
-              {day}
-            </header>
-          </div>
+          <DayColumn key={day} day={day} />
         ))}
       </div>
 
