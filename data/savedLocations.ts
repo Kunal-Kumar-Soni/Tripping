@@ -58,4 +58,4 @@ export const dummySavedLocations = [
     address: "Near Manali",
     category: "activity",
   },
-] as const;
+];

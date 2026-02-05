@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDownIcon } from "lucide-react";
 
-import LocationsList from "./locations-list";
+import LocationsList, { SavedLocationsType } from "./locations-list";
 import { Button } from "../ui/button";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { useState } from "react";
@@ -10,11 +10,10 @@ import { dummySavedLocations } from "@/data/savedLocations";
 
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+import { SavedLocationModel } from "./saved-location-model";
 
 export function SavedLocationCard() {
-  const [activeCategory, setActiveCategory] = useState<"restaurant" | "hotel" | "activity">(
-    "restaurant",
-  );
+  const [activeCategory, setActiveCategory] = useState<string>("restaurant");
 
   const [savedLocations, setSavedLocations] = useState(dummySavedLocations);
   const filteredLocations = savedLocations.filter((loc) => loc.category === activeCategory);
@@ -40,9 +39,9 @@ export function SavedLocationCard() {
               </Button>
             </CollapsibleTrigger>
           </div>
-          <CollapsibleContent className="flex flex-col items-start gap-2 pt-4 text-sm">
+          <CollapsibleContent className="flex flex-col gap-2 pt-4 text-sm">
             {/* Buttons */}
-            <div className="flex justify-center gap-2">
+            <div className="flex gap-2">
               {locationsButtons.map((btn) => {
                 const Icon = btn.icon;
                 return (
@@ -61,8 +60,11 @@ export function SavedLocationCard() {
             {/* Locations list */}
             <LocationsList locations={filteredLocations} />
 
-            {/* Add new activity */}
-            <Button className="py-6 rounded-4xl w-full">Add Activity</Button>
+            {/* Add new activity Model */}
+            <SavedLocationModel
+              activeCategory={activeCategory}
+              setSavedLocations={setSavedLocations}
+            />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

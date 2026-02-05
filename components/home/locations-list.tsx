@@ -1,15 +1,15 @@
 import { BiSolidLandmark } from "react-icons/bi";
+import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import { IoMenu } from "react-icons/io5";
 
-type SavedLocationsType = {
+export type SavedLocationsType = {
   id: string;
   title: string;
   address: string;
-  category: "restaurant" | "hotel" | "activity";
+  category: string;
 };
 
-const categoryIconMap = {
+const categoryIconMap: { [key: string]: IconType } = {
   restaurant: MdOutlineRestaurant,
   hotel: BiSolidLandmark,
   activity: MdHiking,

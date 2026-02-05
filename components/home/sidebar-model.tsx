@@ -89,11 +89,16 @@ export function SidebarModel() {
           </div>
 
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-
-            <Button type="submit">Create Trip</Button>
+            <Button
+              className="px-8 py-5 rounded-full"
+              onClick={() => setIsOpen(false)}
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button className="px-8 py-5 rounded-full" type="submit">
+              Create Trip
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
