@@ -1,8 +1,9 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDownIcon } from "lucide-react";
 
-import LocationsList, { SavedLocationsType } from "./locations-list";
+import LocationsList from "./locations-list";
 import { Button } from "../ui/button";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { useState } from "react";
@@ -11,6 +12,8 @@ import { dummySavedLocations } from "@/data/savedLocations";
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 import { SavedLocationModel } from "./saved-location-model";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
 export function SavedLocationCard() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
@@ -22,7 +25,19 @@ export function SavedLocationCard() {
     { type: "restaurant", icon: MdOutlineRestaurant },
     { type: "hotel", icon: BiSolidLandmark },
     { type: "activity", icon: MdHiking },
-  ] as const;
+  ];
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    setSavedLocations((item) => {
+      const oldIndex = item.findIndex((el) => el.id === active.id);
+      const newIndex = item.findIndex((el) => el.id === over.id);
+      return arrayMove(item, oldIndex, newIndex);
+    });
+  };
 
   return (
     <Card className="top-30 right-6 fixed py-4 w-full max-w-94">
@@ -58,7 +73,14 @@ export function SavedLocationCard() {
               })}
             </div>
             {/* Locations list */}
-            <LocationsList locations={filteredLocations} />
+            <DndContext onDragEnd={handleDragEnd}>
+              <SortableContext
+                items={filteredLocations.map((el) => el.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <LocationsList locations={filteredLocations} />
+              </SortableContext>
+            </DndContext>
 
             {/* Add new activity Model */}
             <SavedLocationModel

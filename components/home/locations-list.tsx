@@ -1,6 +1,7 @@
 import { BiSolidLandmark } from "react-icons/bi";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+import LocationCard from "./location-card";
 
 export type SavedLocationsType = {
   id: string;
@@ -23,13 +24,13 @@ const LocationsList = ({ locations }: { locations: SavedLocationsType[] }) => {
           const Icon = categoryIconMap[location.category];
 
           return (
-            <div key={location.id} className="flex items-center gap-4 px-5 py-2 border rounded-xl">
-              <Icon size={18} />
-              <div className="leading-tight">
-                <h1 className="font-semibold">{location.title}</h1>
-                <p className="text-muted-foreground">{location.address}</p>
-              </div>
-            </div>
+            <LocationCard
+              key={location.id}
+              id={location.id}
+              address={location.address}
+              title={location.title}
+              Icon={Icon}
+            />
           );
         })}
       </div>

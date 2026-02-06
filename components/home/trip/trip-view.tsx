@@ -1,3 +1,4 @@
+"use client";
 import { useTrip } from "@/hooks/useTrip";
 import { daysGenerator } from "@/lib/date";
 import { SavedLocationCard } from "../saved-location-card";
