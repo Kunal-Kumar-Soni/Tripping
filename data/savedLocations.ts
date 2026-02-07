@@ -1,5 +1,5 @@
 export const dummySavedLocations = [
-  //  Restaurants (3)
+  //  ***Restaurants***
   {
     id: "res-1",
     title: "Spice Garden",
@@ -19,7 +19,7 @@ export const dummySavedLocations = [
     category: "restaurant",
   },
 
-  //  Hotels (3)
+  //  ***Hotels***
   {
     id: "hot-1",
     title: "Grand Palace Hotel",
@@ -39,7 +39,7 @@ export const dummySavedLocations = [
     category: "hotel",
   },
 
-  // 🧭 Activities (3)
+  //  ***Activities***
   {
     id: "act-1",
     title: "Red Fort Visit",
