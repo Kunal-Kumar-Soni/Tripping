@@ -5,15 +5,20 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  User,
 } from "firebase/auth";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 
+type AppUser = {
+  id: string;
+  email: string;
+  name?: string;
+  avatar?: string;
+};
+
 type AuthContextType = {
-  user: User | null;
+  user: AppUser | null;
   isLoading: boolean;
-  //   error: Error | null;
   handleSignupWithEmailAndPassword: (email: string, password: string) => Promise<void>;
   handleSigninWithEmailAndPassword: (email: string, password: string) => Promise<void>;
   handleWithGoogle: () => Promise<void>;
@@ -25,23 +30,48 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 const Provider = new GoogleAuthProvider();
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AppUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  //   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        setIsLoading(false);
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      setIsLoading(true);
+
+      if (firebaseUser) {
+        try {
+          const backendUser = await fetchBackendUser();
+          setUser(backendUser);
+        } catch (error) {
+          setUser(null);
+        }
       } else {
         setUser(null);
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
+
+  const fetchBackendUser = async (): Promise<AppUser> => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) {
+      throw new Error("No firebase user");
+    }
+    const token = await firebaseUser.getIdToken();
+
+    const res = await fetch("/api/user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Unauthorized");
+    }
+    return res.json();
+  };
 
   const handleSignupWithEmailAndPassword = async (email: string, password: string) => {
     setIsLoading(true);
@@ -52,6 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     setIsLoading(false);
   };
+
   const handleSigninWithEmailAndPassword = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -85,7 +116,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const contextValue: AuthContextType = {
     user,
     isLoading,
-    // error,
     handleSignupWithEmailAndPassword,
     handleSigninWithEmailAndPassword,
     handleWithGoogle,
