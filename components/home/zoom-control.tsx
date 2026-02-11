@@ -5,17 +5,20 @@ import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
 import { IoMapOutline } from "react-icons/io5";
 import { useEffect } from "react";
-import { getAuth } from "firebase/auth";
+import { getTrips } from "@/services/trips";
+import { useAuth } from "@/hooks/useAuth";
 
 const ZoomControl = () => {
+  const { user, isLoading } = useAuth();
   useEffect(() => {
     const getData = async () => {
-      const auth = getAuth();
-      const token = await auth.currentUser?.getIdToken();
-      console.log(token);
+      if (!isLoading && user) {
+        const data = await getTrips();
+        console.log(data);
+      }
     };
     getData();
-  }, []);
+  }, [user, isLoading]);
 
   return (
     <Card className="right-6 bottom-5 fixed py-2 w-full max-w-94">

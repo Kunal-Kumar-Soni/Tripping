@@ -11,3 +11,13 @@ export interface Trip {
   updated_at: string;
   user_id: string;
 }
+
+export interface CreateTrip {
+  budget: number;
+  description: string;
+  destination: string;
+  end_date: string;
+  start_date: string;
+  status: string;
+  title: string;
+}
