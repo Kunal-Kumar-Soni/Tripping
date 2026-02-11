@@ -32,7 +32,14 @@ const Sidebar = () => {
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
       {/* Logo */}
       <div className="flex justify-between items-center">
-        <Image src="/home/Tripping.png" alt="tripping-logo" width={100} height={50} />
+        <Image
+          src="/home/Tripping.png"
+          alt="tripping-logo"
+          loading="eager"
+          width={1000}
+          height={300}
+          className="w-auto h-12"
+        />
         <Button variant={"outline"} size="icon-lg" className="rounded-full cursor-pointer">
           <Bell />
         </Button>

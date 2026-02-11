@@ -4,8 +4,19 @@ import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
 import { IoMapOutline } from "react-icons/io5";
+import { useEffect } from "react";
+import { getAuth } from "firebase/auth";
 
 const ZoomControl = () => {
+  useEffect(() => {
+    const getData = async () => {
+      const auth = getAuth();
+      const token = await auth.currentUser?.getIdToken();
+      console.log(token);
+    };
+    getData();
+  }, []);
+
   return (
     <Card className="right-6 bottom-5 fixed py-2 w-full max-w-94">
       <CardContent className="flex justify-between items-center px-5">

@@ -34,9 +34,17 @@ const page = () => {
         fill
         alt="Sign in background"
         className="-z-10 object-cover"
+        loading="eager"
       />
       <div className="flex lg:flex-row flex-col justify-center lg:justify-between items-center gap-10 px-6 md:px-10 min-h-screen">
-        <Image src="/images/auth/tripping.png" width={350} height={160} alt="tripping-logo" />
+        <Image
+          src="/images/auth/tripping.png"
+          width={1000}
+          height={300}
+          className="w-auto h-30"
+          loading="eager"
+          alt="tripping-logo"
+        />
 
         <Card className="py-4 rounded-3xl w-full max-w-120">
           <CardContent className="space-y-4 px-4">
