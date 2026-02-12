@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
+import axiosInstance from "@/lib/axios";
 
 type AppUser = {
   id: string;
@@ -35,12 +36,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      setIsLoading(true);
       if (firebaseUser) {
         try {
           const backendUser = await fetchBackendUser();
           setUser(backendUser);
-        } catch (error) {
+        } catch (error: any) {
+          console.error("Backend Sync Error:", error);
           setUser(null);
+          if (error.response?.status === 401) {
+            await signOut(auth);
+          }
         }
       } else {
         setUser(null);
@@ -53,27 +59,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const fetchBackendUser = async (): Promise<AppUser> => {
-    const firebaseUser = auth.currentUser;
-    if (!firebaseUser) {
-      throw new Error("No firebase user");
-    }
-    const token = await firebaseUser.getIdToken(true);
-
-    const res = await fetch("/api/user", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.status === 401) {
-      await signOut(auth);
-      throw new Error("Unauthorized");
-    }
-
-    if (!res.ok) {
-      throw new Error("Server error");
-    }
-    return res.json();
+    const res = await axiosInstance.get("/api/user");
+    return res.data;
   };
 
   const handleSignupWithEmailAndPassword = async (email: string, password: string) => {

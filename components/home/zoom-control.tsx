@@ -9,18 +9,6 @@ import { getTrips } from "@/services/trips";
 import { useAuth } from "@/hooks/useAuth";
 
 const ZoomControl = () => {
-  const { user, isLoading } = useAuth();
-  useEffect(() => {
-    const getData = async () => {
-      if (!isLoading && user) {
-        const data = await getTrips();
-        console.log(data);
-      }
-      console.log(isLoading);
-    };
-    getData();
-  }, [user, isLoading]);
-
   return (
     <Card className="right-6 bottom-5 fixed py-2 w-full max-w-94">
       <CardContent className="flex justify-between items-center px-5">

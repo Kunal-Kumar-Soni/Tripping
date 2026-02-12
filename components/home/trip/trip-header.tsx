@@ -1,34 +1,31 @@
 import { ImMagicWand } from "react-icons/im";
 import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
-import { useTrip } from "@/hooks/useTrip";
+
 import { Button } from "../../ui/button";
 
 const TripHeader = () => {
-  const { activeTripInfo } = useTrip();
-  if (!activeTripInfo) return null;
-
   return (
     <section className="top-0 right-0 left-100 z-50 fixed">
       {/* Header */}
       <header className="flex justify-between items-center bg-black/80 shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)] px-6 py-4 text-white">
         {/* Left */}
         <div className="w-[40%]">
-          <h1 className="font-semibold text-2xl tracking-tight">{activeTripInfo.tripName}</h1>
+          <h1 className="font-semibold text-2xl tracking-tight">Paris</h1>
         </div>
 
         {/* Right */}
         <div className="flex justify-between items-center gap-10 w-[60%]">
           <div className="leading-tight">
             <p className="text-white/60 text-sm">Duration</p>
-            <p className="font-semibold">{activeTripInfo.duration} Days</p>
+            <p className="font-semibold">7 Days</p>
           </div>
 
           <div className="leading-tight">
             <p className="text-white/60 text-sm">Cost Estimate</p>
-            <p className="font-semibold">${activeTripInfo.estimatedPrice}</p>
+            <p className="font-semibold">$4000</p>
           </div>
 
-          <AvatarGroupCountExample person={activeTripInfo.person} />
+          <AvatarGroupCountExample person={"4"} />
 
           <Button
             size={"icon-lg"}

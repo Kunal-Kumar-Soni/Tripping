@@ -6,27 +6,26 @@ import { FaUser } from "react-icons/fa";
 import { SidebarModel } from "./sidebar-model";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useTrip } from "@/hooks/useTrip";
-import type { TripInfoType } from "@/context/TripContext";
 import { dateFormatter } from "@/lib/date";
 import { Button } from "../ui/button";
+import { getTrips } from "@/services/trips";
+import { useAuth } from "@/hooks/useAuth";
+import { Trip } from "@/types/trips";
 
 const Sidebar = () => {
+  const [trips, setTrips] = useState<Trip[] | null>(null);
   const [searchData, setSearchData] = useState<string>("");
-  const [activeTripsId, setActiveTripsId] = useState<string>("1");
-  const { setActiveTripInfo, trips } = useTrip();
-
-  if (!trips) return null;
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    const activeInfo = trips.find((trip) => trip.id === activeTripsId) ?? null;
-
-    setActiveTripInfo(activeInfo);
-  }, [trips, setActiveTripInfo, activeTripsId]);
-
-  const filteredTripData: TripInfoType[] = trips.filter((trip) =>
-    trip.tripName.toLowerCase().includes(searchData.toLowerCase()),
-  );
+    const fetchTrips = async () => {
+      if (!isLoading && user) {
+        const res = await getTrips();
+        setTrips(res);
+      }
+    };
+    fetchTrips();
+  }, [user, isLoading]);
 
   return (
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
@@ -67,26 +66,31 @@ const Sidebar = () => {
 
       {/* Trips List */}
       <div className="flex flex-col gap-0.5">
-        {filteredTripData.map((trip) => (
-          <div
-            key={trip.id}
-            onClick={() => {
-              setActiveTripsId(trip.id);
-            }}
-            className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors cursor-pointer ${activeTripsId === trip.id ? "bg-muted" : "hover:bg-accent"}`}
-          >
-            <div className="leading-snug">
-              <h1 className="font-semibold text-sm">{trip.tripName}</h1>
-              <p className="text-muted-foreground text-xs">
-                {dateFormatter(trip.startDate)} - {dateFormatter(trip.endDate)}
-              </p>
-            </div>
-            <div className="flex justify-between items-center gap-2">
-              <h1 className="font-semibold text-sm">{trip.person}</h1>
-              <HiUsers />
-            </div>
-          </div>
-        ))}
+        {trips?.length === 0 ? (
+          <>
+            <h1>No data available</h1>
+          </>
+        ) : (
+          <>
+            {trips?.map((trip) => (
+              <div
+                key={trip.id}
+                className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors cursor-pointer `}
+              >
+                <div className="leading-snug">
+                  <h1 className="font-semibold text-sm">{trip.title}</h1>
+                  <p className="text-muted-foreground text-xs">
+                    {dateFormatter(trip.start_date)} - {dateFormatter(trip.end_date)}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <h1 className="font-semibold text-sm">3</h1>
+                  <HiUsers />
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       {/*User Profile */}

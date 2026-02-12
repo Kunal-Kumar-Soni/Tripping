@@ -1,5 +1,4 @@
 import { IconType } from "react-icons/lib";
-import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 

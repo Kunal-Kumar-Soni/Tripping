@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,34 +12,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BsPlusLg } from "react-icons/bs";
 import { useState } from "react";
-import { differenceInDays } from "date-fns";
-import { useTrip } from "@/hooks/useTrip";
-import { TripInfoType } from "@/context/TripContext";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 export function SidebarModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { setTrips } = useTrip();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { tripName, startDate, endDate, person, estimatedPrice } = Object.fromEntries(
-      formData,
-    ) as Record<string, string>;
+    const { tripName, startDate, endDate, status, budget, destination, description } =
+      Object.fromEntries(formData) as Record<string, string>;
 
-    const duration = differenceInDays(new Date(endDate), new Date(startDate)) + 1;
-
-    const tripsDetail: TripInfoType = {
-      id: crypto.randomUUID(),
-      tripName,
-      startDate,
-      endDate,
-      duration,
-      person,
-      estimatedPrice,
-    };
-
-    setTrips((prev) => (prev ? [...prev, tripsDetail] : [tripsDetail]));
+    console.log({ tripName, startDate, endDate, status, budget, destination, description });
 
     setIsOpen(false);
   };
@@ -78,13 +70,42 @@ export function SidebarModel() {
             </div>
 
             <div className="gap-3 grid">
-              <Label htmlFor="person">Person</Label>
-              <Input required type="number" id="person" name="person" />
+              <Label htmlFor="budget">Budget</Label>
+              <Input required type="number" id="budget" name="budget" />
             </div>
 
             <div className="gap-3 grid">
-              <Label htmlFor="estimated-price">Estimated Price</Label>
-              <Input required type="number" id="estimated-price" name="estimatedPrice" />
+              <Label htmlFor="budget">Status</Label>
+              <Select name="status">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Status</SelectLabel>
+                    <SelectItem value="planning">Planning</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="gap-3 grid col-span-2">
+              <Label htmlFor="destination">Destination</Label>
+              <Input required id="destination" name="destination" />
+            </div>
+
+            <div className="gap-3 grid col-span-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                required
+                id="description"
+                name="description"
+                placeholder="Type your description here."
+                rows={5}
+                className="max-h-30"
+              />
             </div>
           </div>
 

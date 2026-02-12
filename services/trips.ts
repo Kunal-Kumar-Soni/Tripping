@@ -1,141 +1,29 @@
-import { auth } from "@/lib/firebase";
+import axiosInstance from "@/lib/axios";
 import { CreateTrip } from "@/types/trips";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-//! Get Token
-const getToken = async () => {
-  const token = await auth.currentUser?.getIdToken();
-
-  if (!token) {
-    throw new Error("No token found");
-  }
-
-  return token;
-};
-
 //! All Trips
-
-//? GET METHOD
 export const getTrips = async () => {
-  try {
-    const token = await getToken();
-
-    const res = await fetch(`${BASE_URL}/api/trips`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch trips");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const res = await axiosInstance.get(`/api/trips`);
+  return res.data;
 };
 
-//? POST METHOD
 export const createTrip = async (data: CreateTrip) => {
-  try {
-    const token = await getToken();
-
-    const res = await fetch(`${BASE_URL}/api/trips`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to create trip");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const res = await axiosInstance.post(`/api/trips`, data);
+  return res.data;
 };
 
 //! Individual Trip
-
-//? GET METHOD
-export const getSingleTrip = async (id: number) => {
-  try {
-    const token = await getToken();
-
-    const res = await fetch(`${BASE_URL}/api/trips/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch single trip");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+export const getSingleTrip = async (tripId: number) => {
+  const res = await axiosInstance.get(`/api/trips/${tripId}`);
+  return res.data;
 };
 
-//? PUT METHOD
-export const updateSingleTrip = async (id: number, data: Partial<CreateTrip>) => {
-  try {
-    const token = await getToken();
-    const res = await fetch(`${BASE_URL}/api/trips/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to Update single trip");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+export const updateSingleTrip = async (tripId: number, data: CreateTrip) => {
+  const res = await axiosInstance.put(`/api/trips/${tripId}`, data);
+  return res.data;
 };
 
-//? DELETE METHOD
-export const deleteSingleTrip = async (id: number) => {
-  try {
-    const token = await getToken();
-    const res = await fetch(`${BASE_URL}/api/trips/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to delete single trip");
-    }
-
-    if (res.status === 204) return;
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+export const deleteSingleTrip = async (tripId: number) => {
+  const res = await axiosInstance.delete(`/api/trips/${tripId}`);
+  return res.data;
 };
