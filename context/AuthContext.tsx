@@ -31,12 +31,10 @@ const Provider = new GoogleAuthProvider();
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AppUser | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
-      setIsLoading(true);
-
       if (firebaseUser) {
         try {
           const backendUser = await fetchBackendUser();
@@ -59,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!firebaseUser) {
       throw new Error("No firebase user");
     }
-    const token = await firebaseUser.getIdToken();
+    const token = await firebaseUser.getIdToken(true);
 
     const res = await fetch("/api/user", {
       headers: {
@@ -67,8 +65,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
     });
 
-    if (!res.ok) {
+    if (res.status === 401) {
+      await signOut(auth);
       throw new Error("Unauthorized");
+    }
+
+    if (!res.ok) {
+      throw new Error("Server error");
     }
     return res.json();
   };

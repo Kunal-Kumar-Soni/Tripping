@@ -16,6 +16,7 @@ const ZoomControl = () => {
         const data = await getTrips();
         console.log(data);
       }
+      console.log(isLoading);
     };
     getData();
   }, [user, isLoading]);
