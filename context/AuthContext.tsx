@@ -59,8 +59,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const fetchBackendUser = async (): Promise<AppUser> => {
-    const res = await axiosInstance.get("/api/user");
-    return res.data;
+    const { data } = await axiosInstance.get("/api/user");
+    return data;
   };
 
   const handleSignupWithEmailAndPassword = async (email: string, password: string) => {

@@ -4,9 +4,6 @@ import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
 import { IoMapOutline } from "react-icons/io5";
-import { useEffect } from "react";
-import { getTrips } from "@/services/trips";
-import { useAuth } from "@/hooks/useAuth";
 
 const ZoomControl = () => {
   return (

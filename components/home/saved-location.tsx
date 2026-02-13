@@ -15,7 +15,7 @@ import { SavedLocationModel } from "./saved-location-model";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
-export function SavedLocationCard() {
+export function SavedLocation() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
 
   const [savedLocations, setSavedLocations] = useState(dummySavedLocations);
@@ -73,7 +73,7 @@ export function SavedLocationCard() {
               })}
             </div>
             {/* Locations list */}
-            <DndContext onDragEnd={handleDragEnd}>
+            <DndContext onDragEnd={handleDragEnd} id="locations">
               <SortableContext
                 items={filteredLocations.map((el) => el.id)}
                 strategy={verticalListSortingStrategy}

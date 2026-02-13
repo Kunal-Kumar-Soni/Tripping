@@ -2,13 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
 const page = () => {
-  const { handleWithGoogle, user, handleSigninWithEmailAndPassword, isLoading } = useAuth();
-  const router = useRouter();
+  const { handleWithGoogle, handleSigninWithEmailAndPassword } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -21,10 +19,6 @@ const page = () => {
   const googleHandler = async () => {
     await handleWithGoogle();
   };
-
-  useEffect(() => {
-    if (user) router.push("/");
-  }, [router, user]);
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden">

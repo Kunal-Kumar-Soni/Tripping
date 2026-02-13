@@ -1,3 +1,4 @@
+"use client";
 import { BiSolidLandmark } from "react-icons/bi";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";

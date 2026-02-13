@@ -1,3 +1,4 @@
+"use client";
 import { Bell, Search } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
