@@ -1,29 +1,30 @@
 import axiosInstance from "@/lib/axios";
-import { CreateTrip } from "@/types/trips";
+import { CreateTrip, Trip } from "@/types/trips";
+import { DeleteResponse } from "@/types/common";
 
 //! All Trips
-export const getTrips = async () => {
-  const res = await axiosInstance.get(`/api/trips`);
-  return res.data;
-};
-
-export const createTrip = async (data: CreateTrip) => {
-  const res = await axiosInstance.post(`/api/trips`, data);
-  return res.data;
+export const getTrips = async (): Promise<Trip[]> => {
+  const { data } = await axiosInstance.get<Trip[]>(`/api/trips`);
+  return data;
 };
 
 //! Individual Trip
-export const getSingleTrip = async (tripId: number) => {
-  const res = await axiosInstance.get(`/api/trips/${tripId}`);
-  return res.data;
+export const createTrip = async (tripData: CreateTrip): Promise<Trip> => {
+  const { data } = await axiosInstance.post<Trip>(`/api/trips`, tripData);
+  return data;
 };
 
-export const updateSingleTrip = async (tripId: number, data: CreateTrip) => {
-  const res = await axiosInstance.put(`/api/trips/${tripId}`, data);
-  return res.data;
+export const getSingleTrip = async (tripId: number): Promise<Trip> => {
+  const { data } = await axiosInstance.get<Trip>(`/api/trips/${tripId}`);
+  return data;
 };
 
-export const deleteSingleTrip = async (tripId: number) => {
-  const res = await axiosInstance.delete(`/api/trips/${tripId}`);
-  return res.data;
+export const updateSingleTrip = async (tripId: number, tripData: CreateTrip): Promise<Trip> => {
+  const { data } = await axiosInstance.put<Trip>(`/api/trips/${tripId}`, tripData);
+  return data;
+};
+
+export const deleteSingleTrip = async (tripId: number): Promise<DeleteResponse> => {
+  const { data } = await axiosInstance.delete<DeleteResponse>(`/api/trips/${tripId}`);
+  return data;
 };

@@ -29,4 +29,10 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+// Response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => Promise.reject(error),
+);
+
 export default axiosInstance;

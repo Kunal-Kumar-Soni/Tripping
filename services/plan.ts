@@ -1,54 +1,79 @@
 import axiosInstance from "@/lib/axios";
-import { CreatePlan, CreatePlanTransport } from "@/types/plan";
+import { DeleteResponse } from "@/types/common";
+import { CreatePlan, CreatePlanTransport, Plan, PlanTransport } from "@/types/plan";
 
-//! All plan
-export const getPlans = async (tripId: number) => {
-  const res = await axiosInstance.get(`/api/trips/${tripId}/plan-items`);
-  return res.data;
+//! All plans
+export const getPlans = async (tripId: number): Promise<Plan[]> => {
+  const { data } = await axiosInstance.get<Plan[]>(`/api/trips/${tripId}/plan-items`);
+  return data;
 };
 
 //! Individual Plan
-export const createPlan = async (tripId: number, data: CreatePlan) => {
-  const res = await axiosInstance.post(`/api/trips/${tripId}/plan-items`, data);
-  return res.data;
+export const createPlan = async (tripId: number, planData: CreatePlan): Promise<Plan> => {
+  const { data } = await axiosInstance.post<Plan>(`/api/trips/${tripId}/plan-items`, planData);
+  return data;
 };
 
-export const getSinglePlan = async (tripId: number, itemId: number) => {
-  const res = await axiosInstance.get(`/api/trips/${tripId}/plan-items/${itemId}`);
-  return res.data;
+export const getSinglePlan = async (tripId: number, itemId: number): Promise<Plan> => {
+  const { data } = await axiosInstance.get<Plan>(`/api/trips/${tripId}/plan-items/${itemId}`);
+  return data;
 };
 
-export const updateSinglePlan = async (tripId: number, itemId: number, data: CreatePlan) => {
-  const res = await axiosInstance.put(`/api/trips/${tripId}/plan-items/${itemId}`, data);
-  return res.data;
+export const updateSinglePlan = async (
+  tripId: number,
+  itemId: number,
+  planData: CreatePlan,
+): Promise<Plan> => {
+  const { data } = await axiosInstance.put<Plan>(
+    `/api/trips/${tripId}/plan-items/${itemId}`,
+    planData,
+  );
+  return data;
 };
 
-export const deleteSinglePlan = async (tripId: number, itemId: number) => {
-  const res = await axiosInstance.delete(`/api/trips/${tripId}/plan-items/${itemId}`);
-  return res.data;
+export const deleteSinglePlan = async (tripId: number, itemId: number): Promise<DeleteResponse> => {
+  const { data } = await axiosInstance.delete<DeleteResponse>(
+    `/api/trips/${tripId}/plan-items/${itemId}`,
+  );
+  return data;
 };
 
-//! Plan Transport
-export const getPlanTransports = async (tripId: number) => {
-  const res = await axiosInstance.get(`/api/trips/${tripId}/plan-transports`);
-  return res.data;
+//! All Plan Transports
+export const getPlanTransports = async (tripId: number): Promise<PlanTransport[]> => {
+  const { data } = await axiosInstance.get<PlanTransport[]>(`/api/trips/${tripId}/plan-transports`);
+  return data;
 };
 
-export const createPlanTransport = async (tripId: number, data: CreatePlanTransport) => {
-  const res = await axiosInstance.post(`/api/trips/${tripId}/plan-transports`, data);
-  return res.data;
+//! Individual Plan Transport
+export const createPlanTransport = async (
+  tripId: number,
+  planTransportData: CreatePlanTransport,
+): Promise<PlanTransport> => {
+  const { data } = await axiosInstance.post<PlanTransport>(
+    `/api/trips/${tripId}/plan-transports`,
+    planTransportData,
+  );
+  return data;
 };
 
 export const updatePlanTransport = async (
   tripId: number,
   transportId: number,
-  data: CreatePlanTransport,
-) => {
-  const res = await axiosInstance.put(`/api/trips/${tripId}/plan-transports/${transportId}`, data);
-  return res.data;
+  planTransportData: CreatePlanTransport,
+): Promise<PlanTransport> => {
+  const { data } = await axiosInstance.put<PlanTransport>(
+    `/api/trips/${tripId}/plan-transports/${transportId}`,
+    planTransportData,
+  );
+  return data;
 };
 
-export const deletePlanTransport = async (tripId: number, transportId: number) => {
-  const res = await axiosInstance.delete(`/api/trips/${tripId}/plan-transports/${transportId}`);
-  return res.data;
+export const deletePlanTransport = async (
+  tripId: number,
+  transportId: number,
+): Promise<DeleteResponse> => {
+  const { data } = await axiosInstance.delete<DeleteResponse>(
+    `/api/trips/${tripId}/plan-transports/${transportId}`,
+  );
+  return data;
 };
