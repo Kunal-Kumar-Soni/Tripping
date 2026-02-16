@@ -4,7 +4,7 @@ export interface Trip {
   description: string;
   destination: string;
   end_date: string;
-  id: string;
+  id: number;
   start_date: string;
   status: string;
   title: string;

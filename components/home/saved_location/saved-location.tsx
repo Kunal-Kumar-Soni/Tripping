@@ -4,7 +4,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronDownIcon } from "lucide-react";
 
 import LocationsList from "./locations-list";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import { dummySavedLocations } from "@/data/savedLocations";

@@ -1,5 +1,5 @@
+import { SavedLocation } from "../saved_location/saved-location";
 import ZoomControl from "../zoom-control";
-import { SavedLocation } from "../saved-location";
 
 const TripView = () => {
   return (
