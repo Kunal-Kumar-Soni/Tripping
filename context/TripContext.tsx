@@ -24,11 +24,18 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   const { isLoading, user } = useAuth();
 
+  const sortedTripsByTime = (trips: Trip[]) => {
+    return [...trips].sort(
+      (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
+    );
+  };
+
   const selectTrip = async (id: number) => {
     try {
       setLoadingSelectedTrip(true);
       setError(null);
       const selectTripData = await getSingleTrip(id);
+
       setSelectedTrip(selectTripData);
     } catch (error: any) {
       setError(error.message);
@@ -45,10 +52,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         setLoadingTrips(true);
         setError(null);
         const tripsData = await getTrips();
-        setTrips(tripsData);
+        const sortedByTime = sortedTripsByTime(tripsData);
+        setTrips(sortedByTime);
 
-        if (tripsData.length > 0 && !selectedTrip) {
-          await selectTrip(tripsData[0].id);
+        if (sortedByTime.length > 0) {
+          await selectTrip(sortedByTime[0].id);
         }
       } catch (error: any) {
         setError(error.message);

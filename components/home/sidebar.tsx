@@ -5,28 +5,23 @@ import { Input } from "../ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import { SidebarModel } from "./sidebar-model";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date";
 import { Button } from "../ui/button";
-import { getTrips } from "@/services/trips";
 import { useAuth } from "@/hooks/useAuth";
-import { Trip } from "@/types/trips";
+import { useTrip } from "@/hooks/useTrip";
 
 const Sidebar = () => {
-  const [trips, setTrips] = useState<Trip[] | null>(null);
-  const [searchData, setSearchData] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>("");
   const { user, isLoading } = useAuth();
+  const { trips, loadingTrips, selectedTrip, loadingSelectedTrip, error, selectTrip } = useTrip();
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      if (!isLoading && user) {
-        const res = await getTrips();
-        setTrips(res);
-      }
-    };
-    fetchTrips();
-  }, [user, isLoading]);
+  const filteredTrips = trips?.filter((el) =>
+    el.title.toLowerCase().includes(searchText.toLowerCase()),
+  );
+
+  console.log(selectedTrip);
 
   return (
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
@@ -48,8 +43,8 @@ const Sidebar = () => {
       {/* Input */}
       <div className="relative w-full">
         <Input
-          onChange={(e) => setSearchData(e.target.value)}
-          value={searchData}
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
           className="bg-accent py-5 pr-10 rounded-full"
           placeholder="Text"
         />
@@ -67,30 +62,39 @@ const Sidebar = () => {
 
       {/* Trips List */}
       <div className="flex flex-col gap-0.5">
-        {trips?.length === 0 ? (
-          <>
-            <h1>No data available</h1>
-          </>
+        {loadingTrips ? (
+          <p className="py-4 text-muted-foreground text-sm text-center">Loading trips...</p>
+        ) : filteredTrips?.length === 0 ? (
+          <p className="py-4 text-muted-foreground text-sm text-center">No trips found.</p>
         ) : (
-          <>
-            {trips?.map((trip) => (
-              <div
-                key={trip.id}
-                className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors cursor-pointer `}
-              >
-                <div className="leading-snug">
-                  <h1 className="font-semibold text-sm">{trip.title}</h1>
-                  <p className="text-muted-foreground text-xs">
-                    {dateFormatter(trip.start_date)} - {dateFormatter(trip.end_date)}
-                  </p>
-                </div>
-                <div className="flex justify-between items-center gap-2">
-                  <h1 className="font-semibold text-sm">3</h1>
-                  <HiUsers />
-                </div>
+          filteredTrips?.map((trip) => (
+            <div
+              key={trip.id}
+              onClick={() => {
+                if (trip.id !== selectedTrip?.id && !loadingSelectedTrip) {
+                  selectTrip(trip.id);
+                }
+              }}
+              className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors hover:bg-accent  ${
+                selectedTrip?.id === trip.id
+                  ? "bg-muted cursor-default"
+                  : loadingSelectedTrip
+                    ? "cursor-not-allowed opacity-70"
+                    : "hover:bg-accent cursor-pointer"
+              }`}
+            >
+              <div className="leading-snug">
+                <h1 className="font-semibold text-sm">{trip.title}</h1>
+                <p className="text-muted-foreground text-xs">
+                  {dateFormatter(trip.start_date)} - {dateFormatter(trip.end_date)}
+                </p>
               </div>
-            ))}
-          </>
+              <div className="flex justify-between items-center gap-2">
+                <h1 className="font-semibold text-sm">3</h1>
+                <HiUsers />
+              </div>
+            </div>
+          ))
         )}
       </div>
 

@@ -1,11 +1,11 @@
 import { ImMagicWand } from "react-icons/im";
 import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
-
 import { Button } from "../../ui/button";
+import { GoGear } from "react-icons/go";
 
 const TripHeader = () => {
   return (
-    <section className="top-0 right-0 left-100 z-50 fixed">
+    <section className="top-0 right-0 left-100 z-40 fixed">
       {/* Header */}
       <header className="flex justify-between items-center bg-black/80 shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)] px-6 py-4 text-white">
         {/* Left */}
@@ -27,12 +27,20 @@ const TripHeader = () => {
 
           <AvatarGroupCountExample person={"4"} />
 
-          <Button
-            size={"icon-lg"}
-            className="flex justify-center items-center bg-indigo-500 hover:bg-indigo-600 rounded-full transition"
-          >
-            <ImMagicWand />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              size={"icon-lg"}
+              className="flex justify-center items-center bg-indigo-500 hover:bg-indigo-600 rounded-full transition"
+            >
+              <ImMagicWand />
+            </Button>
+            <Button
+              size={"icon-lg"}
+              className="flex justify-center items-center border rounded-full transition"
+            >
+              <GoGear />
+            </Button>
+          </div>
         </div>
       </header>
     </section>
