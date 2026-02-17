@@ -2,6 +2,7 @@ import TripSettingsHeader from "./trip-settings-header";
 import DurationCard from "./duration-card";
 import FinanceCard from "./finances-card";
 import MembersCard from "./members-card";
+import { TripDeleteModel } from "./trip-delete-model";
 
 const TripSettings = () => {
   return (

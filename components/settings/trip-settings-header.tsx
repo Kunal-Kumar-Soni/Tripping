@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LuSlash } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { useTrip } from "@/hooks/useTrip";
+import { TripDeleteModel } from "./trip-delete-model";
 
 const TripSettingsHeader = () => {
   const { selectedTrip } = useTrip();
@@ -31,12 +32,7 @@ const TripSettingsHeader = () => {
             Trip Settings
           </span>
         </div>
-        <div>
-          <Button variant={"outline"}>
-            <BsTrash3 />
-            <span>Delete Trip</span>
-          </Button>
-        </div>
+        <TripDeleteModel />
       </div>
 
       {/* Trip Name */}

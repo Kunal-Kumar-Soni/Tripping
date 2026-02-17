@@ -18,7 +18,6 @@ const Sidebar = () => {
   const filteredTrips = trips?.filter((el) =>
     el.title.toLowerCase().includes(searchText.toLowerCase()),
   );
-  console.log(selectedTrip);
 
   return (
     <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
