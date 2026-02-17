@@ -10,8 +10,8 @@ const FinanceCard = () => {
   return (
     <section className="space-y-5 font-medium">
       {/* Title */}
-      <div className="flex items-center gap-4 p-2">
-        <AiFillDollarCircle size={15} />
+      <div className="flex items-center gap-3 p-2">
+        <AiFillDollarCircle size={20} />
         <span>Finances</span>
       </div>
 

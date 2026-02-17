@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { BsTrash3 } from "react-icons/bs";
 import { MdArrowBackIos } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +31,7 @@ const TripSettingsHeader = () => {
             Trip Settings
           </span>
         </div>
+        {/* Delete Button and Model */}
         <TripDeleteModel />
       </div>
 

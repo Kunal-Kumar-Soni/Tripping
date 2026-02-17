@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -13,8 +12,8 @@ const MembersCard = () => {
     <section className="space-y-5 font-medium">
       {/* Title and add button */}
       <div className="flex justify-between items-center px-2">
-        <div className="flex items-center gap-4 p-2">
-          <HiUsers size={15} />
+        <div className="flex items-center gap-3 p-2">
+          <HiUsers size={18} />
           <span>Trip Members</span>
         </div>
         <Button size="icon-sm" variant="outline" className="border-foreground rounded-full">
