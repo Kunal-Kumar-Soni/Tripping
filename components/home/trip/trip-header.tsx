@@ -2,6 +2,7 @@ import { ImMagicWand } from "react-icons/im";
 import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
 import { Button } from "../../ui/button";
 import { GoGear } from "react-icons/go";
+import Link from "next/link";
 
 const TripHeader = () => {
   return (
@@ -35,10 +36,13 @@ const TripHeader = () => {
               <ImMagicWand />
             </Button>
             <Button
+              asChild
               size={"icon-lg"}
               className="flex justify-center items-center border rounded-full transition"
             >
-              <GoGear />
+              <Link href={"/settings"}>
+                <GoGear />
+              </Link>
             </Button>
           </div>
         </div>

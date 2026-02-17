@@ -10,3 +10,14 @@ export const dateFormatter = (date: string) => {
   const formatted = `${dayNumber} ${month} '${year}`;
   return formatted;
 };
+
+export const indianFormat = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const indianDate = date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  const finalFormat = indianDate.split("/").join(" | ");
+  return finalFormat;
+};

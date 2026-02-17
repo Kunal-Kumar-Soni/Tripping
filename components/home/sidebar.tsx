@@ -9,18 +9,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date";
 import { Button } from "../ui/button";
-import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
 
 const Sidebar = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const { user, isLoading } = useAuth();
   const { trips, loadingTrips, selectedTrip, loadingSelectedTrip, error, selectTrip } = useTrip();
 
   const filteredTrips = trips?.filter((el) =>
     el.title.toLowerCase().includes(searchText.toLowerCase()),
   );
-
   console.log(selectedTrip);
 
   return (

@@ -10,7 +10,7 @@ export default function RootLayout({
   const { isLoading } = useAuth();
 
   return (
-    <div className="relative flex min-h-screen">
+    <div className="relative min-h-screen">
       {/* Overlay */}
       {isLoading && <div className="z-50 absolute inset-0 bg-background/50 backdrop-blur-md" />}
       {/* Content */}
@@ -22,7 +22,7 @@ export default function RootLayout({
 
       <Sidebar />
 
-      <main className="flex-1 ml-100">{children}</main>
+      <main className="ml-100">{children}</main>
     </div>
   );
 }
