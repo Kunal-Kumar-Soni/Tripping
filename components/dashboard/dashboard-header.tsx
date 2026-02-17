@@ -5,12 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LuSlash } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import { useTrip } from "@/hooks/useTrip";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { useAuth } from "@/hooks/useAuth";
 
 const DashboardHeader = () => {
-  const { selectedTrip } = useTrip();
+  const { handleLogout } = useAuth();
+
   const router = useRouter();
   return (
     <section className="space-y-6">
@@ -32,7 +33,7 @@ const DashboardHeader = () => {
           </span>
         </div>
         {/* Logout */}
-        <Button variant={"outline"}>
+        <Button onClick={handleLogout} variant={"outline"}>
           <IoLogOutOutline />
           Log out
         </Button>
