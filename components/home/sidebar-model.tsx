@@ -13,28 +13,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BsPlusLg } from "react-icons/bs";
 import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Textarea } from "../ui/textarea";
+
+import { useTrip } from "@/hooks/useTrip";
+import { CreateTrip } from "@/types/trips";
 
 export function SidebarModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { handleCreateSingleTrip } = useTrip();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { tripName, startDate, endDate, status, budget, destination, description } =
-      Object.fromEntries(formData) as Record<string, string>;
+    const { budget, startDate, endDate, tripName } = Object.fromEntries(formData);
 
-    console.log({ tripName, startDate, endDate, status, budget, destination, description });
-
+    const tripData = {
+      budget: Number(budget),
+      start_date: new Date(startDate as string).toISOString(),
+      end_date: new Date(endDate as string).toISOString(),
+      title: tripName as string,
+    };
+    handleCreateSingleTrip(tripData);
     setIsOpen(false);
   };
 
@@ -48,7 +46,7 @@ export function SidebarModel() {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add New Trip</DialogTitle>
+            <DialogTitle>Create a Trip</DialogTitle>
             <DialogDescription>
               Fill in the trip details below. You can update them later if needed.
             </DialogDescription>
@@ -70,57 +68,25 @@ export function SidebarModel() {
               <Input required type="date" id="end-date" name="endDate" />
             </div>
 
-            <div className="gap-3 grid">
+            <div className="gap-3 grid col-span-2">
               <Label htmlFor="budget">Budget</Label>
               <Input required type="number" id="budget" name="budget" />
-            </div>
-
-            <div className="gap-3 grid">
-              <Label htmlFor="budget">Status</Label>
-              <Select name="status">
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Status</SelectLabel>
-                    <SelectItem value="planning">Planning</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="gap-3 grid col-span-2">
-              <Label htmlFor="destination">Destination</Label>
-              <Input required id="destination" name="destination" />
-            </div>
-
-            <div className="gap-3 grid col-span-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                required
-                id="description"
-                name="description"
-                placeholder="Type your description here."
-                rows={5}
-                className="max-h-30"
-              />
             </div>
           </div>
 
           <DialogFooter>
-            <Button
-              className="px-8 py-5 rounded-full"
-              onClick={() => setIsOpen(false)}
-              variant="outline"
-            >
-              Cancel
-            </Button>
-            <Button className="px-8 py-5 rounded-full" type="submit">
-              Create Trip
-            </Button>
+            <div className="flex gap-2 w-full">
+              <Button
+                className="flex-1 px-8 py-5 rounded-full"
+                onClick={() => setIsOpen(false)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button className="flex-1 px-8 py-5 rounded-full" type="submit">
+                Create Trip
+              </Button>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>

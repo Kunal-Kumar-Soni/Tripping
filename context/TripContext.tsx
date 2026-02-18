@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
-import { deleteSingleTrip, getSingleTrip, getTrips } from "@/services/trips";
-import { Trip } from "@/types/trips";
+import { createTrip, deleteSingleTrip, getSingleTrip, getTrips } from "@/services/trips";
+import { CreateTrip, Trip } from "@/types/trips";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface TripContextType {
@@ -11,6 +11,7 @@ interface TripContextType {
   loadingSelectedTrip: boolean;
   error: string | null;
   selectTrip: (id: number) => Promise<void>;
+  handleCreateSingleTrip: (trip: CreateTrip) => Promise<void>;
   handleDeleteSingleTrip: (id: number) => Promise<void>;
 }
 
@@ -42,6 +43,23 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       setError(error.message);
     } finally {
       setLoadingSelectedTrip(false);
+    }
+  };
+
+  const handleCreateSingleTrip = async (tripData: CreateTrip) => {
+    try {
+      setError(null);
+      const newTrip = await createTrip(tripData);
+
+      setTrips((prev) => {
+        if (!prev) return [newTrip];
+        const updated = sortedTripsByTime([...prev, newTrip]);
+        return updated;
+      });
+
+      setSelectedTrip(newTrip);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -101,6 +119,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     loadingSelectedTrip,
     error,
     selectTrip,
+    handleCreateSingleTrip,
     handleDeleteSingleTrip,
   };
 
