@@ -1,28 +1,34 @@
 "use client";
 import Sidebar from "@/components/home/sidebar";
+import GlobalLoader from "@/components/loader/global-loader";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isLoading } = useAuth();
+  const { isLoading, user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/signin");
+    }
+  }, [router, user, isLoading]);
 
   return (
-    <div className="relative min-h-screen">
-      {/* Overlay */}
-      {isLoading && <div className="z-50 absolute inset-0 bg-background/50 backdrop-blur-md" />}
+    <>
+      {/* Global loader in protect routes */}
+      <GlobalLoader isLoading={isLoading} />
+
       {/* Content */}
-      <div
-        className={`flex w-full transition-all duration-300 ${
-          isLoading ? "pointer-events-none select-none" : ""
-        }`}
-      />
-
-      <Sidebar />
-
-      <main className="ml-100">{children}</main>
-    </div>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <main className="flex-1 ml-100">{children}</main>
+      </div>
+    </>
   );
 }

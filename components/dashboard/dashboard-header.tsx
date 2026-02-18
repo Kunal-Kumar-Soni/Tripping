@@ -33,7 +33,13 @@ const DashboardHeader = () => {
           </span>
         </div>
         {/* Logout */}
-        <Button onClick={handleLogout} variant={"outline"}>
+        <Button
+          onClick={() => {
+            handleLogout();
+            router.push("/signin");
+          }}
+          variant={"outline"}
+        >
           <IoLogOutOutline />
           Log out
         </Button>
