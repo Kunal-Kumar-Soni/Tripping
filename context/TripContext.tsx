@@ -1,19 +1,26 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
-import { createTrip, deleteSingleTrip, getSingleTrip, getTrips } from "@/services/trips";
+import {
+  createTrip,
+  deleteSingleTrip,
+  getSingleTrip,
+  getTrips,
+  updateSingleTrip,
+} from "@/services/trips";
 import { CreateTrip, Trip } from "@/types/trips";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-interface TripContextType {
+type TripContextType = {
   trips: Trip[] | null;
   loadingTrips: boolean;
   selectedTrip: Trip | null;
   loadingSelectedTrip: boolean;
   error: string | null;
   selectTrip: (id: number) => Promise<void>;
-  handleCreateSingleTrip: (trip: CreateTrip) => Promise<void>;
+  handleCreateSingleTrip: (tripData: CreateTrip) => Promise<void>;
+  handleUpdateSingleTrip: (tripId: number, tripData: CreateTrip) => Promise<void>;
   handleDeleteSingleTrip: (id: number) => Promise<void>;
-}
+};
 
 export const TripContext = createContext<TripContextType | null>(null);
 
@@ -63,19 +70,35 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handleDeleteSingleTrip = async (id: number) => {
+  const handleUpdateSingleTrip = async (tripId: number, tripData: CreateTrip) => {
     try {
       setError(null);
-      await deleteSingleTrip(id);
+      const updatedTrip = await updateSingleTrip(tripId, tripData);
+      setTrips((prev) => {
+        if (!prev) return null;
+        return prev.map((trip) => (trip.id === tripId ? updatedTrip : trip));
+      });
+      if (selectedTrip?.id === tripId) {
+        setSelectedTrip(updatedTrip);
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  const handleDeleteSingleTrip = async (tripId: number) => {
+    try {
+      setError(null);
+      await deleteSingleTrip(tripId);
 
       setTrips((prev) => {
         if (!prev) return null;
 
-        const updatedTrips = prev.filter((trip) => trip.id !== id);
-        if (selectedTrip?.id === id) {
+        const updatedTrips = prev.filter((trip) => trip.id !== tripId);
+        if (selectedTrip?.id === tripId) {
           setSelectedTrip(updatedTrips[0] ?? null);
         }
-        return updatedTrips;
+        return updatedTrips.length === 0 ? null : updatedTrips;
       });
     } catch (error: any) {
       setError(error.message);
@@ -112,7 +135,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  const tripData = {
+  const value: TripContextType = {
     trips,
     loadingTrips,
     selectedTrip,
@@ -120,8 +143,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     error,
     selectTrip,
     handleCreateSingleTrip,
+    handleUpdateSingleTrip,
     handleDeleteSingleTrip,
   };
 
-  return <TripContext.Provider value={tripData}>{children}</TripContext.Provider>;
+  return <TripContext.Provider value={value}>{children}</TripContext.Provider>;
 };

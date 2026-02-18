@@ -1,8 +1,6 @@
 export interface Trip {
   budget: number;
   created_at: string;
-  description: string;
-  destination: string;
   end_date: string;
   id: number;
   start_date: string;
