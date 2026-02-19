@@ -8,6 +8,7 @@ import { LuSlash } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { useTrip } from "@/hooks/useTrip";
 import { TripDeleteModel } from "./trip-delete-model";
+import { EditTripModel } from "./edit-trip-model";
 
 const TripSettingsHeader = () => {
   const { selectedTrip } = useTrip();
@@ -46,9 +47,7 @@ const TripSettingsHeader = () => {
             <span className="font-semibold">{selectedTrip?.title}</span>
           </div>
 
-          <Button variant={"outline"} size={"icon-sm"} className="border-foreground rounded-full">
-            <LuSlash />
-          </Button>
+          <EditTripModel />
         </CardContent>
       </Card>
     </section>

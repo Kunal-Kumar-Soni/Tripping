@@ -11,7 +11,7 @@ import { CreateTrip, Trip } from "@/types/trips";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 type TripContextType = {
-  trips: Trip[] | null;
+  trips: Trip[];
   loadingTrips: boolean;
   selectedTrip: Trip | null;
   loadingSelectedTrip: boolean;
@@ -25,7 +25,7 @@ type TripContextType = {
 export const TripContext = createContext<TripContextType | null>(null);
 
 export const TripProvider = ({ children }: { children: ReactNode }) => {
-  const [trips, setTrips] = useState<Trip[] | null>(null);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [loadingTrips, setLoadingTrips] = useState<boolean>(false);
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [loadingSelectedTrip, setLoadingSelectedTrip] = useState<boolean>(false);
@@ -57,7 +57,6 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     try {
       setError(null);
       const newTrip = await createTrip(tripData);
-
       setTrips((prev) => {
         if (!prev) return [newTrip];
         const updated = sortedTripsByTime([...prev, newTrip]);
@@ -74,10 +73,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     try {
       setError(null);
       const updatedTrip = await updateSingleTrip(tripId, tripData);
-      setTrips((prev) => {
-        if (!prev) return null;
-        return prev.map((trip) => (trip.id === tripId ? updatedTrip : trip));
-      });
+      setTrips((prev) => prev.map((trip) => (trip.id === tripId ? updatedTrip : trip)));
       if (selectedTrip?.id === tripId) {
         setSelectedTrip(updatedTrip);
       }
@@ -92,13 +88,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       await deleteSingleTrip(tripId);
 
       setTrips((prev) => {
-        if (!prev) return null;
-
         const updatedTrips = prev.filter((trip) => trip.id !== tripId);
         if (selectedTrip?.id === tripId) {
           setSelectedTrip(updatedTrips[0] ?? null);
         }
-        return updatedTrips.length === 0 ? null : updatedTrips;
+        return updatedTrips.length === 0 ? [] : updatedTrips;
       });
     } catch (error: any) {
       setError(error.message);
@@ -117,7 +111,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         setTrips(sortedByTime);
 
         if (sortedByTime.length > 0) {
-          await selectTrip(sortedByTime[0].id);
+          setSelectedTrip(sortedByTime[0]);
         }
       } catch (error: any) {
         setError(error.message);
@@ -130,7 +124,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
-      setTrips(null);
+      setTrips([]);
       setSelectedTrip(null);
     }
   }, [user]);

@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "@/components/home/sidebar";
+import Sidebar from "@/components/trips/sidebar";
 import GlobalLoader from "@/components/loader/global-loader";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";

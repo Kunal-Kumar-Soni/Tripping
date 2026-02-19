@@ -53,6 +53,7 @@ const Sidebar = () => {
       <div className="flex justify-between items-center">
         <h1 className="font-semibold text-xl">Your Trips</h1>
 
+        {/* <SidebarModel /> */}
         <SidebarModel />
       </div>
 
