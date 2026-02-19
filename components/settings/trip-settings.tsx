@@ -1,16 +1,15 @@
 import TripSettingsHeader from "./trip-settings-header";
-import DurationCard from "./duration-card";
-import FinanceCard from "./finances-card";
 import MembersCard from "./members-card";
+import PreferencesCard from "./preferences-card";
 
 const TripSettings = () => {
   return (
     <section className="space-y-8">
       <TripSettingsHeader />
 
-      <div className="gap-6 grid grid-cols-1 md:grid-cols-3">
-        <DurationCard />
-        <FinanceCard />
+      <div className="gap-6 grid grid-cols-1 md:grid-cols-2">
+        {/* <DurationCard /> */}
+        <PreferencesCard />
         <MembersCard />
       </div>
     </section>
