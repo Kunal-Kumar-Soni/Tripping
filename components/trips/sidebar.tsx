@@ -10,6 +10,7 @@ import Link from "next/link";
 import { dateFormatter } from "@/lib/date";
 import { Button } from "../ui/button";
 import { useTrip } from "@/hooks/useTrip";
+import { Spinner, Spinner2 } from "../ui/spinner";
 
 const Sidebar = () => {
   const [searchText, setSearchText] = useState<string>("");
@@ -60,7 +61,9 @@ const Sidebar = () => {
       {/* Trips List */}
       <div className="flex flex-col gap-0.5">
         {loadingTrips ? (
-          <p className="py-4 text-muted-foreground text-sm text-center">Loading trips...</p>
+          <p className="py-4 text-muted-foreground">
+            <Spinner2 className="mx-auto w-6 h-6 text-blue-600" />
+          </p>
         ) : filteredTrips?.length === 0 ? (
           <p className="py-4 text-muted-foreground text-sm text-center">No trips found.</p>
         ) : (

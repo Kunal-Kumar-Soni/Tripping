@@ -24,7 +24,7 @@ const PaymentMethods = () => {
       <div className="flex justify-between items-center p-2">
         <div className="flex items-center gap-3">
           <MdOutlinePayment size={20} />
-          <span>Your Documents</span>
+          <span>Payment Method</span>
         </div>
       </div>
 
