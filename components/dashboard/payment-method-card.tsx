@@ -1,9 +1,8 @@
 import { Button } from "../ui/button";
 import { FiPlus } from "react-icons/fi";
-import { IoDocumentTextOutline } from "react-icons/io5";
 import { MdOutlinePayment } from "react-icons/md";
 
-const PaymentMethods = () => {
+const PaymentMethodsCard = () => {
   const data = [
     {
       title: "Seoul",
@@ -49,4 +48,4 @@ const PaymentMethods = () => {
   );
 };
 
-export default PaymentMethods;
+export default PaymentMethodsCard;

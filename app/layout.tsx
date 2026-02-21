@@ -4,6 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { TripProvider } from "@/context/TripContext";
 
+import { Toaster } from "react-hot-toast";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,6 +35,7 @@ export default function RootLayout({
         <AuthProvider>
           <TripProvider>{children}</TripProvider>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

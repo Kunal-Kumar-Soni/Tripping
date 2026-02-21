@@ -9,6 +9,7 @@ import {
 } from "@/services/trips";
 import { CreateTrip, Trip } from "@/types/trips";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type TripContextType = {
   trips: Trip[];
@@ -62,8 +63,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         const updated = sortedTripsByTime([...prev, newTrip]);
         return updated;
       });
-
       setSelectedTrip(newTrip);
+      toast.success(`${tripData?.title} trip created..`);
     } catch (error: any) {
       setError(error.message);
     }
@@ -77,6 +78,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       if (selectedTrip?.id === tripId) {
         setSelectedTrip(updatedTrip);
       }
+      toast.success("Trip updated.");
     } catch (error: any) {
       setError(error.message);
     }
@@ -94,6 +96,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         }
         return updatedTrips.length === 0 ? [] : updatedTrips;
       });
+      toast.success(`${selectedTrip?.title} trip deleted.`);
     } catch (error: any) {
       setError(error.message);
     }

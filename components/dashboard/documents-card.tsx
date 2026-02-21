@@ -2,7 +2,7 @@ import { Button } from "../ui/button";
 import { FiPlus } from "react-icons/fi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
-const Documents = () => {
+const DocumentsCard = () => {
   const data = [
     {
       title: "Seoul",
@@ -48,4 +48,4 @@ const Documents = () => {
   );
 };
 
-export default Documents;
+export default DocumentsCard;

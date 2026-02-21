@@ -1,8 +1,7 @@
-import React from "react";
 import DashboardHeader from "./dashboard-header";
-import Documents from "./documents";
-import PaymentMethods from "./payment-method";
 import UserInfoCard from "./user-info-card";
+import DocumentsCard from "./documents-card";
+import PaymentMethodsCard from "./payment-method-card";
 
 const Dashboard = () => {
   return (
@@ -12,8 +11,8 @@ const Dashboard = () => {
       {/* Content Overview */}
       <UserInfoCard />
       <div className="gap-6 grid grid-cols-1 md:grid-cols-3">
-        <Documents />
-        <PaymentMethods />
+        <DocumentsCard />
+        <PaymentMethodsCard />
       </div>
     </section>
   );
