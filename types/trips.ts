@@ -10,9 +10,4 @@ export interface Trip {
   user_id: string;
 }
 
-export interface CreateTrip {
-  budget: number;
-  end_date: string;
-  start_date: string;
-  title: string;
-}
+export type CreateTrip = Omit<Trip, "created_at" | "id" | "status" | "updated_at" | "user_id">;

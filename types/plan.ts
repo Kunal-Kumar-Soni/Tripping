@@ -17,20 +17,7 @@ export interface Plan {
   updated_at: string;
 }
 
-export interface CreatePlan {
-  address: string;
-  end_date: string;
-  end_time: string;
-  location_name: string;
-  notes: string;
-  order_index: number;
-  section: string;
-  start_date: string;
-  start_time: string;
-  status: string;
-  title: string;
-  type: string;
-}
+export type CreatePlan = Omit<Plan, "created_at" | "id" | "trip_id" | "updated_at">;
 
 export interface PlanTransport {
   arrive_date: string;
@@ -48,14 +35,7 @@ export interface PlanTransport {
   updated_at: string;
 }
 
-export interface CreatePlanTransport {
-  arrive_date: string;
-  arrive_time: string;
-  depart_date: string;
-  depart_time: string;
-  from_item_id: number;
-  mode: string;
-  notes: string;
-  order_index: number;
-  to_item_id: number;
-}
+export type CreatePlanTransport = Omit<
+  PlanTransport,
+  "created_at" | "id" | "trip_id" | "updated_at"
+>;

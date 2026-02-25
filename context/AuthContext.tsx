@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
+import toast from "react-hot-toast";
 
 type AppUser = {
   id: string;
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       setError(null);
+      setIsLoading(true);
       if (!firebaseUser) {
         setUser(null);
         setIsLoading(false);
@@ -69,49 +71,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const handleSignupWithEmailAndPassword = async (email: string, password: string) => {
-    setIsLoading(true);
     setError(null);
+    setIsLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
       setError(error.message);
-    } finally {
       setIsLoading(false);
     }
   };
 
   const handleSigninWithEmailAndPassword = async (email: string, password: string) => {
-    setIsLoading(true);
     setError(null);
+    setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
       setError(error.message);
-    } finally {
       setIsLoading(false);
     }
   };
 
   const handleWithGoogle = async () => {
-    setIsLoading(true);
     setError(null);
+    setIsLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (error: any) {
       setError(error.message);
-    } finally {
       setIsLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    setIsLoading(true);
     setError(null);
+    setIsLoading(true);
     try {
       await signOut(auth);
+      toast.success("Logout successfully");
     } catch (error: any) {
       setError(error.message);
-    } finally {
       setIsLoading(false);
     }
   };
