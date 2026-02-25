@@ -78,6 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       setError(error.message);
       setIsLoading(false);
+      toast.error(error.message);
     }
   };
 
