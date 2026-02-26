@@ -12,32 +12,16 @@ import { dummySavedLocations } from "@/data/savedLocations";
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 import { SavedLocationModel } from "./saved-location-model";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
 export function SavedLocation() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
-
-  const [savedLocations, setSavedLocations] = useState(dummySavedLocations);
-  const filteredLocations = savedLocations.filter((loc) => loc.category === activeCategory);
+  const filteredLocations = dummySavedLocations.filter((loc) => loc.category === activeCategory);
 
   const locationsButtons = [
     { type: "restaurant", icon: MdOutlineRestaurant },
     { type: "hotel", icon: BiSolidLandmark },
     { type: "activity", icon: MdHiking },
   ];
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
-
-    setSavedLocations((item) => {
-      const oldIndex = item.findIndex((el) => el.id === active.id);
-      const newIndex = item.findIndex((el) => el.id === over.id);
-      return arrayMove(item, oldIndex, newIndex);
-    });
-  };
 
   return (
     <Card className="top-30 right-6 fixed py-4 w-full max-w-94">
@@ -73,20 +57,11 @@ export function SavedLocation() {
               })}
             </div>
             {/* Locations list */}
-            <DndContext onDragEnd={handleDragEnd} id="locations">
-              <SortableContext
-                items={filteredLocations.map((el) => el.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <LocationsList locations={filteredLocations} />
-              </SortableContext>
-            </DndContext>
+
+            <LocationsList locations={filteredLocations} />
 
             {/* Add new activity Model */}
-            <SavedLocationModel
-              activeCategory={activeCategory}
-              setSavedLocations={setSavedLocations}
-            />
+            <SavedLocationModel />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

@@ -3,38 +3,40 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Dispatch, SetStateAction, useState } from "react";
-import { SavedLocationsType } from "./locations-list";
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-type SavedLocationModelType = {
-  activeCategory: string;
-  setSavedLocations: Dispatch<SetStateAction<SavedLocationsType[]>>;
+type SavedLocationFormData = {
+  name: string;
+  location: string;
+  category: string;
 };
 
-export function SavedLocationModel({ activeCategory, setSavedLocations }: SavedLocationModelType) {
+export function SavedLocationModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { name, location } = Object.fromEntries(formData) as Record<string, string>;
+    const formValue = Object.fromEntries(formData) as SavedLocationFormData;
+    const { name, location, category } = formValue;
+    console.log({ name, location, category });
 
-    if (name.trim() === "" || location.trim() === "") return;
-
-    const newData = {
-      id: crypto.randomUUID().toString(),
-      title: name,
-      address: location,
-      category: activeCategory,
-    };
-
-    setSavedLocations((prev) => [...prev, newData]);
     setIsOpen(false);
   };
   return (
@@ -42,19 +44,38 @@ export function SavedLocationModel({ activeCategory, setSavedLocations }: SavedL
       <DialogTrigger className="w-full" asChild>
         <Button className="py-6 rounded-full">Add Activity</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>Add Activity</DialogTitle>
+            <DialogDescription>
+              Enter activity details to keep your trip organized.
+            </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
-            <Input required className="bg-muted py-5 rounded-lg" name="name" placeholder="Name" />
-            <Input
-              required
-              className="bg-muted py-5 rounded-lg"
-              name="location"
-              placeholder="Location"
-            />
+          <div className="gap-4 grid grid-cols-2">
+            <div className="gap-3 grid col-span-2">
+              <Label htmlFor="name">Name</Label>
+              <Input required id="name" name="name" />
+            </div>
+            <div className="gap-3 grid col-span-2">
+              <Label htmlFor="location">Location</Label>
+              <Input required id="location" name="location" />
+            </div>
+            <div className="gap-3 grid col-span-2">
+              <Label>Category</Label>
+              <Select name="category" defaultValue="restaurant">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                    <SelectItem value="hotel">Hotel</SelectItem>
+                    <SelectItem value="activity">Activity</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <DialogFooter className="flex gap-2 w-full">
             <Button

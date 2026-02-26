@@ -27,7 +27,6 @@ const LocationsList = ({ locations }: { locations: SavedLocationsType[] }) => {
           return (
             <LocationCard
               key={location.id}
-              id={location.id}
               address={location.address}
               title={location.title}
               Icon={Icon}
