@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axios";
-import { DeleteResponse } from "@/types/common";
 import { CreatePlan, CreatePlanTransport, Plan, PlanTransport } from "@/types/plan";
+import { DeleteResponse } from "@/types/common";
 
 //! All plans
 export const getPlans = async (tripId: number): Promise<Plan[]> => {
