@@ -1,5 +1,7 @@
 import Sidebar from "@/components/trip/sidebar";
-import AuthGuard from "@/components/auth/auth-guard";
+import ProtectedGuard from "@/components/auth/protected-guard";
+import { TripProvider } from "@/context/TripContext";
+import ActivityProvider from "@/context/ActivityContext";
 
 export default function RootLayout({
   children,
@@ -7,12 +9,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthGuard>
-      {/* Content */}
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1 ml-100">{children}</main>
-      </div>
-    </AuthGuard>
+    <ProtectedGuard>
+      <TripProvider>
+        <ActivityProvider>
+          {/* Content */}
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <main className="flex-1 ml-100">{children}</main>
+          </div>
+        </ActivityProvider>
+      </TripProvider>
+    </ProtectedGuard>
   );
 }

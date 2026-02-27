@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from "react";
 import GlobalLoader from "../loader/global-loader";
 import { useRouter } from "next/navigation";
 
-const AuthGuard = ({ children }: { children: ReactNode }) => {
+const ProtectedGuard = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
@@ -16,8 +16,10 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
 
   if (isLoading) return <GlobalLoader />;
 
-  if (!user) return null;
-  return <>{children}</>;
+  if (user) {
+    return <>{children}</>;
+  }
+  return null;
 };
 
-export default AuthGuard;
+export default ProtectedGuard;

@@ -16,8 +16,10 @@ const PublicGuard = ({ children }: { children: ReactNode }) => {
 
   if (isLoading) return <GlobalLoader />;
 
-  if (user) return null;
-  return <>{children}</>;
+  if (!user) {
+    return <>{children}</>;
+  }
+  return null;
 };
 
 export default PublicGuard;
