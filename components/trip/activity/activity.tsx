@@ -3,19 +3,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDownIcon } from "lucide-react";
 
-import LocationsList from "./locations-list";
+import LocationsList from "./activity-list";
 import { Button } from "@/components/ui/button";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { useState } from "react";
-import { dummySavedLocations } from "@/data/savedLocations";
 
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import { SavedLocationModel } from "./saved-location-model";
+import { ActivityModel } from "./activity-model";
+import { useActivity } from "@/hooks/useActivity";
 
-export function SavedLocation() {
+export function Activity() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
-  const filteredLocations = dummySavedLocations.filter((loc) => loc.category === activeCategory);
+  const { activities } = useActivity();
+
+  const filteredLocations = activities.filter((loc) => loc.category === activeCategory);
 
   const locationsButtons = [
     { type: "restaurant", icon: MdOutlineRestaurant },
@@ -61,7 +63,7 @@ export function SavedLocation() {
             <LocationsList locations={filteredLocations} />
 
             {/* Add new activity Model */}
-            <SavedLocationModel />
+            <ActivityModel />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

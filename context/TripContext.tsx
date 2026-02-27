@@ -6,8 +6,8 @@ import {
   getSingleTrip,
   getTrips,
   updateSingleTrip,
-} from "@/services/trips";
-import { CreateTrip, Trip } from "@/types/trips";
+} from "@/services/trip";
+import { CreateTrip, Trip } from "@/types/trip";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 

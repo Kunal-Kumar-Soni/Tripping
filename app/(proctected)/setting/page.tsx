@@ -1,4 +1,4 @@
-import TripSettings from "@/components/settings/trip-settings";
+import TripSettings from "@/components/setting/trip-settings";
 
 const page = () => {
   return (

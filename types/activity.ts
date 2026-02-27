@@ -1,9 +1,9 @@
 export interface Activity {
   category: string;
-  cost: number;
+  cost?: number;
   created_at: string;
-  description: string;
-  duration: number;
+  description?: string;
+  duration?: number;
   id: number;
   location: string;
   name: string;

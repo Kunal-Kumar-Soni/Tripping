@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import { Activity, CreateActivity } from "@/types/activities";
+import { Activity, CreateActivity } from "@/types/activity";
 import { DeleteResponse } from "@/types/common";
 
 //! All Activities

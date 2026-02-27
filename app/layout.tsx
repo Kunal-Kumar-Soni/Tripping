@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { TripProvider } from "@/context/TripContext";
 
 import { Toaster } from "react-hot-toast";
+import ActivityProvider from "@/context/ActivityContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <TripProvider>{children}</TripProvider>
+          <TripProvider>
+            <ActivityProvider>{children}</ActivityProvider>
+          </TripProvider>
         </AuthProvider>
         <Toaster />
       </body>

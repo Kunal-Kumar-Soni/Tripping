@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import { CreateTrip, Trip } from "@/types/trips";
+import { CreateTrip, Trip } from "@/types/trip";
 import { DeleteResponse } from "@/types/common";
 
 //! All Trips

@@ -1,4 +1,4 @@
-import Sidebar from "@/components/trips/sidebar";
+import Sidebar from "@/components/trip/sidebar";
 import AuthGuard from "@/components/auth/auth-guard";
 
 export default function RootLayout({

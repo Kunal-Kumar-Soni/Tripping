@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CreateTrip, Trip } from "@/types/trips";
+import { CreateTrip, Trip } from "@/types/trip";
 import { DialogClose } from "../ui/dialog";
 
 type TripsFormProps = {
