@@ -14,8 +14,6 @@ import toast from "react-hot-toast";
 type AppUser = {
   id: string;
   email: string;
-  name?: string;
-  avatar?: string;
 };
 
 type AuthContextType = {
@@ -37,11 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBackendUser = async (): Promise<AppUser> => {
-    const { data } = await axiosInstance.get("/api/user");
-    return data;
-  };
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       setError(null);
@@ -53,8 +46,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       try {
-        const backendUser = await fetchBackendUser();
-        setUser(backendUser);
+        const { data } = await axiosInstance.get("/api/user");
+        setUser(data);
       } catch (error: any) {
         setError(error.message);
         if (error.response?.status === 401) {

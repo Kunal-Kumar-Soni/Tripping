@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createActivity } from "@/services/activity";
+import { useActivity } from "@/hooks/useActivity";
 
 type SavedLocationFormData = {
   name: string;
@@ -30,13 +30,14 @@ type SavedLocationFormData = {
 
 export function ActivityModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { handleCreateSingleActivity } = useActivity();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const formValue = Object.fromEntries(formData) as SavedLocationFormData;
 
-    createActivity(formValue);
+    handleCreateSingleActivity(formValue);
     setIsOpen(false);
   };
   return (

@@ -13,7 +13,7 @@ import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 import { ActivityModel } from "./activity-model";
 import { useActivity } from "@/hooks/useActivity";
 
-export function Activity() {
+export function ActivityPage() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
   const { activities } = useActivity();
 

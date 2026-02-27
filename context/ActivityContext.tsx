@@ -7,7 +7,8 @@ import {
   updateSingleActivity,
 } from "@/services/activity";
 import { Activity, CreateActivity } from "@/types/activity";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type ActivityContextType = {
   activities: Activity[];
@@ -27,16 +28,19 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
 
   const { isLoading, user } = useAuth();
 
+  // Create Activity
   const handleCreateSingleActivity = async (activityData: CreateActivity) => {
     setError(null);
     try {
       const newActivity = await createActivity(activityData);
       setActivities((prev) => [...prev, newActivity]);
+      toast.success("Activity Added");
     } catch (error: any) {
       setError(error.message);
     }
   };
 
+  // Update Activity
   const handleUpdateSingleActivity = async (activityId: number, activityData: CreateActivity) => {
     setError(null);
     try {
@@ -49,6 +53,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Delete Activity
   const handleDeleteSingleActivity = async (activityId: number) => {
     setError(null);
     try {
@@ -59,20 +64,26 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Fetch Activities
+  const fetchActivities = useCallback(async () => {
+    setError(null);
+    setLoadingActivities(true);
+    try {
+      const res = await getActivities();
+      setActivities(res);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoadingActivities(false);
+    }
+  }, []);
+
   useEffect(() => {
-    if (isLoading || !user) return;
-    const fetchActivities = async () => {
-      setError(null);
-      setLoadingActivities(true);
-      try {
-        const res = await getActivities();
-        setActivities(res);
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoadingActivities(false);
-      }
-    };
+    if (isLoading) return;
+    if (!user) {
+      setActivities([]);
+      return;
+    }
     fetchActivities();
   }, [isLoading, user]);
 

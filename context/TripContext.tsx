@@ -8,7 +8,7 @@ import {
   updateSingleTrip,
 } from "@/services/trip";
 import { CreateTrip, Trip } from "@/types/trip";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type TripContextType = {
@@ -34,12 +34,14 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   const { isLoading, user } = useAuth();
 
+  // Sorted Trips By Time
   const sortedTripsByTime = (trips: Trip[]) => {
     return [...trips].sort(
       (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
     );
   };
 
+  // Select Trip Function
   const selectTrip = async (id: number) => {
     try {
       setLoadingSelectedTrip(true);
@@ -54,6 +56,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Create Trip
   const handleCreateSingleTrip = async (tripData: CreateTrip) => {
     try {
       setError(null);
@@ -70,6 +73,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Update Trip
   const handleUpdateSingleTrip = async (tripId: number, tripData: CreateTrip) => {
     try {
       setError(null);
@@ -84,6 +88,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Delete Trip
   const handleDeleteSingleTrip = async (tripId: number) => {
     try {
       setError(null);
@@ -102,26 +107,31 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    if (isLoading || !user) return;
+  // Fetch Trips
+  const fetchTrips = useCallback(async () => {
+    setError(null);
+    setLoadingTrips(true);
+    try {
+      const tripsData = await getTrips();
+      const sortedByTime = sortedTripsByTime(tripsData);
+      setTrips(sortedByTime);
 
-    const fetchTrips = async () => {
-      try {
-        setLoadingTrips(true);
-        setError(null);
-        const tripsData = await getTrips();
-        const sortedByTime = sortedTripsByTime(tripsData);
-        setTrips(sortedByTime);
-
-        if (sortedByTime.length > 0) {
-          setSelectedTrip(sortedByTime[0]);
-        }
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoadingTrips(false);
+      if (sortedByTime.length > 0) {
+        setSelectedTrip(sortedByTime[0]);
       }
-    };
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoadingTrips(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!user) {
+      setTrips([]);
+      return;
+    }
     fetchTrips();
   }, [isLoading, user]);
 

@@ -17,10 +17,11 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const user = auth.currentUser;
+    await auth.authStateReady();
 
+    const user = auth.currentUser;
     if (user) {
-      const token = await user.getIdToken();
+      const token = await user.getIdToken(true);
       // console.log(token);
       config.headers.Authorization = `Bearer ${token}`;
     }
