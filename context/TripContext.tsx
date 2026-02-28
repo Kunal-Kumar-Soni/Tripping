@@ -109,6 +109,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch Trips
   const fetchTrips = useCallback(async () => {
+    if (!user?.uid) return;
     setError(null);
     setLoadingTrips(true);
     try {
@@ -124,23 +125,18 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoadingTrips(false);
     }
-  }, []);
+  }, [user?.uid]);
 
   useEffect(() => {
     if (isLoading) return;
-    if (!user) {
-      setTrips([]);
-      return;
-    }
-    fetchTrips();
-  }, [isLoading, user]);
 
-  useEffect(() => {
-    if (!user) {
+    if (user?.uid) {
+      fetchTrips();
+    } else {
       setTrips([]);
       setSelectedTrip(null);
     }
-  }, [user]);
+  }, [isLoading, user?.uid, fetchTrips]);
 
   const value: TripContextType = {
     trips,

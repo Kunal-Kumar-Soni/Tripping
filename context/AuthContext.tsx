@@ -12,8 +12,8 @@ import axiosInstance from "@/lib/axios";
 import toast from "react-hot-toast";
 
 type AppUser = {
-  id: string;
   email: string;
+  uid: string;
 };
 
 type AuthContextType = {

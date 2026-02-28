@@ -66,6 +66,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch Activities
   const fetchActivities = useCallback(async () => {
+    if (!user?.uid) return;
     setError(null);
     setLoadingActivities(true);
     try {
@@ -76,16 +77,18 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoadingActivities(false);
     }
-  }, []);
+  }, [user?.uid]);
 
   useEffect(() => {
     if (isLoading) return;
-    if (!user) {
+
+    if (user?.uid) {
+      fetchActivities();
+      console.count("Activities Api Call");
+    } else {
       setActivities([]);
-      return;
     }
-    fetchActivities();
-  }, [isLoading, user]);
+  }, [isLoading, user?.uid, fetchActivities]);
 
   const value: ActivityContextType = {
     activities,
