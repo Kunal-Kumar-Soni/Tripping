@@ -1,19 +1,27 @@
 "use client";
+import { Activity } from "@/types/activity";
 import { IconType } from "react-icons/lib";
+import { ActivityFromModel } from "./activity-from-model";
 
 type Props = {
-  name: string;
-  location: string;
+  activity: Activity;
   Icon: IconType;
 };
 
-const ActivityCard = ({ name, location, Icon }: Props) => {
+const ActivityCard = ({ activity, Icon }: Props) => {
   return (
-    <div className="flex items-center gap-4 px-5 py-2 border rounded-xl">
-      <Icon size={18} />
-      <div className="leading-tight">
-        <h1 className="font-semibold">{name}</h1>
-        <p className="text-muted-foreground">{location}</p>
+    <div className="flex justify-between px-5 py-2 border rounded-xl">
+      <div className="flex items-center gap-4">
+        <Icon size={18} />
+
+        <div className="leading-tight">
+          <h1 className="font-semibold">{activity.name}</h1>
+          <p className="text-muted-foreground">{activity.location}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center">
+        <ActivityFromModel mode="update" initialData={activity} />
       </div>
     </div>
   );

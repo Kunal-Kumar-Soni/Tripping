@@ -11,21 +11,14 @@ const categoryIconMap: { [key: string]: IconType } = {
   activity: MdHiking,
 };
 
-const LocationsList = ({ locations }: { locations: Activity[] }) => {
+const LocationsList = ({ activities }: { activities: Activity[] }) => {
   return (
     <section className="space-y-4 w-full">
       <div className="flex flex-col gap-1">
-        {locations.map((location) => {
-          const Icon = categoryIconMap[location.category];
+        {activities.map((activity) => {
+          const Icon = categoryIconMap[activity.category];
 
-          return (
-            <ActivityCard
-              key={location.id}
-              name={location.name}
-              location={location.location}
-              Icon={Icon}
-            />
-          );
+          return <ActivityCard key={activity.id} activity={activity} Icon={Icon} />;
         })}
       </div>
     </section>

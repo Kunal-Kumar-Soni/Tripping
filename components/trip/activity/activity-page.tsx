@@ -10,8 +10,8 @@ import { useState } from "react";
 
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import { ActivityModel } from "./activity-model";
 import { useActivity } from "@/hooks/useActivity";
+import { ActivityFromModel } from "./activity-from-model";
 
 export function ActivityPage() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
@@ -60,10 +60,10 @@ export function ActivityPage() {
             </div>
             {/* Locations list */}
 
-            <LocationsList locations={filteredLocations} />
+            <LocationsList activities={filteredLocations} />
 
             {/* Add new activity Model */}
-            <ActivityModel />
+            <ActivityFromModel mode="create" />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

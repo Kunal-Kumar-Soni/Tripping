@@ -14,6 +14,7 @@ type ActivityContextType = {
   activities: Activity[];
   loadingActivities: boolean;
   error: string | null;
+  mutationType: "create" | "update" | "delete" | null;
   handleCreateSingleActivity: (activityData: CreateActivity) => Promise<void>;
   handleUpdateSingleActivity: (activityId: number, activityData: CreateActivity) => Promise<void>;
   handleDeleteSingleActivity: (activityId: number) => Promise<void>;
@@ -25,42 +26,54 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [mutationType, setMutationType] = useState<"create" | "update" | "delete" | null>(null);
 
   const { isLoading, user } = useAuth();
 
   // Create Activity
   const handleCreateSingleActivity = async (activityData: CreateActivity) => {
     setError(null);
+    setMutationType("create");
     try {
       const newActivity = await createActivity(activityData);
-      setActivities((prev) => [...prev, newActivity]);
+      setActivities((prev) => [newActivity, ...prev]);
       toast.success("Activity Added");
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
   // Update Activity
   const handleUpdateSingleActivity = async (activityId: number, activityData: CreateActivity) => {
     setError(null);
+    setMutationType("update");
     try {
       const updateActivity = await updateSingleActivity(activityId, activityData);
       setActivities((prev) =>
         prev.map((activity) => (activity.id === activityId ? updateActivity : activity)),
       );
+      toast.success("Activity Updated");
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
   // Delete Activity
   const handleDeleteSingleActivity = async (activityId: number) => {
     setError(null);
+    setMutationType("delete");
     try {
       await deleteSingleActivity(activityId);
       setActivities((prev) => prev.filter((activity) => activity.id !== activityId));
+      toast.success("Activity Deleted");
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
@@ -94,6 +107,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     activities,
     loadingActivities,
     error,
+    mutationType,
     handleCreateSingleActivity,
     handleUpdateSingleActivity,
     handleDeleteSingleActivity,
