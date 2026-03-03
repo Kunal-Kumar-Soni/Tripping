@@ -8,7 +8,6 @@ import { differenceInDays } from "date-fns";
 
 const DurationCard = () => {
   const { selectedTrip } = useTrip();
-  if (!selectedTrip) return null;
 
   // hardcoded value
   const estimate = 5000;
@@ -16,7 +15,9 @@ const DurationCard = () => {
   const percentage = (estimate / totalBudget) * 100;
 
   //Duration
-  const duration = differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
+  const duration = selectedTrip
+    ? differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1
+    : "---";
 
   return (
     <Card className="shadow-none py-3">
@@ -27,7 +28,7 @@ const DurationCard = () => {
               <AvatarFallback></AvatarFallback>
             </Avatar>
 
-            <span className="font-semibold">{selectedTrip?.title}</span>
+            <span className="font-semibold">{selectedTrip?.title || "---"}</span>
           </div>
 
           <EditTripModel />
@@ -38,18 +39,22 @@ const DurationCard = () => {
           <div className="flex flex-col flex-1 justify-between">
             <div className="mb-2 font-semibold">
               <h3>Duration</h3>
-              <p className="text-muted-foreground text-sm">{duration} Days</p>
+              <p className="text-muted-foreground text-sm"> {duration} Days</p>
             </div>
 
             <div className="grid grid-cols-2 font-semibold text-sm">
               <div>
                 <p className="text-muted-foreground text-sm">From</p>
-                <p className="font-semibold =">{indianFormat(selectedTrip?.start_date)}</p>
+                <p className="font-semibold =">
+                  {selectedTrip ? indianFormat(selectedTrip?.start_date) : "---"}
+                </p>
               </div>
 
               <div>
                 <p className="text-muted-foreground text-sm">To</p>
-                <p className="font-semibold">{indianFormat(selectedTrip?.end_date)}</p>
+                <p className="font-semibold">
+                  {selectedTrip ? indianFormat(selectedTrip?.end_date) : "---"}
+                </p>
               </div>
             </div>
           </div>

@@ -97,7 +97,6 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
 
     if (user?.uid) {
       fetchActivities();
-      console.count("Activities Api Call");
     } else {
       setActivities([]);
     }

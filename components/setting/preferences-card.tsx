@@ -8,14 +8,11 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
 
 const PreferencesCard = () => {
-  const { selectedTrip } = useTrip();
-  if (!selectedTrip) return null;
   return (
     <section className="space-y-5 font-medium">
       {/* Title */}

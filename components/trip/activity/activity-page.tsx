@@ -12,10 +12,11 @@ import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 import { useActivity } from "@/hooks/useActivity";
 import { ActivityFromModel } from "./activity-from-model";
+import { Spinner, Spinner2 } from "@/components/ui/spinner";
 
 export function ActivityPage() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
-  const { activities } = useActivity();
+  const { activities, loadingActivities } = useActivity();
 
   const filteredLocations = activities.filter((loc) => loc.category === activeCategory);
 
@@ -60,7 +61,11 @@ export function ActivityPage() {
             </div>
             {/* Locations list */}
 
-            <LocationsList activities={filteredLocations} />
+            {loadingActivities ? (
+              <Spinner2 className="mx-auto w-6 h-6 text-blue-600" />
+            ) : (
+              <LocationsList activities={filteredLocations} />
+            )}
 
             {/* Add new activity Model */}
             <ActivityFromModel mode="create" />
