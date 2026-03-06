@@ -1,5 +1,5 @@
-import { ActivityPage } from "./activity/activity-page";
-import ZoomControl from "./zoom-control";
+import { ActivityPage } from "../activity/activity-page";
+import ZoomControl from "../common/zoom-control";
 
 const TripView = () => {
   return (

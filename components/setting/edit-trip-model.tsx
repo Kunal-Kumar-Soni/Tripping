@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { TripForm } from "../trip/trip-form";
+import { TripForm } from "../trip/common/trip-form";
 import { LuSlash } from "react-icons/lu";
 
 export function EditTripModel() {

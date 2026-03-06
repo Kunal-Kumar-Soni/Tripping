@@ -1,16 +1,16 @@
 "use client";
 import { Bell, Search } from "lucide-react";
 import Image from "next/image";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import { SidebarModel } from "./sidebar-model";
 import { useState } from "react";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useTrip } from "@/hooks/useTrip";
-import { Spinner, Spinner2 } from "../ui/spinner";
+import { Spinner, Spinner2 } from "@/components/ui/spinner";
 
 const Sidebar = () => {
   const [searchText, setSearchText] = useState<string>("");

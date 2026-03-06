@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CreateTrip, Trip } from "@/types/trip";
-import { DialogClose } from "../ui/dialog";
+import { DialogClose } from "@/components/ui/dialog";
 
 type TripsFormProps = {
   initialData?: Trip;

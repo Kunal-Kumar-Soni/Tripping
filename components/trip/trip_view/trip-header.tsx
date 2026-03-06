@@ -1,7 +1,7 @@
 "use client";
 import { ImMagicWand } from "react-icons/im";
-import { AvatarGroupCountExample } from "../ui/avatar-group-count-example";
-import { Button } from "../ui/button";
+import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
+import { Button } from "../../ui/button";
 import { GoGear } from "react-icons/go";
 import Link from "next/link";
 import { useTrip } from "@/hooks/useTrip";

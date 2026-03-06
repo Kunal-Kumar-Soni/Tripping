@@ -1,6 +1,6 @@
 import { useTrip } from "@/hooks/useTrip";
 import { useState } from "react";
-import { TripForm } from "./trip-form";
+import { TripForm } from "../common/trip-form";
 import {
   Dialog,
   DialogContent,
@@ -8,9 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+
 import { BsPlusLg } from "react-icons/bs";
+import { Button } from "@/components/ui/button";
 
 export function SidebarModel() {
   const [isOpen, setIsOpen] = useState(false);

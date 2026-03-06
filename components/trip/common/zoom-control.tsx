@@ -1,5 +1,5 @@
-import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";

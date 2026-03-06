@@ -1,4 +1,4 @@
-import Sidebar from "@/components/trip/sidebar";
+import Sidebar from "@/components/trip/sidebar/sidebar";
 import ProtectedGuard from "@/components/auth/protected-guard";
 import { TripProvider } from "@/context/TripContext";
 import ActivityProvider from "@/context/ActivityContext";
