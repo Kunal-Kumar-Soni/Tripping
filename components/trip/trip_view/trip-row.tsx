@@ -9,7 +9,7 @@ type TripRowProps = {
 };
 
 const backgroundShadowStyle: React.CSSProperties = {
-  backgroundColor: "rgba(30, 30, 35, 0.35)",
+  backgroundColor: "#B2B2B2",
 };
 
 const TripRow = ({ children, isDark, date, hour }: TripRowProps) => {
@@ -18,9 +18,9 @@ const TripRow = ({ children, isDark, date, hour }: TripRowProps) => {
   return (
     <div
       ref={setNodeRef}
-      style={isDark ? backgroundShadowStyle : undefined}
-      className={`flex items-center p-2 h-20 border-b transition-all
-       ${isOver ? "border-2 border-dashed border-blue-400 bg-blue-50/40" : ""}`}
+      className={`flex items-center p-2 h-20 transition-all 
+        ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}
+       ${isOver ? "border-dashed border border-blue-400 " : ""}`}
     >
       {children}
     </div>

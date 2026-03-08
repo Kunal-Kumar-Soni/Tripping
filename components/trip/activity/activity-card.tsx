@@ -2,6 +2,7 @@
 import { Activity } from "@/types/activity";
 import { IconType } from "react-icons/lib";
 import { ActivityFromModel } from "./activity-from-model";
+import { useDraggable } from "@dnd-kit/core";
 
 type Props = {
   activity: Activity;
@@ -9,8 +10,24 @@ type Props = {
 };
 
 const ActivityCard = ({ activity, Icon }: Props) => {
+  const { setNodeRef, attributes, listeners, transform } = useDraggable({ id: activity.id });
+
+  const style = transform
+    ? {
+        transform: `translate(${transform.x}px, ${transform.y}px)`,
+        cursor: "move",
+        zIndex: "50",
+      }
+    : undefined;
+
   return (
-    <div className="flex justify-between px-5 py-2 border rounded-xl">
+    <div
+      style={style}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className="flex justify-between px-5 py-2 border rounded-xl"
+    >
       <div className="flex items-center gap-4">
         <Icon size={18} />
 
@@ -20,7 +37,7 @@ const ActivityCard = ({ activity, Icon }: Props) => {
         </div>
       </div>
 
-      <div className="flex items-center">
+      <div onClick={(e) => e.stopPropagation()} className="flex items-center">
         <ActivityFromModel mode="update" initialData={activity} />
       </div>
     </div>

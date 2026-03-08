@@ -4,11 +4,11 @@ import { ActivityPage } from "../activity/activity-page";
 import ZoomControl from "../common/zoom-control";
 import TripViewCard, { Activity } from "./trip-view-card";
 import TripRow from "./trip-row";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { useState } from "react";
 
 const activityInfo = {
-  id: 1,
+  id: 10,
   title: "Eiffel Tower",
   date: "2026-04-01",
   hour: 0,
@@ -30,12 +30,20 @@ const TripView = () => {
     setActivity((prev) => (prev.id === active.id ? { ...prev, date, hour: hourNumber } : prev));
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  );
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex mt-18 border">
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <div className="flex mt-18">
         {dates.map((date) => (
-          <div key={date} className="border-r w-83">
-            <div className="top-18 z-50 sticky bg-black/80 p-2 font-medium text-white">
+          <div key={date} className="w-full">
+            <div className="top-18 z-50 sticky bg-black/80 p-2 border-r font-medium text-white">
               {tripFormate(date)}
             </div>
 
