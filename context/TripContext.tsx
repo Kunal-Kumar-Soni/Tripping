@@ -136,7 +136,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       setTrips([]);
       setSelectedTrip(null);
     }
-  }, [isLoading, user?.uid, fetchTrips]);
+  }, [isLoading, fetchTrips]);
 
   const value: TripContextType = {
     trips,

@@ -1,22 +1,16 @@
-import { formatHour12 } from "@/lib/date";
+import { formatHour12 } from "@/lib/plan-formate";
+import { FormattedPlans } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
 import { FaHotel } from "react-icons/fa";
 
-export type Activity = {
-  id: number;
-  title: string;
-  date: string;
-  hour: number;
-};
-
 type TripViewCardProps = {
-  activity: Activity;
+  activity: FormattedPlans;
   isDark: boolean;
 };
 
 const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
-    id: activity.id,
+    id: activity.title,
   });
   const style = transform
     ? {
@@ -38,15 +32,15 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
         <FaHotel />
         <div className="font-semibold text-sm">
           <h1>{activity.title}</h1>
-          <h1 className="text-muted-foreground">Address</h1>
+          <h1 className="text-muted-foreground">{activity.address}</h1>
         </div>
       </div>
 
       <h1 className="top-1 right-2 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.hour)}
+        {formatHour12(activity.startHour)}
       </h1>
       <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.hour + 1)}
+        {formatHour12(activity.endHour)}
       </h1>
     </div>
   );

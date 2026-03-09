@@ -1,23 +1,34 @@
 export interface Plan {
-  address: string;
+  address?: string;
   created_at: string;
   end_date: string;
   end_time: string;
   id: number;
-  location_name: string;
-  notes: string;
-  order_index: number;
-  section: string;
+  location_name?: string;
+  notes?: string;
+  order_index?: number;
+  section?: string;
   start_date: string;
   start_time: string;
-  status: string;
+  status?: string;
   title: string;
-  trip_id: number;
+  trip_id?: number;
   type: string;
   updated_at: string;
 }
 
 export type CreatePlan = Omit<Plan, "created_at" | "id" | "trip_id" | "updated_at">;
+
+export interface FormattedPlans {
+  address: string | null;
+  date: string;
+  duration: number;
+  endHour: number;
+  id: number;
+  order_index: number | null;
+  startHour: number;
+  title: string;
+}
 
 export interface PlanTransport {
   arrive_date: string;

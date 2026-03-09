@@ -8,10 +8,6 @@ type TripRowProps = {
   hour: number;
 };
 
-const backgroundShadowStyle: React.CSSProperties = {
-  backgroundColor: "#B2B2B2",
-};
-
 const TripRow = ({ children, isDark, date, hour }: TripRowProps) => {
   const { setNodeRef, isOver } = useDroppable({ id: `${date}|${hour}` });
 

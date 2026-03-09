@@ -22,7 +22,7 @@ type ActivityContextType = {
 
 export const ActivityContext = createContext<ActivityContextType | null>(null);
 
-const ActivityProvider = ({ children }: { children: ReactNode }) => {
+export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -100,7 +100,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setActivities([]);
     }
-  }, [isLoading, user?.uid, fetchActivities]);
+  }, [isLoading, fetchActivities]);
 
   const value: ActivityContextType = {
     activities,
@@ -113,5 +113,3 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
   };
   return <ActivityContext.Provider value={value}>{children}</ActivityContext.Provider>;
 };
-
-export default ActivityProvider;
