@@ -1,16 +1,23 @@
+import { usePlan } from "@/hooks/usePlan";
 import { formatHour12 } from "@/lib/plan-formate";
-import { FormattedPlans } from "@/types/plan";
+import { Plan } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
 import { FaHotel } from "react-icons/fa";
 
 type TripViewCardProps = {
-  activity: FormattedPlans;
+  activity: Plan;
   isDark: boolean;
 };
 
 const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
+  const { mutationType } = usePlan();
+  const isUpdating = mutationType !== null;
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
-    id: activity.title,
+    id: `timelineId-${activity.id}`,
+    disabled: isUpdating,
+    data: {
+      activity,
+    },
   });
   const style = transform
     ? {
@@ -26,7 +33,9 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={`flex relative justify-between items-center shadow py-2 px-4 rounded w-full h-15 ${isDark ? "bg-black/80 text-white" : ""} }`}
+      className={`flex relative justify-between items-center shadow py-2 px-4 rounded w-full h-15 
+       ${isDark ? "bg-black/80 text-white" : ""}
+       ${isUpdating ? "opacity-50 cursor-not-allowed pointer-events-none" : "cursor-move"}}`}
     >
       <div className="flex items-center gap-4">
         <FaHotel />
@@ -37,10 +46,10 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
       </div>
 
       <h1 className="top-1 right-2 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.startHour)}
+        {formatHour12(activity.start_time)}
       </h1>
       <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.endHour)}
+        {formatHour12(activity.end_time)}
       </h1>
     </div>
   );
