@@ -19,6 +19,8 @@ export interface Plan {
 
 export type CreatePlan = Omit<Plan, "created_at" | "id" | "trip_id" | "updated_at">;
 
+export type DragType = "activity" | "timeline";
+
 export interface PlanTransport {
   arrive_date: string;
   arrive_time: string;

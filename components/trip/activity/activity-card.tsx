@@ -3,6 +3,7 @@ import { Activity } from "@/types/activity";
 import { IconType } from "react-icons/lib";
 import { ActivityFromModel } from "./activity-from-model";
 import { useDraggable } from "@dnd-kit/core";
+import { useActivity } from "@/hooks/useActivity";
 
 type Props = {
   activity: Activity;
@@ -10,7 +11,16 @@ type Props = {
 };
 
 const ActivityCard = ({ activity, Icon }: Props) => {
-  const { setNodeRef, attributes, listeners, transform } = useDraggable({ id: activity.id });
+  const { mutationType } = useActivity();
+  const isUpdating = mutationType !== null;
+  const { setNodeRef, attributes, listeners, transform } = useDraggable({
+    id: `activity-${activity.id}`,
+    data: {
+      activity,
+      type: "activity",
+    },
+    disabled: isUpdating,
+  });
 
   const style = transform
     ? {
@@ -26,7 +36,9 @@ const ActivityCard = ({ activity, Icon }: Props) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="flex justify-between px-5 py-2 border rounded-xl"
+      className={`flex justify-between px-5 py-2 border rounded-xl ${
+        isUpdating ? "opacity-50 cursor-not-allowed bg-muted" : "hover:bg-accent"
+      }`}
     >
       <div className="flex items-center gap-4">
         <Icon size={18} />

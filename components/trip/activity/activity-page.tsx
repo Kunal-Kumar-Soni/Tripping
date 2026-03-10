@@ -12,13 +12,14 @@ import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 import { useActivity } from "@/hooks/useActivity";
 import { ActivityFromModel } from "./activity-from-model";
-import { Spinner, Spinner2 } from "@/components/ui/spinner";
+import { Spinner2 } from "@/components/ui/spinner";
+import { useDroppable } from "@dnd-kit/core";
 
 export function ActivityPage() {
   const [activeCategory, setActiveCategory] = useState<string>("restaurant");
   const { activities, loadingActivities } = useActivity();
 
-  const filteredLocations = activities.filter((loc) => loc.category === activeCategory);
+  const filteredLocations = activities?.filter((loc) => loc.category === activeCategory) ?? [];
 
   const locationsButtons = [
     { type: "restaurant", icon: MdOutlineRestaurant },
@@ -26,8 +27,13 @@ export function ActivityPage() {
     { type: "activity", icon: MdHiking },
   ];
 
+  const { setNodeRef, isOver } = useDroppable({ id: "activity-drop" });
+
   return (
-    <Card className="top-30 right-6 fixed py-4 w-full max-w-94">
+    <Card
+      ref={setNodeRef}
+      className={`top-30 right-6 fixed py-4 w-full max-w-94  ${isOver ? "bg-muted border-dashed border-blue-500" : ""}`}
+    >
       <CardContent className="px-4">
         <Collapsible defaultOpen className="rounded-md">
           <div className="flex justify-between items-center">

@@ -17,6 +17,7 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
     disabled: isUpdating,
     data: {
       activity,
+      type: "timeline",
     },
   });
   const style = transform

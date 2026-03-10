@@ -7,11 +7,20 @@ import {
   updateSingleActivity,
 } from "@/services/activity";
 import { Activity, CreateActivity } from "@/types/activity";
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 
 type ActivityContextType = {
   activities: Activity[];
+  setActivities: Dispatch<SetStateAction<Activity[]>>;
   loadingActivities: boolean;
   error: string | null;
   mutationType: "create" | "update" | "delete" | null;
@@ -69,7 +78,6 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     try {
       await deleteSingleActivity(activityId);
       setActivities((prev) => prev.filter((activity) => activity.id !== activityId));
-      toast.success("Activity Deleted");
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -104,6 +112,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
 
   const value: ActivityContextType = {
     activities,
+    setActivities,
     loadingActivities,
     error,
     mutationType,

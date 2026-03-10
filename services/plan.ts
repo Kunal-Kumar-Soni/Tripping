@@ -14,26 +14,26 @@ export const createPlan = async (tripId: number, planData: CreatePlan): Promise<
   return data;
 };
 
-export const getSinglePlan = async (tripId: number, itemId: number): Promise<Plan> => {
-  const { data } = await axiosInstance.get<Plan>(`/api/trips/${tripId}/plan-items/${itemId}`);
+export const getSinglePlan = async (tripId: number, planId: number): Promise<Plan> => {
+  const { data } = await axiosInstance.get<Plan>(`/api/trips/${tripId}/plan-items/${planId}`);
   return data;
 };
 
 export const updateSinglePlan = async (
   tripId: number,
-  itemId: number,
+  planId: number,
   planData: CreatePlan,
 ): Promise<Plan> => {
   const { data } = await axiosInstance.put<Plan>(
-    `/api/trips/${tripId}/plan-items/${itemId}`,
+    `/api/trips/${tripId}/plan-items/${planId}`,
     planData,
   );
   return data;
 };
 
-export const deleteSinglePlan = async (tripId: number, itemId: number): Promise<DeleteResponse> => {
+export const deleteSinglePlan = async (tripId: number, planId: number): Promise<DeleteResponse> => {
   const { data } = await axiosInstance.delete<DeleteResponse>(
-    `/api/trips/${tripId}/plan-items/${itemId}`,
+    `/api/trips/${tripId}/plan-items/${planId}`,
   );
   return data;
 };
