@@ -3,7 +3,10 @@ import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate
 import { Plan } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
 import { useState } from "react";
+import { BiSolidLandmark } from "react-icons/bi";
 import { FaHotel } from "react-icons/fa";
+import { IconType } from "react-icons/lib";
+import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
 type TripViewCardProps = {
   activity: Plan;
@@ -27,7 +30,7 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
 
   const style = {
     ...(transform && {
-      transform: `translate(${transform.x}px, ${transform.y}px)`,
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       zIndex: 50,
     }),
   };
@@ -38,8 +41,8 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
 
   const effectiveEnd = previewEndHour ?? endHour;
   const duration = Math.max(1, effectiveEnd - startHour);
-  const height = duration * ROW_HEIGHT;
-  const top = startHour * ROW_HEIGHT;
+  const height = duration * ROW_HEIGHT - 4;
+  const top = startHour * ROW_HEIGHT + 4;
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -91,18 +94,26 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
+  const IconsType = [
+    { type: "restaurant", icon: MdOutlineRestaurant },
+    { type: "hotel", icon: BiSolidLandmark },
+    { type: "activity", icon: MdHiking },
+  ];
+
+  const Icon: IconType = IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
+
   return (
     <div
       style={{ ...style, height, top }}
       ref={setNodeRef}
-      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto  ${isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white text-black"}`}
+      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto  ${isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
     >
-      <div {...attributes} {...listeners} className={`px-4 py-2 w-full `}>
+      <div {...attributes} {...listeners} className={`px-4 py-2 w-full h-full`}>
         <div className="flex items-center gap-4">
-          <FaHotel />
+          <Icon />
           <div className="font-semibold text-sm">
             <h1>{activity.title}</h1>
-            <h1 className="text-muted-foreground">{activity.address}</h1>
+            <h1 className="text-muted-foreground">{activity.location_name}</h1>
           </div>
         </div>
 
@@ -116,7 +127,7 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
 
       <div
         onMouseDown={handleResizeStart}
-        className="bottom-0 absolute bg-transparent w-full h-3 cursor-ns-resize"
+        className="bottom-0 absolute bg-transparent w-full h-2 cursor-ns-resize"
       />
       {previewEndHour && (
         <div className="right-2 bottom-0 left-2 absolute bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)] h-0.5" />

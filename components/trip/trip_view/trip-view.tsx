@@ -82,6 +82,13 @@ const TripView = () => {
       const [date, hour] = String(over.id).split("|");
       const hourNumber = Number(hour);
 
+      const oldStart = formatHourToNumber(activity.start_time);
+      const oldEnd = formatHourToNumber(activity.end_time);
+      const duration = oldEnd - oldStart;
+
+      // drag alignment fix (top se snap)
+      const finalHour = Math.max(0, hourNumber - Math.floor(duration / 2));
+
       if (isSlotOccupied(date, hourNumber, activity.id)) {
         return;
       }
@@ -93,8 +100,8 @@ const TripView = () => {
         return;
       }
 
-      const start_time = formatHour(hourNumber);
-      const end_time = formatHour(hourNumber + 1);
+      const start_time = formatHour(finalHour);
+      const end_time = formatHour(finalHour + duration);
 
       const { id, trip_id, created_at, updated_at, status, ...rest } = activity;
 
@@ -124,10 +131,9 @@ const TripView = () => {
 
       const { id, created_at, updated_at, user_id, ...rest } = activity;
       const payload = {
-        address: rest.location,
+        location_name: rest.location,
         type: rest.category,
         title: rest.name,
-        order_index: 0,
         start_date: new Date(date).toISOString(),
         end_date: new Date(date).toISOString(),
         start_time,
