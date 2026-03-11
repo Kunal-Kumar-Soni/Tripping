@@ -20,7 +20,7 @@ export const formatHourToNumber = (hour: string) => {
   return Number(hour.split(":")[0]);
 };
 export const formatHour = (hour: number) => {
-  return `${hour.toString().padStart(2, "0")}:00`;
+  return `${hour.toString().padStart(2, "0")}:00:00`;
 };
 
 export const formatHour12 = (hour: string) => {

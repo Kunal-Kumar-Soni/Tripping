@@ -1,7 +1,8 @@
 import { usePlan } from "@/hooks/usePlan";
-import { formatHour12 } from "@/lib/plan-formate";
+import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
+import { useState } from "react";
 import { FaHotel } from "react-icons/fa";
 
 type TripViewCardProps = {
@@ -9,8 +10,11 @@ type TripViewCardProps = {
   isDark: boolean;
 };
 
+const ROW_HEIGHT = 60;
+
 const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
-  const { mutationType } = usePlan();
+  const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
+  const { mutationType, handleUpdateSinglePlan } = usePlan();
   const isUpdating = mutationType !== null;
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `timelineId-${activity.id}`,
@@ -20,38 +24,103 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
       type: "timeline",
     },
   });
-  const style = transform
-    ? {
-        transform: `translate(${transform.x}px, ${transform.y}px)`,
-        cursor: "move",
-        zIndex: "50",
+
+  const style = {
+    ...(transform && {
+      transform: `translate(${transform.x}px, ${transform.y}px)`,
+      zIndex: 50,
+    }),
+  };
+
+  // =====  calculation =====
+  const startHour = formatHourToNumber(activity.start_time);
+  const endHour = formatHourToNumber(activity.end_time);
+
+  const effectiveEnd = previewEndHour ?? endHour;
+  const duration = Math.max(1, effectiveEnd - startHour);
+  const height = duration * ROW_HEIGHT;
+  const top = startHour * ROW_HEIGHT;
+
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const startHour = formatHourToNumber(activity.start_time);
+    let newHour = formatHourToNumber(activity.end_time) - 1;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const container = document.querySelector("[data-timeline]");
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+
+      const offsetY = e.clientY - rect.top;
+
+      const hour = Math.floor(offsetY / ROW_HEIGHT);
+
+      newHour = hour;
+      setPreviewEndHour(hour + 1);
+    };
+
+    const handleMouseUp = async () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+
+      setPreviewEndHour(null);
+
+      if (newHour < startHour) {
+        newHour = startHour;
       }
-    : undefined;
+
+      const newEndTime = formatHour(newHour + 1);
+
+      const currentEnd = formatHourToNumber(activity.end_time);
+      if (newHour + 1 === currentEnd) return;
+
+      const { id, trip_id, created_at, updated_at, status, ...rest } = activity;
+
+      const payload = {
+        ...rest,
+        end_time: newEndTime,
+      };
+      // console.log(payload);
+      await handleUpdateSinglePlan(activity.id, payload);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
 
   return (
     <div
-      style={style}
+      style={{ ...style, height, top }}
       ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      className={`flex relative justify-between items-center shadow py-2 px-4 rounded w-full h-15 
-       ${isDark ? "bg-black/80 text-white" : ""}
-       ${isUpdating ? "opacity-50 cursor-not-allowed pointer-events-none" : "cursor-move"}}`}
+      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto  ${isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white text-black"}`}
     >
-      <div className="flex items-center gap-4">
-        <FaHotel />
-        <div className="font-semibold text-sm">
-          <h1>{activity.title}</h1>
-          <h1 className="text-muted-foreground">{activity.address}</h1>
+      <div {...attributes} {...listeners} className={`px-4 py-2 w-full `}>
+        <div className="flex items-center gap-4">
+          <FaHotel />
+          <div className="font-semibold text-sm">
+            <h1>{activity.title}</h1>
+            <h1 className="text-muted-foreground">{activity.address}</h1>
+          </div>
         </div>
+
+        <h1 className="top-1 right-2 absolute text-[13px] text-muted-foreground">
+          {formatHour12(activity.start_time)}
+        </h1>
+        <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
+          {formatHour12(activity.end_time)}
+        </h1>
       </div>
 
-      <h1 className="top-1 right-2 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.start_time)}
-      </h1>
-      <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
-        {formatHour12(activity.end_time)}
-      </h1>
+      <div
+        onMouseDown={handleResizeStart}
+        className="bottom-0 absolute bg-transparent w-full h-3 cursor-ns-resize"
+      />
+      {previewEndHour && (
+        <div className="right-2 bottom-0 left-2 absolute bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)] h-0.5" />
+      )}
     </div>
   );
 };

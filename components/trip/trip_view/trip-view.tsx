@@ -147,26 +147,30 @@ const TripView = () => {
       ) : (
         <div className="flex mt-18">
           {dates.map((date) => (
-            <div key={date} className="w-full">
+            <div key={date} className="relative w-full" data-timeline>
               <div className="top-18 z-50 sticky bg-black/80 p-2 border-r font-medium text-white">
                 {tripFormate(date)}
               </div>
 
-              {hours.map((hour) => {
-                const isDark = hour <= 7 || hour >= 19;
-                const slotPlans = plans.filter(
-                  (item) =>
-                    formatDate(item.start_date) === date &&
-                    formatHourToNumber(item.start_time) === hour,
-                );
-                return (
-                  <TripRow key={hour} isDark={isDark} date={date} hour={hour}>
-                    {slotPlans.map((item) => (
-                      <TripViewCard key={item.id} activity={item} isDark={isDark} />
-                    ))}
-                  </TripRow>
-                );
-              })}
+              <div className="relative">
+                {/* rows */}
+                {hours.map((hour) => {
+                  const isDark = hour <= 7 || hour >= 19;
+                  return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
+                })}
+
+                {/* events */}
+                <div className="absolute inset-0 pointer-events-none">
+                  {plans
+                    .filter((item) => formatDate(item.start_date) === date)
+                    .map((item) => {
+                      const hour = formatHourToNumber(item.start_time);
+                      const isDark = hour <= 7 || hour >= 19;
+
+                      return <TripViewCard key={item.id} activity={item} isDark={isDark} />;
+                    })}
+                </div>
+              </div>
             </div>
           ))}
 
