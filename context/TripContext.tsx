@@ -27,7 +27,7 @@ export const TripContext = createContext<TripContextType | null>(null);
 
 export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [loadingTrips, setLoadingTrips] = useState<boolean>(false);
+  const [loadingTrips, setLoadingTrips] = useState<boolean>(true);
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [loadingSelectedTrip, setLoadingSelectedTrip] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,7 +111,6 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const fetchTrips = useCallback(async () => {
     if (!user?.uid) return;
     setError(null);
-    setLoadingTrips(true);
     try {
       const tripsData = await getTrips();
       const sortedByTime = sortedTripsByTime(tripsData);

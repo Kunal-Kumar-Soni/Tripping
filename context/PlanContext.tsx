@@ -22,7 +22,7 @@ export const PlanContext = createContext<PlanContextType | null>(null);
 
 export const PlanProvider = ({ children }: { children: ReactNode }) => {
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [loadingPlans, setLoadingPlans] = useState<boolean>(false);
+  const [loadingPlans, setLoadingPlans] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [mutationType, setMutationType] = useState<"create" | "update" | "move" | null>(null);
 
@@ -110,15 +110,17 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const fetchPlans = useCallback(async () => {
-    if (!user?.uid || !selectedTrip) return;
-
-    setLoadingPlans(true);
+    if (!user?.uid || !selectedTrip) {
+      setPlans([]);
+      setLoadingPlans(false);
+      return;
+    }
     setError(null);
 
     try {
       const res = await getPlans(selectedTrip.id);
       if (res) {
-        setPlans(res);
+        setPlans(res ?? []);
       } else {
         setPlans([]);
       }

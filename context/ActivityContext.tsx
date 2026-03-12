@@ -33,7 +33,7 @@ export const ActivityContext = createContext<ActivityContextType | null>(null);
 
 export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [loadingActivities, setLoadingActivities] = useState<boolean>(false);
+  const [loadingActivities, setLoadingActivities] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [mutationType, setMutationType] = useState<"create" | "update" | "delete" | null>(null);
 
@@ -45,7 +45,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     setMutationType("create");
     try {
       const newActivity = await createActivity(activityData);
-      setActivities((prev) => [newActivity, ...prev]);
+      setActivities((prev) => [newActivity, ...(prev ?? [])]);
       toast.success("Activity Added");
     } catch (error: any) {
       setError(error.message);
@@ -89,10 +89,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const fetchActivities = useCallback(async () => {
     if (!user?.uid) return;
     setError(null);
-    setLoadingActivities(true);
     try {
       const res = await getActivities();
-      setActivities(res);
+      setActivities(res ?? []);
     } catch (error: any) {
       setError(error.message);
     } finally {

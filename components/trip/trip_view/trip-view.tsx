@@ -65,7 +65,7 @@ const TripView = () => {
 
       const payload: CreateActivity = {
         name: rest.title,
-        location: rest.address,
+        location: rest.location_name,
         category: rest.type,
       };
       await handlePlanTimelineToActivity(payload, id);
@@ -146,44 +146,38 @@ const TripView = () => {
 
   return (
     <DndContext collisionDetection={closestCenter} sensors={sensors} onDragEnd={handleDragEnd}>
-      {loadingPlans ? (
-        <div className="flex justify-center items-center min-h-screen">
-          <Spinner2 className="w-20 h-20 text-blue-600" />
-        </div>
-      ) : (
-        <div className="flex mt-18">
-          {dates.map((date) => (
-            <div key={date} className="relative w-full" data-timeline>
-              <div className="top-18 z-50 sticky bg-black/80 p-2 border-r font-medium text-white">
-                {tripFormate(date)}
-              </div>
+      <div className="flex mt-18">
+        {dates.map((date) => (
+          <div key={date} className="relative w-full" data-timeline>
+            <div className="top-18 z-50 sticky bg-black/80 p-2 border-r font-medium text-white">
+              {tripFormate(date)}
+            </div>
 
-              <div className="relative">
-                {/* rows */}
-                {hours.map((hour) => {
-                  const isDark = hour <= 7 || hour >= 19;
-                  return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
-                })}
+            <div className="relative">
+              {/* rows */}
+              {hours.map((hour) => {
+                const isDark = hour <= 7 || hour >= 19;
+                return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
+              })}
 
-                {/* events */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {plans
-                    .filter((item) => formatDate(item.start_date) === date)
-                    .map((item) => {
-                      const hour = formatHourToNumber(item.start_time);
-                      const isDark = hour <= 7 || hour >= 19;
+              {/* events */}
+              <div className="absolute inset-0 pointer-events-none">
+                {plans
+                  .filter((item) => formatDate(item.start_date) === date)
+                  .map((item) => {
+                    const hour = formatHourToNumber(item.start_time);
+                    const isDark = hour <= 7 || hour >= 19;
 
-                      return <TripViewCard key={item.id} activity={item} isDark={isDark} />;
-                    })}
-                </div>
+                    return <TripViewCard key={item.id} activity={item} isDark={isDark} />;
+                  })}
               </div>
             </div>
-          ))}
+          </div>
+        ))}
 
-          <ActivityPage />
-          <ZoomControl />
-        </div>
-      )}
+        <ActivityPage />
+        <ZoomControl />
+      </div>
     </DndContext>
   );
 };

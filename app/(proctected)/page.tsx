@@ -1,11 +1,5 @@
-import TripHeader from "@/components/trip/trip_view/trip-header";
-import TripView from "@/components/trip/trip_view/trip-view";
+import TripMain from "@/components/trip/trip-main";
 
 export default function Home() {
-  return (
-    <div>
-      <TripHeader />
-      <TripView />
-    </div>
-  );
+  return <TripMain />;
 }
