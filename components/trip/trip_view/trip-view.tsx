@@ -15,7 +15,7 @@ import {
 import { usePlan } from "@/hooks/usePlan";
 import { formatDate, formatHour, formatHourToNumber, getDays } from "@/lib/plan-formate";
 import { useTrip } from "@/hooks/useTrip";
-import { Spinner2 } from "@/components/ui/spinner";
+
 import { CreateActivity } from "@/types/activity";
 
 const TripView = () => {
@@ -164,11 +164,24 @@ const TripView = () => {
               <div className="absolute inset-0 pointer-events-none">
                 {plans
                   .filter((item) => formatDate(item.start_date) === date)
-                  .map((item) => {
+                  .sort(
+                    (a, b) => formatHourToNumber(a.start_time) - formatHourToNumber(b.start_time),
+                  )
+                  .map((item, index, arr) => {
                     const hour = formatHourToNumber(item.start_time);
+                    const nextEvent = arr[index + 1];
+                    const prevEvent = arr[index - 1];
                     const isDark = hour <= 7 || hour >= 19;
 
-                    return <TripViewCard key={item.id} activity={item} isDark={isDark} />;
+                    return (
+                      <TripViewCard
+                        key={item.id}
+                        activity={item}
+                        isDark={isDark}
+                        nextEvent={nextEvent}
+                        prevEvent={prevEvent}
+                      />
+                    );
                   })}
               </div>
             </div>

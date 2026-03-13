@@ -1,24 +1,32 @@
+import { Button } from "@/components/ui/button";
 import { usePlan } from "@/hooks/usePlan";
 import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { BiSolidLandmark } from "react-icons/bi";
-import { FaHotel } from "react-icons/fa";
+import { BsPlusLg } from "react-icons/bs";
+import { FaCar, FaPlane } from "react-icons/fa";
+import { FaTrainTram } from "react-icons/fa6";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
 type TripViewCardProps = {
   activity: Plan;
   isDark: boolean;
+  nextEvent?: Plan;
+  prevEvent?: Plan;
 };
 
 const ROW_HEIGHT = 60;
 
-const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
+const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
   const isUpdating = mutationType !== null;
+
+  const [openTransport, setOpenTransport] = useState(false);
+
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `timelineId-${activity.id}`,
     disabled: isUpdating,
@@ -102,6 +110,9 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
 
   const Icon: IconType = IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
 
+  const showBottomPlus = Boolean(nextEvent);
+  const showTopPlus = Boolean(prevEvent);
+
   return (
     <div
       style={{ ...style, height, top }}
@@ -131,6 +142,47 @@ const TripViewCard = ({ activity, isDark }: TripViewCardProps) => {
       />
       {previewEndHour && (
         <div className="right-2 bottom-0 left-2 absolute bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)] h-0.5" />
+      )}
+
+      {/* Bottom Button */}
+      {showBottomPlus && (
+        <div
+          className="-bottom-4 left-1/2 z-40 absolute flex flex-col items-center -translate-x-1/2 cursor-default"
+          onMouseEnter={() => setOpenTransport(true)}
+          onMouseLeave={() => setOpenTransport(false)}
+        >
+          {!openTransport && (
+            <button
+              className={`p-1 rounded-full cursor-pointer ${
+                isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
+              }`}
+            >
+              <BsPlusLg />
+            </button>
+          )}
+
+          {openTransport && (
+            <div className="flex gap-3 bg-white shadow-lg mt-2 px-2 py-1 rounded-full">
+              <button className="cursor-pointer">
+                <FaCar />
+              </button>
+              <button className="cursor-pointer">
+                <FaTrainTram />
+              </button>
+              <button className="cursor-pointer">
+                <FaPlane />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {showTopPlus && (
+        <button
+          className={`-top-4 left-1/2 z-40 absolute p-1 rounded-full border-none -translate-x-1/2 ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black "}`}
+        >
+          <BsPlusLg />
+        </button>
       )}
     </div>
   );
