@@ -13,7 +13,7 @@ const TripHeader = () => {
   const durations = differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
 
   return (
-    <section className="top-0 right-0 left-100 z-40 fixed">
+    <section className="top-0 right-0 left-100 z-50 fixed">
       {/* Header */}
       <header className="flex justify-between items-center bg-black/80 shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)] px-6 py-4 text-white">
         {/* Left */}

@@ -1,15 +1,13 @@
-import { Button } from "@/components/ui/button";
 import { usePlan } from "@/hooks/usePlan";
 import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
 import { useDraggable } from "@dnd-kit/core";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSolidLandmark } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
-import { FaCar, FaPlane } from "react-icons/fa";
-import { FaTrainTram } from "react-icons/fa6";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+import { FaCar, FaTrain, FaPlane, FaBan } from "react-icons/fa";
 
 type TripViewCardProps = {
   activity: Plan;
@@ -20,12 +18,33 @@ type TripViewCardProps = {
 
 const ROW_HEIGHT = 60;
 
+type ActivityType = "restaurant" | "hotel" | "activity";
+type ActivityInfo = { type: ActivityType; icon: IconType };
+
+const IconsType: ActivityInfo[] = [
+  { type: "restaurant", icon: MdOutlineRestaurant },
+  { type: "hotel", icon: BiSolidLandmark },
+  { type: "activity", icon: MdHiking },
+];
+
+type TransportType = "none" | "car" | "train" | "plane";
+type TransportInfo = { type: TransportType; icon: IconType };
+
+const transports: TransportInfo[] = [
+  { type: "none", icon: BsPlusLg },
+  { type: "car", icon: FaCar },
+  { type: "train", icon: FaTrain },
+  { type: "plane", icon: FaPlane },
+];
+
 const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
   const isUpdating = mutationType !== null;
 
+  const [mouseResizeStyle, setMouseResizeStyle] = useState<boolean>(false);
   const [openTransport, setOpenTransport] = useState(false);
+  const [selectTransport, setSelectTransport] = useState<TransportInfo>(transports[0]);
 
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `timelineId-${activity.id}`,
@@ -43,7 +62,7 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
     }),
   };
 
-  // =====  calculation =====
+  // calculation
   const startHour = formatHourToNumber(activity.start_time);
   const endHour = formatHourToNumber(activity.end_time);
 
@@ -55,6 +74,8 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
   const handleResizeStart = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+
+    setMouseResizeStyle(true);
 
     const startHour = formatHourToNumber(activity.start_time);
     let newHour = formatHourToNumber(activity.end_time) - 1;
@@ -70,20 +91,21 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
       const hour = Math.floor(offsetY / ROW_HEIGHT);
 
       newHour = hour;
-      setPreviewEndHour(hour + 1);
+      setPreviewEndHour(hour);
     };
 
     const handleMouseUp = async () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
 
+      setMouseResizeStyle(false);
       setPreviewEndHour(null);
 
       if (newHour < startHour) {
         newHour = startHour;
       }
 
-      const newEndTime = formatHour(newHour + 1);
+      const newEndTime = formatHour(newHour);
 
       const currentEnd = formatHourToNumber(activity.end_time);
       if (newHour + 1 === currentEnd) return;
@@ -102,22 +124,43 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  const IconsType = [
-    { type: "restaurant", icon: MdOutlineRestaurant },
-    { type: "hotel", icon: BiSolidLandmark },
-    { type: "activity", icon: MdHiking },
-  ];
-
   const Icon: IconType = IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
 
   const showBottomPlus = Boolean(nextEvent);
   const showTopPlus = Boolean(prevEvent);
 
+  const handleOpenTransport = () => {
+    setOpenTransport((prev) => (prev ? false : true));
+  };
+
+  const handleSelectTransport = (e: React.MouseEvent, selectTransportType: TransportType) => {
+    e.stopPropagation();
+    const getTransportTypeInfo = transports.find((item) => item.type === selectTransportType);
+    setSelectTransport(getTransportTypeInfo ? getTransportTypeInfo : transports[0]);
+    setOpenTransport(false);
+  };
+
+  const SelectedTransportIcon = selectTransport.icon;
+
+  useEffect(() => {
+    if (mouseResizeStyle) {
+      document.body.style.cursor = "ns-resize";
+    } else {
+      document.body.style.cursor = "default";
+    }
+
+    return () => {
+      document.body.style.cursor = "default";
+    };
+  }, [mouseResizeStyle]);
+
   return (
     <div
       style={{ ...style, height, top }}
       ref={setNodeRef}
-      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto  ${isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
+      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto
+          ${isUpdating ? "opacity-50 cursor-not-allowed" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-default"} 
+          ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
     >
       <div {...attributes} {...listeners} className={`px-4 py-2 w-full h-full`}>
         <div className="flex items-center gap-4">
@@ -147,32 +190,46 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
       {/* Bottom Button */}
       {showBottomPlus && (
         <div
-          className="-bottom-4 left-1/2 z-40 absolute flex flex-col items-center -translate-x-1/2 cursor-default"
-          onMouseEnter={() => setOpenTransport(true)}
-          onMouseLeave={() => setOpenTransport(false)}
+          className={`-bottom-4 left-1/2 z-40 absolute flex flex-col items-center -translate-x-1/2 cursor-default`}
+          onClick={handleOpenTransport}
         >
-          {!openTransport && (
+          {/* {(!openTransport || isUpdating) && (
             <button
+              disabled={isUpdating}
+              className={`p-1 rounded-full  ${
+                isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
+              }`}
+            >
+              <SelectedTransportIcon />
+            </button>
+          )} */}
+
+          {openTransport && !isUpdating ? (
+            <div
+              className={`flex gap-3 shadow-lg mt-2 px-2 py-1 rounded-full ${isDark ? "bg-black/80" : "bg-white/80 "} `}
+            >
+              <button onClick={(e) => handleSelectTransport(e, "car")} className="cursor-pointer">
+                <FaCar />
+              </button>
+              <button onClick={(e) => handleSelectTransport(e, "train")} className="cursor-pointer">
+                <FaTrain />
+              </button>
+              <button onClick={(e) => handleSelectTransport(e, "plane")} className="cursor-pointer">
+                <FaPlane />
+              </button>
+              <button onClick={(e) => handleSelectTransport(e, "none")} className="cursor-pointer">
+                <FaBan />
+              </button>
+            </div>
+          ) : (
+            <button
+              disabled={isUpdating}
               className={`p-1 rounded-full cursor-pointer ${
                 isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
               }`}
             >
-              <BsPlusLg />
+              <SelectedTransportIcon />
             </button>
-          )}
-
-          {openTransport && (
-            <div className="flex gap-3 bg-white shadow-lg mt-2 px-2 py-1 rounded-full">
-              <button className="cursor-pointer">
-                <FaCar />
-              </button>
-              <button className="cursor-pointer">
-                <FaTrainTram />
-              </button>
-              <button className="cursor-pointer">
-                <FaPlane />
-              </button>
-            </div>
           )}
         </div>
       )}
