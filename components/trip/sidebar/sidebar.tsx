@@ -21,7 +21,7 @@ const Sidebar = () => {
   );
 
   return (
-    <section className="fixed space-y-6 p-6 border w-100 min-h-screen">
+    <section className="z-50 fixed space-y-6 bg-white p-6 border w-100 min-h-screen">
       {/* Logo */}
       <div className="flex justify-between items-center">
         <Image

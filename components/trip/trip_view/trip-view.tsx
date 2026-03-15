@@ -25,7 +25,6 @@ const TripView = () => {
     handleUpdateSinglePlan,
     handlePlanActivityToTimeline,
     handlePlanTimelineToActivity,
-    loadingPlans,
   } = usePlan();
 
   const sensors = useSensors(
@@ -61,12 +60,12 @@ const TripView = () => {
 
     // Drag Timeline → Activity Panel
     if (dragType === "timeline" && over.id === "activity-drop") {
-      const { id, ...rest } = activity;
+      const { id, title, location_name, type } = activity;
 
       const payload: CreateActivity = {
-        name: rest.title,
-        location: rest.location_name,
-        category: rest.type,
+        name: title,
+        location: location_name,
+        category: type,
       };
       await handlePlanTimelineToActivity(payload, id);
       return;
@@ -145,16 +144,29 @@ const TripView = () => {
   };
 
   return (
-    <DndContext collisionDetection={closestCenter} sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="flex mt-18">
+    <DndContext
+      collisionDetection={closestCenter}
+      sensors={sensors}
+      onDragEnd={handleDragEnd}
+      autoScroll
+    >
+      {/* Sticky Date Header */}
+      <div className="top-18 z-40 sticky flex">
         {dates.map((date) => (
-          <div key={date} className="relative w-full" data-timeline>
-            <div className="top-18 z-50 sticky bg-black/80 p-2 border-r font-medium text-white">
-              {tripFormate(date)}
-            </div>
+          <div
+            key={date}
+            className="bg-black/80 p-2 border-r w-100 font-medium text-white shrink-0"
+          >
+            {tripFormate(date)}
+          </div>
+        ))}
+      </div>
 
+      {/* Timeline */}
+      <div className="flex mt-18 overflow-hidden">
+        {dates.map((date) => (
+          <div key={date} className="relative w-100 shrink-0" data-timeline>
             <div className="relative">
-              {/* rows */}
               {hours.map((hour) => {
                 const isDark = hour <= 7 || hour >= 19;
                 return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;

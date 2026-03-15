@@ -159,7 +159,7 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
       style={{ ...style, height, top }}
       ref={setNodeRef}
       className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto
-          ${isUpdating ? "opacity-50 cursor-not-allowed" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-default"} 
+          ${isUpdating ? "opacity-50 cursor-not-allowed" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} 
           ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
     >
       <div {...attributes} {...listeners} className={`px-4 py-2 w-full h-full`}>
@@ -190,20 +190,9 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
       {/* Bottom Button */}
       {showBottomPlus && (
         <div
-          className={`-bottom-4 left-1/2 z-40 absolute flex flex-col items-center -translate-x-1/2 cursor-default`}
+          className={`-bottom-4 left-1/2  absolute flex flex-col items-center -translate-x-1/2 cursor-default`}
           onClick={handleOpenTransport}
         >
-          {/* {(!openTransport || isUpdating) && (
-            <button
-              disabled={isUpdating}
-              className={`p-1 rounded-full  ${
-                isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
-              }`}
-            >
-              <SelectedTransportIcon />
-            </button>
-          )} */}
-
           {openTransport && !isUpdating ? (
             <div
               className={`flex gap-3 shadow-lg mt-2 px-2 py-1 rounded-full ${isDark ? "bg-black/80" : "bg-white/80 "} `}
@@ -236,7 +225,7 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
 
       {showTopPlus && (
         <button
-          className={`-top-4 left-1/2 z-40 absolute p-1 rounded-full border-none -translate-x-1/2 ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black "}`}
+          className={`-top-4 left-1/2  absolute p-1 rounded-full border-none -translate-x-1/2 ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black "}`}
         >
           <BsPlusLg />
         </button>
