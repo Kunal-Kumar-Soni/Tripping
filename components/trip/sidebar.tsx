@@ -4,13 +4,13 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { HiUsers } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
-import { SidebarModel } from "./sidebar-model";
 import { useState } from "react";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date";
 import { Button } from "@/components/ui/button";
 import { useTrip } from "@/hooks/useTrip";
-import { Spinner, Spinner2 } from "@/components/ui/spinner";
+import { Spinner2 } from "@/components/ui/spinner";
+import { TripFormModel } from "./trip-form-model";
 
 const Sidebar = () => {
   const [searchText, setSearchText] = useState<string>("");
@@ -55,7 +55,7 @@ const Sidebar = () => {
         <h1 className="font-semibold text-xl">Your Trips</h1>
 
         {/* <SidebarModel /> */}
-        <SidebarModel />
+        <TripFormModel mode="create" />
       </div>
 
       {/* Trips List */}

@@ -13,6 +13,10 @@ export const getDays = (start: string, end: string) => {
   return result;
 };
 
+export const formateDateInIsoString = (date: string) => {
+  return new Date(date).toISOString();
+};
+
 export const formatDate = (date: string) => {
   return date.split("T")[0];
 };

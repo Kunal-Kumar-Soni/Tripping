@@ -1,7 +1,6 @@
 "use client";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -12,16 +11,24 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useTrip } from "@/hooks/useTrip";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 
 export function TripDeleteModel() {
-  const router = useRouter();
-  const { selectedTrip, handleDeleteSingleTrip } = useTrip();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { selectedTrip, handleDeleteSingleTrip, mutationType } = useTrip();
   if (!selectedTrip) return null;
 
+  const isDeleting = mutationType === "delete";
+
+  const handleDelete = async () => {
+    await handleDeleteSingleTrip(selectedTrip?.id);
+    new Promise((res) => setTimeout(res, 3000));
+    setIsOpen(false);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <Button variant={"outline"}>
           <BsTrash3 />
@@ -39,12 +46,9 @@ export function TripDeleteModel() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            variant={"destructive"}
-            onClick={() => handleDeleteSingleTrip(selectedTrip?.id)}
-          >
-            Delete
-          </AlertDialogAction>
+          <Button variant={"destructive"} disabled={isDeleting} onClick={handleDelete}>
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

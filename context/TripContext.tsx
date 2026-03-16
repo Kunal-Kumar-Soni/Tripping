@@ -11,12 +11,14 @@ import { CreateTrip, Trip } from "@/types/trip";
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+type Mutation = "create" | "update" | "delete";
 type TripContextType = {
   trips: Trip[];
   loadingTrips: boolean;
   selectedTrip: Trip | null;
   loadingSelectedTrip: boolean;
   error: string | null;
+  mutationType: Mutation | null;
   selectTrip: (id: number) => Promise<void>;
   handleCreateSingleTrip: (tripData: CreateTrip) => Promise<void>;
   handleUpdateSingleTrip: (tripId: number, tripData: CreateTrip) => Promise<void>;
@@ -31,6 +33,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [loadingSelectedTrip, setLoadingSelectedTrip] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [mutationType, setMutationType] = useState<Mutation | null>(null);
 
   const { isLoading, user } = useAuth();
 
@@ -58,8 +61,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   // Create Trip
   const handleCreateSingleTrip = async (tripData: CreateTrip) => {
+    setError(null);
+    setMutationType("create");
     try {
-      setError(null);
       const newTrip = await createTrip(tripData);
       setTrips((prev) => {
         if (!prev) return [newTrip];
@@ -70,13 +74,16 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       toast.success(`${tripData?.title} trip created..`);
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
   // Update Trip
   const handleUpdateSingleTrip = async (tripId: number, tripData: CreateTrip) => {
+    setError(null);
+    setMutationType("update");
     try {
-      setError(null);
       const updatedTrip = await updateSingleTrip(tripId, tripData);
       setTrips((prev) => prev.map((trip) => (trip.id === tripId ? updatedTrip : trip)));
       if (selectedTrip?.id === tripId) {
@@ -85,13 +92,16 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       toast.success("Trip updated.");
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
   // Delete Trip
   const handleDeleteSingleTrip = async (tripId: number) => {
+    setError(null);
+    setMutationType("delete");
     try {
-      setError(null);
       await deleteSingleTrip(tripId);
 
       setTrips((prev) => {
@@ -104,6 +114,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       toast.success(`${selectedTrip?.title} trip deleted.`);
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setMutationType(null);
     }
   };
 
@@ -144,6 +156,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     loadingSelectedTrip,
     error,
     selectTrip,
+    mutationType,
     handleCreateSingleTrip,
     handleUpdateSingleTrip,
     handleDeleteSingleTrip,

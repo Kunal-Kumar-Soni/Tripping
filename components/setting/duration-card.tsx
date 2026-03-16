@@ -2,9 +2,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTrip } from "@/hooks/useTrip";
-import { EditTripModel } from "./edit-trip-model";
 import { indianFormat } from "@/lib/date";
 import { differenceInDays } from "date-fns";
+import { TripFormModel } from "../trip/trip-form-model";
 
 const DurationCard = () => {
   const { selectedTrip } = useTrip();
@@ -31,7 +31,7 @@ const DurationCard = () => {
             <span className="font-semibold">{selectedTrip?.title}</span>
           </div>
 
-          <EditTripModel />
+          <TripFormModel mode="update" initialData={selectedTrip} />
         </div>
 
         <div className="flex items-stretch gap-6">

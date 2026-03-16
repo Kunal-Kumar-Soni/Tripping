@@ -1,7 +1,7 @@
 "use client";
 import { tripFormate } from "@/lib/date";
 import { ActivityPage } from "../activity/activity-page";
-import ZoomControl from "../common/zoom-control";
+import ZoomControl from "../zoom-control";
 import TripViewCard from "./trip-view-card";
 import TripRow from "./trip-row";
 import {
@@ -155,7 +155,7 @@ const TripView = () => {
         {dates.map((date) => (
           <div
             key={date}
-            className="bg-black/80 p-2 border-r w-100 font-medium text-white shrink-0"
+            className="bg-black/80 p-2 border-r min-w-100 font-medium text-white shrink-0"
           >
             {tripFormate(date)}
           </div>
@@ -165,7 +165,7 @@ const TripView = () => {
       {/* Timeline */}
       <div className="flex mt-18 overflow-hidden">
         {dates.map((date) => (
-          <div key={date} className="relative w-100 shrink-0" data-timeline>
+          <div key={date} className="relative min-w-100 shrink-0" data-timeline>
             <div className="relative">
               {hours.map((hour) => {
                 const isDark = hour <= 7 || hour >= 19;
