@@ -4,8 +4,19 @@ import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
 import { IoMapOutline } from "react-icons/io5";
+import { Dispatch, SetStateAction } from "react";
+import { SelectViewType } from "./trip_view/trip-view";
 
-const ZoomControl = () => {
+type ZoomControlProps = {
+  selectView: SelectViewType;
+  setSelectView: Dispatch<SetStateAction<SelectViewType>>;
+};
+
+const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
+  const handleSelectView = (type: SelectViewType) => {
+    setSelectView(type ? type : "map");
+  };
+
   return (
     <Card className="right-6 bottom-5 fixed py-2 w-full max-w-94">
       <CardContent className="flex justify-between items-center px-5">
@@ -19,10 +30,10 @@ const ZoomControl = () => {
 
         {/* Minus / Plus */}
         <div className="flex gap-1">
-          <Button size="icon-lg" variant="outline" className="rounded-full">
+          <Button size="icon-lg" variant="outline" className="rounded-full cursor-pointer">
             <CgMathMinus />
           </Button>
-          <Button size="icon-lg" variant="outline" className="rounded-full">
+          <Button size="icon-lg" variant="outline" className="rounded-full cursor-pointer">
             <BsPlusLg />
           </Button>
         </div>
@@ -32,10 +43,20 @@ const ZoomControl = () => {
 
         {/* Action icons */}
         <div className="flex gap-1">
-          <Button size="icon-lg" className="rounded-full">
+          <Button
+            onClick={() => handleSelectView("calendar")}
+            size="icon-lg"
+            variant={selectView === "calendar" ? "default" : "outline"}
+            className="rounded-full cursor-pointer"
+          >
             <BsCalendar3 />
           </Button>
-          <Button size="icon-lg" variant="outline" className="rounded-full">
+          <Button
+            onClick={() => handleSelectView("map")}
+            size="icon-lg"
+            variant={selectView === "map" ? "default" : "outline"}
+            className="rounded-full cursor-pointer"
+          >
             <IoMapOutline />
           </Button>
         </div>

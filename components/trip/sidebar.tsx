@@ -99,7 +99,7 @@ const Sidebar = () => {
       </div>
 
       {/*User Profile */}
-      <div className="right-6 bottom-4 left-6 absolute">
+      <div className="right-6 bottom-5 left-6 absolute">
         <Link
           href={"/dashboard"}
           className="flex items-center gap-3 hover:bg-accent px-4 py-3 border rounded-xl transition cursor-pointer"

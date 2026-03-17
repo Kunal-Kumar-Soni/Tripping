@@ -1,7 +1,5 @@
 "use client";
 import { tripFormate } from "@/lib/date";
-import { ActivityPage } from "../activity/activity-page";
-import ZoomControl from "../zoom-control";
 import TripViewCard from "./trip-view-card";
 import TripRow from "./trip-row";
 import {
@@ -17,8 +15,15 @@ import { formatDate, formatHour, formatHourToNumber, getDays } from "@/lib/plan-
 import { useTrip } from "@/hooks/useTrip";
 
 import { CreateActivity } from "@/types/activity";
+import { ActivityPage } from "../activity/activity-page";
+import ZoomControl from "../zoom-control";
+import { useState } from "react";
+import MapView from "../map_view/map-view";
+
+export type SelectViewType = "calendar" | "map";
 
 const TripView = () => {
+  const [selectView, setSelectView] = useState<SelectViewType>("calendar");
   const { selectedTrip } = useTrip();
   const {
     plans,
@@ -150,59 +155,68 @@ const TripView = () => {
       onDragEnd={handleDragEnd}
       autoScroll
     >
-      {/* Sticky Date Header */}
-      <div className="top-18 z-40 sticky flex">
-        {dates.map((date) => (
-          <div
-            key={date}
-            className="bg-black/80 p-2 border-r min-w-100 font-medium text-white shrink-0"
-          >
-            {tripFormate(date)}
-          </div>
-        ))}
-      </div>
-
-      {/* Timeline */}
-      <div className="flex mt-18 overflow-hidden">
-        {dates.map((date) => (
-          <div key={date} className="relative min-w-100 shrink-0" data-timeline>
-            <div className="relative">
-              {hours.map((hour) => {
-                const isDark = hour <= 7 || hour >= 19;
-                return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
-              })}
-
-              {/* events */}
-              <div className="absolute inset-0 pointer-events-none">
-                {plans
-                  .filter((item) => formatDate(item.start_date) === date)
-                  .sort(
-                    (a, b) => formatHourToNumber(a.start_time) - formatHourToNumber(b.start_time),
-                  )
-                  .map((item, index, arr) => {
-                    const hour = formatHourToNumber(item.start_time);
-                    const nextEvent = arr[index + 1];
-                    const prevEvent = arr[index - 1];
-                    const isDark = hour <= 7 || hour >= 19;
-
-                    return (
-                      <TripViewCard
-                        key={item.id}
-                        activity={item}
-                        isDark={isDark}
-                        nextEvent={nextEvent}
-                        prevEvent={prevEvent}
-                      />
-                    );
-                  })}
+      {selectView === "calendar" ? (
+        <>
+          {/***** Calendar view *****/}
+          <div className="top-18 z-40 sticky flex">
+            {dates.map((date) => (
+              <div
+                key={date}
+                className="bg-black/80 p-2 border-r min-w-100 font-medium text-white shrink-0"
+              >
+                {tripFormate(date)}
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+          {/* Timeline */}
+          <div className="flex mt-18 overflow-hidden">
+            {dates.map((date) => (
+              <div key={date} className="relative min-w-100 shrink-0" data-timeline>
+                <div className="relative">
+                  {hours.map((hour) => {
+                    const isDark = hour <= 7 || hour >= 19;
+                    return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
+                  })}
 
-        <ActivityPage />
-        <ZoomControl />
-      </div>
+                  {/* events */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    {plans
+                      .filter((item) => formatDate(item.start_date) === date)
+                      .sort(
+                        (a, b) =>
+                          formatHourToNumber(a.start_time) - formatHourToNumber(b.start_time),
+                      )
+                      .map((item, index, arr) => {
+                        const hour = formatHourToNumber(item.start_time);
+                        const nextEvent = arr[index + 1];
+                        const prevEvent = arr[index - 1];
+                        const isDark = hour <= 7 || hour >= 19;
+
+                        return (
+                          <TripViewCard
+                            key={item.id}
+                            activity={item}
+                            isDark={isDark}
+                            nextEvent={nextEvent}
+                            prevEvent={prevEvent}
+                          />
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          {/***** Calendar view *****/}
+          <MapView />
+        </>
+      )}
+
+      <ActivityPage />
+      <ZoomControl selectView={selectView} setSelectView={setSelectView} />
     </DndContext>
   );
 };

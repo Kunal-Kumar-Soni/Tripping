@@ -1,7 +1,6 @@
 "use client";
 import { usePlan } from "@/hooks/usePlan";
 import TripFallback from "../loader/trip-fallback";
-import { Spinner2 } from "../ui/spinner";
 import TripHeader from "./trip_view/trip-header";
 import TripView from "./trip_view/trip-view";
 import { useTrip } from "@/hooks/useTrip";
