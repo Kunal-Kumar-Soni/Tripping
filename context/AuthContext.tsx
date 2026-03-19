@@ -10,6 +10,7 @@ import {
 import { createContext, useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 import toast from "react-hot-toast";
+import { getErrorMessage } from "@/lib/error";
 
 type AppUser = {
   email: string;
@@ -49,7 +50,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data } = await axiosInstance.get("/api/user");
         setUser(data);
       } catch (error: any) {
-        setError(error.message);
+        const message = getErrorMessage(error);
+        setError(message);
+        toast.error(message);
         if (error.response?.status === 401) {
           await signOut(auth);
         } else {
@@ -65,47 +68,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleSignupWithEmailAndPassword = async (email: string, password: string) => {
     setError(null);
-    setIsLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
-      setError(error.message);
-      setIsLoading(false);
-      toast.error(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     }
   };
 
   const handleSigninWithEmailAndPassword = async (email: string, password: string) => {
     setError(null);
-    setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
-      setError(error.message);
-      setIsLoading(false);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     }
   };
 
   const handleWithGoogle = async () => {
     setError(null);
-    setIsLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (error: any) {
-      setError(error.message);
-      setIsLoading(false);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     }
   };
 
   const handleLogout = async () => {
     setError(null);
-    setIsLoading(true);
     try {
       await signOut(auth);
       toast.success("Logout successfully");
     } catch (error: any) {
-      setError(error.message);
-      setIsLoading(false);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     }
   };
 

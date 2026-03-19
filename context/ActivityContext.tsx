@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
+import { getErrorMessage } from "@/lib/error";
 import {
   createActivity,
   deleteSingleActivity,
@@ -48,7 +49,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       setActivities((prev) => [newActivity, ...(prev ?? [])]);
       toast.success("Activity Added");
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -65,7 +68,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       );
       toast.success("Activity Updated");
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -79,7 +84,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       await deleteSingleActivity(activityId);
       setActivities((prev) => prev.filter((activity) => activity.id !== activityId));
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -93,7 +100,8 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       const res = await getActivities();
       setActivities(res ?? []);
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
     } finally {
       setLoadingActivities(false);
     }

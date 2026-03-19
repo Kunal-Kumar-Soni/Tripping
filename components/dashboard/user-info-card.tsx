@@ -1,9 +1,11 @@
+"use client";
 import { Card, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Button } from "../ui/button";
-import { LuSlash } from "react-icons/lu";
+import { UserEditModel } from "./user-edit-model";
+import { useAuth } from "@/hooks/useAuth";
 
 const UserInfoCard = () => {
+  const { user } = useAuth();
   return (
     <Card className="shadow-none py-3">
       <CardContent className="flex justify-between items-center px-3">
@@ -16,7 +18,7 @@ const UserInfoCard = () => {
 
         <div className="font-semibold text-sm leading-tight">
           <p className="text-muted-foreground">Email Address</p>
-          <p>username@gmail.com</p>
+          <p>{user?.email}</p>
         </div>
 
         <div className="font-semibold text-sm leading-tight">
@@ -24,9 +26,7 @@ const UserInfoCard = () => {
           <p className="">+91 67899 98212</p>
         </div>
 
-        <Button variant={"outline"} size={"icon-sm"} className="border-foreground rounded-full">
-          <LuSlash />
-        </Button>
+        <UserEditModel />
       </CardContent>
     </Card>
   );

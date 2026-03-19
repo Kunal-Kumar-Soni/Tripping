@@ -2,11 +2,13 @@
 import { useActivity } from "@/hooks/useActivity";
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
+import { getErrorMessage } from "@/lib/error";
 import { createActivity } from "@/services/activity";
 import { createPlan, deleteSinglePlan, getPlans, updateSinglePlan } from "@/services/plan";
 import { Activity, CreateActivity } from "@/types/activity";
 import { CreatePlan, Plan } from "@/types/plan";
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type PlanContextType = {
   plans: Plan[];
@@ -44,9 +46,24 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       setPlans((prev) => prev.map((item) => (item.id === res.id ? res : item)));
     } catch (error: any) {
       setPlans(oldPlans);
-      setError(error.message);
+
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
+    }
+  };
+
+  const safelyDeletePlan = async (planId: number) => {
+    if (!selectedTrip) return;
+    try {
+      await deleteSinglePlan(selectedTrip.id, planId);
+    } catch (error: any) {
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
+      throw error;
     }
   };
 
@@ -55,11 +72,11 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     setMutationType("create");
 
-    const oldPlans = plans;
-    const oldActivities = activities;
+    const oldPlans = [...plans];
+    const oldActivities = [...activities];
 
     const optimisticPlan = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       ...payload,
     } as Plan;
 
@@ -69,11 +86,13 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await createPlan(selectedTrip.id, payload);
       setPlans((prev) => prev.map((item) => (item.id === optimisticPlan.id ? res : item)));
-      await handleDeleteSingleActivity(activityId);
     } catch (error: any) {
       setPlans(oldPlans);
       setActivities(oldActivities);
-      setError(error.message);
+
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -84,11 +103,11 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     setMutationType("move");
 
-    const oldPlans = plans;
-    const oldActivities = activities;
+    const oldPlans = [...plans];
+    const oldActivities = [...activities];
 
     const optimisticActivity = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       ...payload,
     } as Activity;
 
@@ -96,14 +115,17 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     setActivities((prev) => [optimisticActivity, ...prev]);
 
     try {
-      await deleteSinglePlan(selectedTrip.id, planId);
+      await safelyDeletePlan(planId);
       const res = await createActivity(payload);
 
       setActivities((prev) => prev.map((item) => (item.id === optimisticActivity.id ? res : item)));
     } catch (error: any) {
       setPlans(oldPlans);
       setActivities(oldActivities);
-      setError(error.message);
+
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -115,21 +137,19 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       setLoadingPlans(false);
       return;
     }
+    setLoadingPlans(true);
     setError(null);
 
     try {
       const res = await getPlans(selectedTrip.id);
-      if (res) {
-        setPlans(res ?? []);
-      } else {
-        setPlans([]);
-      }
+      setPlans(res ?? []);
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
     } finally {
       setLoadingPlans(false);
     }
-  }, [user?.uid, selectedTrip?.id]);
+  }, [user?.uid, selectedTrip]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -138,6 +158,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       fetchPlans();
     } else {
       setPlans([]);
+      setError(null);
     }
   }, [isLoading, fetchPlans]);
 

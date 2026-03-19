@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
+import { getErrorMessage } from "@/lib/error";
 import {
   createTrip,
   deleteSingleTrip,
@@ -53,7 +54,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
       setSelectedTrip(selectTripData);
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
     } finally {
       setLoadingSelectedTrip(false);
     }
@@ -66,14 +68,15 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     try {
       const newTrip = await createTrip(tripData);
       setTrips((prev) => {
-        if (!prev) return [newTrip];
         const updated = sortedTripsByTime([...prev, newTrip]);
         return updated;
       });
       setSelectedTrip(newTrip);
-      toast.success(`${tripData?.title} trip created..`);
+      toast.success(tripData ? `${tripData?.title} trip created.` : "Trip created");
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -91,7 +94,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       }
       toast.success("Trip updated.");
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -102,6 +107,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     setMutationType("delete");
     try {
+      const deletedTripTitle = selectedTrip?.title;
       await deleteSingleTrip(tripId);
 
       setTrips((prev) => {
@@ -111,9 +117,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         }
         return updatedTrips.length === 0 ? [] : updatedTrips;
       });
-      toast.success(`${selectedTrip?.title} trip deleted.`);
+      toast.success(deletedTripTitle ? `${deletedTripTitle} trip deleted.` : "Trip deleted");
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
+      toast.error(message);
     } finally {
       setMutationType(null);
     }
@@ -121,7 +129,12 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch Trips
   const fetchTrips = useCallback(async () => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      setLoadingTrips(false);
+      return;
+    }
+
+    setLoadingTrips(true);
     setError(null);
     try {
       const tripsData = await getTrips();
@@ -132,7 +145,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         setSelectedTrip(sortedByTime[0]);
       }
     } catch (error: any) {
-      setError(error.message);
+      const message = getErrorMessage(error);
+      setError(message);
     } finally {
       setLoadingTrips(false);
     }
@@ -146,6 +160,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setTrips([]);
       setSelectedTrip(null);
+      setError(null);
     }
   }, [isLoading, fetchTrips]);
 
