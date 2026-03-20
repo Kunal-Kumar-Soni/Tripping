@@ -32,7 +32,7 @@ export function ActivityPage() {
   return (
     <Card
       ref={setNodeRef}
-      className={`top-30 right-6 fixed py-4 w-full max-w-94  ${isOver ? "bg-muted border-dashed border-blue-500" : ""}`}
+      className={`top-30 z-40 right-6 fixed py-4 w-full max-w-94  ${isOver ? "bg-muted border-dashed border-blue-500" : ""}`}
     >
       <CardContent className="px-4">
         <Collapsible defaultOpen className="rounded-md">

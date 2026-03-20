@@ -6,7 +6,9 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
+  DragStartEvent,
   PointerSensor,
+  rectIntersection,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -23,6 +25,7 @@ import MapView from "../map_view/map-view";
 export type SelectViewType = "calendar" | "map";
 
 const TripView = () => {
+  const [activeDuration, setActiveDuration] = useState<number>(1);
   const [selectView, setSelectView] = useState<SelectViewType>("calendar");
   const { selectedTrip } = useTrip();
   const {
@@ -45,13 +48,31 @@ const TripView = () => {
   const dates = getDays(selectedTrip?.start_date, selectedTrip?.end_date);
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  const isSlotOccupied = (date: string, hour: number, ignoreId?: number) => {
-    return plans.some(
-      (item) =>
-        formatDate(item.start_date) === date &&
-        formatHourToNumber(item.start_time) === hour &&
-        item.id !== ignoreId,
-    );
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+
+    const activity = active.data.current?.activity;
+
+    if (activity && activity.start_time && activity.end_time) {
+      const start = formatHourToNumber(activity.start_time);
+      const end = formatHourToNumber(activity.end_time);
+
+      setActiveDuration(end - start);
+    } else {
+      setActiveDuration(1);
+    }
+  };
+
+  const isSlotOccupied = (date: string, start: number, end: number, ignoreId?: number) => {
+    return plans.some((item) => {
+      if (item.id === ignoreId) return false;
+      if (formatDate(item.start_date) !== date) return false;
+
+      const itemStart = formatHourToNumber(item.start_time);
+      const itemEnd = formatHourToNumber(item.end_time);
+
+      return start < itemEnd && end > itemStart;
+    });
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -90,12 +111,7 @@ const TripView = () => {
       const oldEnd = formatHourToNumber(activity.end_time);
       const duration = oldEnd - oldStart;
 
-      // drag alignment fix (top se snap)
-      const finalHour = Math.max(0, hourNumber - Math.floor(duration / 2));
-
-      if (isSlotOccupied(date, hourNumber, activity.id)) {
-        return;
-      }
+      const finalHour = hourNumber;
 
       const oldDate = formatDate(activity.start_date);
       const oldHour = formatHourToNumber(activity.start_time);
@@ -104,8 +120,12 @@ const TripView = () => {
         return;
       }
 
-      const start_time = formatHour(finalHour);
-      const end_time = formatHour(finalHour + duration);
+      const start_time = finalHour;
+      const end_time = finalHour + duration;
+
+      if (isSlotOccupied(date, start_time, end_time, activity.id)) {
+        return;
+      }
 
       const { id, trip_id, created_at, updated_at, status, ...rest } = activity;
 
@@ -113,8 +133,8 @@ const TripView = () => {
         ...rest,
         start_date: new Date(date).toISOString(),
         end_date: new Date(date).toISOString(),
-        start_time,
-        end_time,
+        start_time: formatHour(start_time),
+        end_time: formatHour(end_time),
       };
 
       await handleUpdateSinglePlan(activity.id, payload);
@@ -126,12 +146,12 @@ const TripView = () => {
       const [date, hour] = String(over.id).split("|");
       const hourNumber = Number(hour);
 
-      if (isSlotOccupied(date, hourNumber)) {
+      const start_time = hourNumber;
+      const end_time = hourNumber + 1;
+
+      if (isSlotOccupied(date, start_time, end_time)) {
         return;
       }
-
-      const start_time = formatHour(hourNumber);
-      const end_time = formatHour(hourNumber + 1);
 
       const { id, created_at, updated_at, user_id, ...rest } = activity;
       const payload = {
@@ -140,8 +160,8 @@ const TripView = () => {
         title: rest.name,
         start_date: new Date(date).toISOString(),
         end_date: new Date(date).toISOString(),
-        start_time,
-        end_time,
+        start_time: formatHour(start_time),
+        end_time: formatHour(end_time),
       };
       await handlePlanActivityToTimeline(payload, id);
       return;
@@ -150,8 +170,9 @@ const TripView = () => {
 
   return (
     <DndContext
-      collisionDetection={closestCenter}
+      collisionDetection={rectIntersection}
       sensors={sensors}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       autoScroll
     >
@@ -175,7 +196,15 @@ const TripView = () => {
                 <div className="relative">
                   {hours.map((hour) => {
                     const isDark = hour <= 7 || hour >= 19;
-                    return <TripRow key={hour} isDark={isDark} date={date} hour={hour} />;
+                    return (
+                      <TripRow
+                        key={hour}
+                        isDark={isDark}
+                        date={date}
+                        hour={hour}
+                        duration={activeDuration}
+                      />
+                    );
                   })}
 
                   {/* events */}

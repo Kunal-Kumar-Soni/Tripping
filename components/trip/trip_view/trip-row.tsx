@@ -6,19 +6,27 @@ type TripRowProps = {
   isDark: boolean;
   date: string;
   hour: number;
+  duration: number;
 };
 
-const TripRow = ({ children, isDark, date, hour }: TripRowProps) => {
+const TripRow = ({ children, isDark, date, hour, duration }: TripRowProps) => {
   const { setNodeRef, isOver } = useDroppable({ id: `${date}|${hour}` });
 
   return (
     <div
       ref={setNodeRef}
       className={`relative h-15 transition-all 
-        ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}
-        ${isOver ? "bg-muted border border-dashed border-blue-500" : ""}
-        `}
+        ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}`}
     >
+      {isOver && (
+        <div
+          style={{
+            height: `${duration * 60}px`,
+            zIndex: 30,
+          }}
+          className="top-0 right-0 left-0 absolute bg-blue-500/20 border-2 border-blue-500 border-dashed rounded-lg pointer-events-none"
+        />
+      )}
       {children}
     </div>
   );

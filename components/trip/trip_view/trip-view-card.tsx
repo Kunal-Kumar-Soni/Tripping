@@ -1,3 +1,4 @@
+"use client";
 import { usePlan } from "@/hooks/usePlan";
 import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
@@ -81,14 +82,20 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
     let newHour = formatHourToNumber(activity.end_time) - 1;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const container = document.querySelector("[data-timeline]");
+      const container = (e.target as HTMLElement).closest("[data-timeline]");
       if (!container) return;
 
       const rect = container.getBoundingClientRect();
-
       const offsetY = e.clientY - rect.top;
 
-      const hour = Math.floor(offsetY / ROW_HEIGHT);
+      let hour = Math.floor(offsetY / ROW_HEIGHT) + 1;
+
+      hour = Math.max(hour, startHour + 1);
+
+      if (nextEvent) {
+        const nextStart = formatHourToNumber(nextEvent.start_time);
+        hour = Math.min(hour, nextStart);
+      }
 
       newHour = hour;
       setPreviewEndHour(hour);
@@ -101,22 +108,18 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
       setMouseResizeStyle(false);
       setPreviewEndHour(null);
 
-      if (newHour < startHour) {
-        newHour = startHour;
-      }
+      const finalEndTimeValue = newHour;
+      const currentEndValue = formatHourToNumber(activity.end_time);
 
-      const newEndTime = formatHour(newHour);
-
-      const currentEnd = formatHourToNumber(activity.end_time);
-      if (newHour + 1 === currentEnd) return;
+      if (finalEndTimeValue === currentEndValue) return;
 
       const { id, trip_id, created_at, updated_at, status, ...rest } = activity;
 
       const payload = {
         ...rest,
-        end_time: newEndTime,
+        end_time: formatHour(finalEndTimeValue),
       };
-      // console.log(payload);
+
       await handleUpdateSinglePlan(activity.id, payload);
     };
 
