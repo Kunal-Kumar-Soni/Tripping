@@ -19,7 +19,7 @@ import { IconType } from "react-icons/lib";
 
 export function ActivityPage() {
   const [activeCategory, setActiveCategory] = useState<ActivityType>("restaurant");
-  const { activities, loadingActivities } = useActivity();
+  const { activities, loadingActivities, mutationType } = useActivity();
 
   const filteredLocations = activities?.filter((loc) => loc.category === activeCategory) ?? [];
 
@@ -34,10 +34,11 @@ export function ActivityPage() {
   //active ca
   useEffect(() => {
     if (!activities || activities.length === 0) return;
-
-    const latestActivity = activities[0];
-    if (latestActivity?.category) {
-      setActiveCategory(latestActivity?.category);
+    console.log("hello");
+    if (mutationType === "create") {
+      console.log("Hii");
+      const latestActivity = activities[0];
+      setActiveCategory(latestActivity.category);
     }
   }, [activities]);
 

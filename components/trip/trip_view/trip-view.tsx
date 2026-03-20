@@ -8,7 +8,6 @@ import {
   DragEndEvent,
   DragStartEvent,
   PointerSensor,
-  rectIntersection,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -21,6 +20,7 @@ import { ActivityPage } from "../activity/activity-page";
 import ZoomControl from "../zoom-control";
 import { useState } from "react";
 import MapView from "../map_view/map-view";
+import { useActivity } from "@/hooks/useActivity";
 
 export type SelectViewType = "calendar" | "map";
 
@@ -34,6 +34,8 @@ const TripView = () => {
     handlePlanActivityToTimeline,
     handlePlanTimelineToActivity,
   } = usePlan();
+
+  const { setMutationType } = useActivity();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -86,6 +88,7 @@ const TripView = () => {
 
     // Drag Timeline → Activity Panel
     if (dragType === "timeline" && over.id === "activity-drop") {
+      setMutationType("create");
       const { id, title, location_name, type } = activity;
 
       const payload: CreateActivity = {
@@ -94,6 +97,7 @@ const TripView = () => {
         category: type,
       };
       await handlePlanTimelineToActivity(payload, id);
+      setMutationType(null);
       return;
     }
 

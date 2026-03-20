@@ -25,6 +25,7 @@ type ActivityContextType = {
   loadingActivities: boolean;
   error: string | null;
   mutationType: "create" | "update" | "delete" | null;
+  setMutationType: Dispatch<SetStateAction<"create" | "update" | "delete" | null>>;
   handleCreateSingleActivity: (activityData: CreateActivity) => Promise<void>;
   handleUpdateSingleActivity: (activityId: number, activityData: CreateActivity) => Promise<void>;
   handleDeleteSingleActivity: (activityId: number) => Promise<void>;
@@ -94,7 +95,11 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch Activities
   const fetchActivities = useCallback(async () => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      setLoadingActivities(false);
+      setActivities([]);
+    }
+    setLoadingActivities(true);
     setError(null);
     try {
       const res = await getActivities();
@@ -114,6 +119,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       fetchActivities();
     } else {
       setActivities([]);
+      setError(null);
     }
   }, [isLoading, fetchActivities]);
 
@@ -123,6 +129,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     loadingActivities,
     error,
     mutationType,
+    setMutationType,
     handleCreateSingleActivity,
     handleUpdateSingleActivity,
     handleDeleteSingleActivity,

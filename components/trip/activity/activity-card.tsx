@@ -4,6 +4,7 @@ import { IconType } from "react-icons/lib";
 import { ActivityFromModel } from "./activity-from-model";
 import { useDraggable } from "@dnd-kit/core";
 import { useActivity } from "@/hooks/useActivity";
+import { usePlan } from "@/hooks/usePlan";
 
 type Props = {
   activity: Activity;
@@ -11,7 +12,7 @@ type Props = {
 };
 
 const ActivityCard = ({ activity, Icon }: Props) => {
-  const { mutationType } = useActivity();
+  const { mutationType } = usePlan();
   const isUpdating = mutationType !== null;
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `activity-${activity.id}`,

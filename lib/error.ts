@@ -15,7 +15,7 @@ export const getErrorMessage = (error: any): string => {
     case "auth/user-not-found":
       return "User not found";
 
-    case "auth/wrong-password":
+    case "auth/invalid-credential":
       return "Incorrect password";
 
     case "auth/weak-password":
