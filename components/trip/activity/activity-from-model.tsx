@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -23,19 +23,25 @@ import {
 import { useActivity } from "@/hooks/useActivity";
 import { Activity } from "@/types/activity";
 import { Ellipsis } from "lucide-react";
+import { ActivityType } from "@/types/common";
 
 type ActivityFromModelProps = {
   mode: "create" | "update";
   initialData?: Activity;
+  setActiveCategory?: Dispatch<SetStateAction<ActivityType>>;
 };
 
-type SavedLocationFormData = {
+type ActivityFormData = {
   name: string;
   location: string;
-  category: string;
+  category: ActivityType;
 };
 
-export function ActivityFromModel({ mode, initialData }: ActivityFromModelProps) {
+export function ActivityFromModel({
+  mode,
+  initialData,
+  setActiveCategory,
+}: ActivityFromModelProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const {
     handleCreateSingleActivity,
@@ -49,7 +55,7 @@ export function ActivityFromModel({ mode, initialData }: ActivityFromModelProps)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const formValue = Object.fromEntries(formData) as SavedLocationFormData;
+    const formValue = Object.fromEntries(formData) as ActivityFormData;
 
     if (isUpdate && initialData) {
       const isUnchanged =
@@ -67,6 +73,9 @@ export function ActivityFromModel({ mode, initialData }: ActivityFromModelProps)
       await handleUpdateSingleActivity(initialData.id, formValue);
     } else {
       await handleCreateSingleActivity(formValue);
+      if (setActiveCategory) {
+        setActiveCategory(formValue.category);
+      }
     }
     setIsOpen(false);
   };

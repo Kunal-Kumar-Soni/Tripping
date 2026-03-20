@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "lucide-react";
 import LocationsList from "./activity-list";
 import { Button } from "@/components/ui/button";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BiSolidLandmark } from "react-icons/bi";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
@@ -14,20 +14,32 @@ import { useActivity } from "@/hooks/useActivity";
 import { ActivityFromModel } from "./activity-from-model";
 import { Spinner2 } from "@/components/ui/spinner";
 import { useDroppable } from "@dnd-kit/core";
+import { ActivityType } from "@/types/common";
+import { IconType } from "react-icons/lib";
 
 export function ActivityPage() {
-  const [activeCategory, setActiveCategory] = useState<string>("restaurant");
+  const [activeCategory, setActiveCategory] = useState<ActivityType>("restaurant");
   const { activities, loadingActivities } = useActivity();
 
   const filteredLocations = activities?.filter((loc) => loc.category === activeCategory) ?? [];
 
-  const locationsButtons = [
+  const locationsButtons: { type: ActivityType; icon: IconType }[] = [
     { type: "restaurant", icon: MdOutlineRestaurant },
     { type: "hotel", icon: BiSolidLandmark },
     { type: "activity", icon: MdHiking },
   ];
 
   const { setNodeRef, isOver } = useDroppable({ id: "activity-drop" });
+
+  //active ca
+  useEffect(() => {
+    if (!activities || activities.length === 0) return;
+
+    const latestActivity = activities[0];
+    if (latestActivity?.category) {
+      setActiveCategory(latestActivity?.category);
+    }
+  }, [activities]);
 
   return (
     <Card
@@ -52,13 +64,14 @@ export function ActivityPage() {
             <div className="flex gap-2">
               {locationsButtons.map((btn) => {
                 const Icon = btn.icon;
+                const activityType = btn.type;
                 return (
                   <Button
                     key={btn.type}
                     className="rounded-full"
                     size="icon-lg"
-                    variant={activeCategory === btn.type ? "default" : "outline"}
-                    onClick={() => setActiveCategory(btn.type)}
+                    variant={activeCategory === activityType ? "default" : "outline"}
+                    onClick={() => setActiveCategory(activityType)}
                   >
                     <Icon />
                   </Button>
@@ -74,7 +87,7 @@ export function ActivityPage() {
             )}
 
             {/* Add new activity Model */}
-            <ActivityFromModel mode="create" />
+            <ActivityFromModel setActiveCategory={setActiveCategory} mode="create" />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

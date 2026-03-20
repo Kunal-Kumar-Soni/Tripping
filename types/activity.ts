@@ -1,5 +1,7 @@
+import { ActivityType } from "./common";
+
 export interface Activity {
-  category: string;
+  category: ActivityType;
   cost?: number;
   created_at: string;
   description?: string;

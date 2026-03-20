@@ -170,7 +170,7 @@ const TripView = () => {
 
   return (
     <DndContext
-      collisionDetection={rectIntersection}
+      collisionDetection={closestCenter}
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}

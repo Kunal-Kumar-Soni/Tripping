@@ -1,3 +1,5 @@
+import { ActivityType } from "./common";
+
 export interface Plan {
   address?: string;
   created_at: string;
@@ -13,7 +15,7 @@ export interface Plan {
   status?: string;
   title: string;
   trip_id?: number;
-  type: string;
+  type: ActivityType;
   updated_at: string;
 }
 
