@@ -3,7 +3,7 @@ import { useActivity } from "@/hooks/useActivity";
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
 import { getErrorMessage } from "@/lib/error";
-import { createActivity } from "@/services/activity";
+import { createActivity, deleteSingleActivity } from "@/services/activity";
 import { createPlan, deleteSinglePlan, getPlans, updateSinglePlan } from "@/services/plan";
 import { Activity, CreateActivity } from "@/types/activity";
 import { CreatePlan, Plan } from "@/types/plan";
@@ -85,6 +85,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const res = await createPlan(selectedTrip.id, payload);
+      await deleteSingleActivity(activityId);
       setPlans((prev) => prev.map((item) => (item.id === optimisticPlan.id ? res : item)));
     } catch (error: any) {
       setPlans(oldPlans);

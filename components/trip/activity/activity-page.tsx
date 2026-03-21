@@ -31,12 +31,10 @@ export function ActivityPage() {
 
   const { setNodeRef, isOver } = useDroppable({ id: "activity-drop" });
 
-  //active ca
+  //active category
   useEffect(() => {
     if (!activities || activities.length === 0) return;
-    console.log("hello");
     if (mutationType === "create") {
-      console.log("Hii");
       const latestActivity = activities[0];
       setActiveCategory(latestActivity.category);
     }

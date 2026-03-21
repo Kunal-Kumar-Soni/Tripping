@@ -178,7 +178,9 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
           {formatHour12(activity.start_time)}
         </h1>
         <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
-          {formatHour12(activity.end_time)}
+          {previewEndHour !== null
+            ? formatHour12(formatHour(previewEndHour))
+            : formatHour12(activity.end_time)}
         </h1>
       </div>
 
