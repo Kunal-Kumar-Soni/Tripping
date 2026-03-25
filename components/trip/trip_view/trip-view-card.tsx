@@ -166,11 +166,11 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
           ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
     >
       <div {...attributes} {...listeners} className={`px-4 py-2 w-full h-full`}>
-        <div className="flex items-center gap-4">
-          <Icon />
-          <div className="font-semibold text-sm">
-            <h1>{activity.title}</h1>
-            <h1 className="text-muted-foreground">{activity.location_name}</h1>
+        <div className="flex items-center gap-3">
+          <Icon size={18} />
+          <div className="pr-12 w-full font-semibold text-sm">
+            <h1 className="line-clamp-1">{activity.title}</h1>
+            <h1 className="text-muted-foreground line-clamp-1">{activity.location_name}</h1>
           </div>
         </div>
 

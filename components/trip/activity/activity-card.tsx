@@ -41,12 +41,12 @@ const ActivityCard = ({ activity, Icon }: Props) => {
         isUpdating ? "opacity-50 cursor-not-allowed bg-muted" : "hover:bg-accent"
       }`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <Icon size={18} />
 
-        <div className="leading-tight">
-          <h1 className="font-semibold">{activity.name}</h1>
-          <p className="text-muted-foreground">{activity.location}</p>
+        <div className="pr-1 leading-tight">
+          <h1 className="font-semibold line-clamp-1 w">{activity.name}</h1>
+          <p className="text-muted-foreground line-clamp-1">{activity.location}</p>
         </div>
       </div>
 

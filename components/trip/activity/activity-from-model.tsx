@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -24,6 +24,9 @@ import { useActivity } from "@/hooks/useActivity";
 import { Activity } from "@/types/activity";
 import { Ellipsis } from "lucide-react";
 import { ActivityType } from "@/types/common";
+import { useDebounce } from "use-debounce";
+import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
+import { getPlaceAutocomplete } from "@/lib/map";
 
 type ActivityFromModelProps = {
   mode: "create" | "update";
@@ -43,6 +46,11 @@ export function ActivityFromModel({
   setActiveCategory,
 }: ActivityFromModelProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [name, setName] = useState<string>(initialData?.name || "");
+  const [location, setLocation] = useState<string>(initialData?.location || "");
+  const [suggestions, setSuggestions] = useState<PlaceAutocompleteResult[]>([]);
+  const [isSelected, setIsSelected] = useState<string | null>(null);
+  const [isTyped, setIsTyped] = useState<boolean>(false);
   const {
     handleCreateSingleActivity,
     handleUpdateSingleActivity,
@@ -51,6 +59,7 @@ export function ActivityFromModel({
   } = useActivity();
 
   const isUpdate = mode === "update";
+  const [debounceInput] = useDebounce(name, 400);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,6 +95,45 @@ export function ActivityFromModel({
 
   const isSubmitting = isCreating || isUpdating;
 
+  const handleSelect = (selectedData: PlaceAutocompleteResult) => {
+    const { structured_formatting } = selectedData;
+
+    const SelectedName = structured_formatting?.main_text || selectedData.description;
+    setName(SelectedName);
+    setIsSelected(SelectedName);
+    setLocation(structured_formatting?.secondary_text || "no location");
+    setIsTyped(false);
+    setSuggestions([]);
+  };
+
+  useEffect(() => {
+    if (!isTyped) return;
+    const fetchAutoCompleteSuggestions = async () => {
+      if (isSelected === debounceInput) return;
+      if (!debounceInput) {
+        setSuggestions([]);
+        return;
+      }
+      try {
+        const res = await getPlaceAutocomplete(debounceInput);
+        setSuggestions(res ?? []);
+      } catch (error: any) {
+        console.error(error.message);
+      }
+    };
+    fetchAutoCompleteSuggestions();
+  }, [debounceInput, isTyped, isSelected]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setName(initialData?.name || "");
+      setLocation(initialData?.location || "");
+      setSuggestions([]);
+      setIsSelected(null);
+      setIsTyped(false);
+    }
+  }, [isOpen, initialData]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="w-full" asChild>
@@ -108,13 +156,50 @@ export function ActivityFromModel({
             </DialogDescription>
           </DialogHeader>
           <div className="gap-4 grid grid-cols-2">
-            <div className="gap-3 grid col-span-2">
+            <div className="relative gap-3 grid col-span-2 w-full">
               <Label htmlFor="name">Name</Label>
-              <Input required id="name" name="name" defaultValue={initialData?.name} />
+              <Input
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setIsTyped(true);
+                }}
+                onBlur={() => {
+                  setTimeout(() => setSuggestions([]), 100);
+                }}
+                required
+                id="name"
+                name="name"
+                autoComplete="off"
+              />
+
+              {/* Suggestions Dropdown */}
+              {suggestions.length > 0 && (
+                <div className="top-17 left-0 z-50 absolute bg-background shadow-md border rounded-md w-full">
+                  {suggestions.map((suggestion) => (
+                    <div
+                      key={suggestion.place_id}
+                      onClick={() => {
+                        handleSelect(suggestion);
+                      }}
+                      className="hover:bg-muted px-3 py-2 text-sm cursor-pointer"
+                    >
+                      {suggestion.description}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+
             <div className="gap-3 grid col-span-2">
-              <Label htmlFor="location">Location</Label>
-              <Input required id="location" name="location" defaultValue={initialData?.location} />
+              <Label>Location</Label>
+              <Input
+                className="bg-muted focus-visible:border-input rounded-md focus-visible:ring-0 text-muted-foreground text-sm cursor-not-allowed"
+                readOnly
+                name="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
             </div>
             <div className="gap-3 grid col-span-2">
               <Label>Category</Label>
