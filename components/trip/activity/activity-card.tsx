@@ -14,7 +14,7 @@ type Props = {
 const ActivityCard = ({ activity, Icon }: Props) => {
   const { mutationType } = usePlan();
   const isUpdating = mutationType !== null;
-  const { setNodeRef, attributes, listeners, transform } = useDraggable({
+  const { setNodeRef, attributes, listeners, transform, isDragging } = useDraggable({
     id: `activity-${activity.id}`,
     data: {
       activity,

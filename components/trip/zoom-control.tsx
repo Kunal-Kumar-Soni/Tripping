@@ -18,7 +18,7 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
   };
 
   return (
-    <Card className="right-6 bottom-5 fixed py-2 w-full max-w-94">
+    <Card className="right-6 bottom-5 z-50 fixed py-2 w-full max-w-94">
       <CardContent className="flex justify-between items-center px-5">
         {/* Zoom label */}
         <span className="font-medium">Zoom</span>

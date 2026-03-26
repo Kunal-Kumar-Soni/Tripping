@@ -12,6 +12,9 @@ type TripRowProps = {
 const TripRow = ({ children, isDark, date, hour, duration }: TripRowProps) => {
   const { setNodeRef, isOver } = useDroppable({ id: `${date}|${hour}` });
 
+  const overflowHours = Math.max(0, hour + duration - 24);
+  const topOffset = -(overflowHours * 60);
+
   return (
     <div
       ref={setNodeRef}
@@ -22,7 +25,8 @@ const TripRow = ({ children, isDark, date, hour, duration }: TripRowProps) => {
         <div
           style={{
             height: `${duration * 60}px`,
-            zIndex: 30,
+            top: `${topOffset}px`,
+            zIndex: 10,
           }}
           className="top-0 right-0 left-0 absolute bg-blue-500/20 border-2 border-blue-500 border-dashed rounded-lg pointer-events-none"
         />

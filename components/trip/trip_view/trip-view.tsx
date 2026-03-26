@@ -3,7 +3,6 @@ import { tripFormate } from "@/lib/date";
 import TripViewCard from "./trip-view-card";
 import TripRow from "./trip-row";
 import {
-  closestCenter,
   DndContext,
   DragEndEvent,
   DragStartEvent,
@@ -21,12 +20,15 @@ import ZoomControl from "../zoom-control";
 import { useState } from "react";
 import MapView from "../map_view/map-view";
 import { useActivity } from "@/hooks/useActivity";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import { customCollisionStrategy } from "@/lib/custom-collision";
 
 export type SelectViewType = "calendar" | "map";
 
 const TripView = () => {
   const [activeDuration, setActiveDuration] = useState<number>(1);
   const [selectView, setSelectView] = useState<SelectViewType>("calendar");
+
   const { selectedTrip } = useTrip();
   const {
     plans,
@@ -115,7 +117,12 @@ const TripView = () => {
       const oldEnd = formatHourToNumber(activity.end_time);
       const duration = oldEnd - oldStart;
 
-      const finalHour = hourNumber;
+      let finalHour = hourNumber;
+
+      // --- NEW BOUNDARY CHECK ---
+      if (finalHour + duration > 24) {
+        finalHour = 24 - duration;
+      }
 
       const oldDate = formatDate(activity.start_date);
       const oldHour = formatHourToNumber(activity.start_time);
@@ -174,7 +181,8 @@ const TripView = () => {
 
   return (
     <DndContext
-      collisionDetection={closestCenter}
+      collisionDetection={customCollisionStrategy}
+      modifiers={[restrictToWindowEdges]}
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -222,7 +230,6 @@ const TripView = () => {
                       .map((item, index, arr) => {
                         const hour = formatHourToNumber(item.start_time);
                         const nextEvent = arr[index + 1];
-                        const prevEvent = arr[index - 1];
                         const isDark = hour <= 7 || hour >= 19;
 
                         return (
@@ -231,7 +238,6 @@ const TripView = () => {
                             activity={item}
                             isDark={isDark}
                             nextEvent={nextEvent}
-                            prevEvent={prevEvent}
                           />
                         );
                       })}

@@ -14,7 +14,6 @@ type TripViewCardProps = {
   activity: Plan;
   isDark: boolean;
   nextEvent?: Plan;
-  prevEvent?: Plan;
 };
 
 const ROW_HEIGHT = 60;
@@ -38,7 +37,7 @@ const transports: TransportInfo[] = [
   { type: "plane", icon: FaPlane },
 ];
 
-const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardProps) => {
+const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
   const isUpdating = mutationType !== null;
@@ -130,7 +129,6 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
   const Icon: IconType = IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
 
   const showBottomPlus = Boolean(nextEvent);
-  const showTopPlus = Boolean(prevEvent);
 
   const handleOpenTransport = () => {
     setOpenTransport((prev) => (prev ? false : true));
@@ -226,14 +224,6 @@ const TripViewCard = ({ activity, isDark, nextEvent, prevEvent }: TripViewCardPr
             </button>
           )}
         </div>
-      )}
-
-      {showTopPlus && (
-        <button
-          className={`-top-4 left-1/2  absolute p-1 rounded-full border-none -translate-x-1/2 ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black "}`}
-        >
-          <BsPlusLg />
-        </button>
       )}
     </div>
   );
