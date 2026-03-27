@@ -9,22 +9,24 @@ type TripRowProps = {
   duration: number;
 };
 
+const ROW_HEIGHT = 100;
+
 const TripRow = ({ children, isDark, date, hour, duration }: TripRowProps) => {
   const { setNodeRef, isOver } = useDroppable({ id: `${date}|${hour}` });
 
   const overflowHours = Math.max(0, hour + duration - 24);
-  const topOffset = -(overflowHours * 60);
+  const topOffset = -(overflowHours * ROW_HEIGHT);
 
   return (
     <div
       ref={setNodeRef}
-      className={`relative h-15 transition-all 
+      className={`relative h-25 transition-all border
         ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}`}
     >
       {isOver && (
         <div
           style={{
-            height: `${duration * 60}px`,
+            height: `${duration * ROW_HEIGHT}px`,
             top: `${topOffset}px`,
             zIndex: 10,
           }}

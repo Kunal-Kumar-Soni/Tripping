@@ -3,7 +3,6 @@ import { Activity } from "@/types/activity";
 import { IconType } from "react-icons/lib";
 import { ActivityFromModel } from "./activity-from-model";
 import { useDraggable } from "@dnd-kit/core";
-import { useActivity } from "@/hooks/useActivity";
 import { usePlan } from "@/hooks/usePlan";
 
 type Props = {

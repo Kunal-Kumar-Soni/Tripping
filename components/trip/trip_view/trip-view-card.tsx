@@ -16,7 +16,7 @@ type TripViewCardProps = {
   nextEvent?: Plan;
 };
 
-const ROW_HEIGHT = 60;
+const ROW_HEIGHT = 100;
 
 type ActivityType = "restaurant" | "hotel" | "activity";
 type ActivityInfo = { type: ActivityType; icon: IconType };
@@ -68,8 +68,9 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
 
   const effectiveEnd = previewEndHour ?? endHour;
   const duration = Math.max(1, effectiveEnd - startHour);
-  const height = duration * ROW_HEIGHT - 4;
-  const top = startHour * ROW_HEIGHT + 4;
+  const height = duration * ROW_HEIGHT - 40;
+  const top = startHour * ROW_HEIGHT + 20;
+  const bottom = startHour * ROW_HEIGHT - 20;
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -157,7 +158,7 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
 
   return (
     <div
-      style={{ ...style, height, top }}
+      style={{ ...style, height, top, bottom }}
       ref={setNodeRef}
       className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto
           ${isUpdating ? "opacity-50 cursor-not-allowed" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} 

@@ -13,7 +13,7 @@ const categoryIconMap: { [key: string]: IconType } = {
 
 const LocationsList = ({ activities }: { activities: Activity[] }) => {
   return (
-    <section className="space-y-4 w-full">
+    <section className="space-y-4">
       <div className="flex flex-col gap-1">
         {activities.map((activity) => {
           const Icon = categoryIconMap[activity.category];
