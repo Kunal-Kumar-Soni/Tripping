@@ -2,9 +2,9 @@
 import { useDraggable } from "@dnd-kit/core";
 import { IconType } from "react-icons/lib";
 
-import { usePlan } from "@/hooks/usePlan";
-
 import { Activity } from "@/types/activity";
+
+import { usePlan } from "@/hooks/usePlan";
 
 import { ActivityFromModel } from "./activity-from-model";
 
@@ -39,9 +39,9 @@ const ActivityCard = ({ activity, Icon }: Props) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={`flex justify-between px-5 py-2 border rounded-xl ${
+      className={`flex justify-between rounded-xl border px-5 py-2 ${
         isUpdating
-          ? "opacity-50 cursor-not-allowed bg-muted"
+          ? "bg-muted cursor-not-allowed opacity-50"
           : "hover:bg-accent"
       }`}
     >
@@ -49,7 +49,7 @@ const ActivityCard = ({ activity, Icon }: Props) => {
         <Icon size={18} />
 
         <div className="pr-1 leading-tight">
-          <h1 className="font-semibold line-clamp-1 w">{activity.name}</h1>
+          <h1 className="w line-clamp-1 font-semibold">{activity.name}</h1>
           <p className="text-muted-foreground line-clamp-1">
             {activity.location}
           </p>

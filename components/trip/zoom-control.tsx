@@ -21,13 +21,13 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
   };
 
   return (
-    <Card className="right-6 bottom-5 z-50 fixed py-2 w-full max-w-94">
-      <CardContent className="flex justify-between items-center px-5">
+    <Card className="fixed right-6 bottom-5 z-50 w-full max-w-94 py-2">
+      <CardContent className="flex items-center justify-between px-5">
         {/* Zoom label */}
         <span className="font-medium">Zoom</span>
 
         {/* Percentage  */}
-        <div className="bg-muted px-6 py-3 rounded-full font-semibold text-muted-foreground">
+        <div className="bg-muted text-muted-foreground rounded-full px-6 py-3 font-semibold">
           100%
         </div>
 
@@ -36,21 +36,21 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
           <Button
             size="icon-lg"
             variant="outline"
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer rounded-full"
           >
             <CgMathMinus />
           </Button>
           <Button
             size="icon-lg"
             variant="outline"
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer rounded-full"
           >
             <BsPlusLg />
           </Button>
         </div>
 
         {/* Divider */}
-        <div className="self-stretch -my-2 bg-border w-px" />
+        <div className="bg-border -my-2 w-px self-stretch" />
 
         {/* Action icons */}
         <div className="flex gap-1">
@@ -58,7 +58,7 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
             onClick={() => handleSelectView("calendar")}
             size="icon-lg"
             variant={selectView === "calendar" ? "default" : "outline"}
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer rounded-full"
           >
             <BsCalendar3 />
           </Button>
@@ -66,7 +66,7 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
             onClick={() => handleSelectView("map")}
             size="icon-lg"
             variant={selectView === "map" ? "default" : "outline"}
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer rounded-full"
           >
             <IoMapOutline />
           </Button>

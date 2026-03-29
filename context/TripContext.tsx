@@ -7,6 +7,14 @@ import {
   useState,
 } from "react";
 
+import toast from "react-hot-toast";
+
+import { CreateTrip, Trip } from "@/types/trip";
+
+import { getErrorMessage } from "@/lib/error";
+
+import { useAuth } from "@/hooks/useAuth";
+
 import {
   createTrip,
   deleteSingleTrip,
@@ -14,13 +22,6 @@ import {
   getTrips,
   updateSingleTrip,
 } from "@/services/trip";
-import toast from "react-hot-toast";
-
-import { getErrorMessage } from "@/lib/error";
-
-import { useAuth } from "@/hooks/useAuth";
-
-import { CreateTrip, Trip } from "@/types/trip";
 
 type Mutation = "create" | "update" | "delete";
 type TripContextType = {

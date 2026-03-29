@@ -22,13 +22,13 @@ const PreferencesCard = () => {
         <span>Preferences</span>
       </div>
 
-      <Card className="shadow-none py-3 rounded-2xl h-full">
+      <Card className="h-full rounded-2xl py-3 shadow-none">
         <CardContent className="space-y-3 px-3">
           <div className="space-y-3">
-            <div className="flex justify-between items-center gap-2 rounded-md">
-              <span className="font-semibold text-sm">Lifestyle</span>
+            <div className="flex items-center justify-between gap-2 rounded-md">
+              <span className="text-sm font-semibold">Lifestyle</span>
               <Select defaultValue="luxurious">
-                <SelectTrigger className="bg-muted border-none w-full max-w-70">
+                <SelectTrigger className="bg-muted w-full max-w-70 border-none">
                   <SelectValue placeholder="Select lifestyle" />
                 </SelectTrigger>
                 <SelectContent>
@@ -41,10 +41,10 @@ const PreferencesCard = () => {
               </Select>
             </div>
 
-            <div className="flex justify-between items-center gap-2 rounded-md">
-              <span className="font-semibold text-sm">Currency</span>
+            <div className="flex items-center justify-between gap-2 rounded-md">
+              <span className="text-sm font-semibold">Currency</span>
               <Select defaultValue="inr">
-                <SelectTrigger className="bg-muted border-none w-full max-w-70">
+                <SelectTrigger className="bg-muted w-full max-w-70 border-none">
                   <SelectValue placeholder="Select Currency" />
                 </SelectTrigger>
                 <SelectContent>

@@ -1,5 +1,3 @@
-import axiosInstance from "@/lib/axios";
-
 import { DeleteResponse } from "@/types/common";
 import {
   CreatePlan,
@@ -7,6 +5,8 @@ import {
   Plan,
   PlanTransport,
 } from "@/types/plan";
+
+import axiosInstance from "@/lib/axios";
 
 //! All plans
 export const getPlans = async (tripId: number): Promise<Plan[]> => {

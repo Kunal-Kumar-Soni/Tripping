@@ -9,19 +9,20 @@ import {
   useState,
 } from "react";
 
+import toast from "react-hot-toast";
+
+import { Activity, CreateActivity } from "@/types/activity";
+
+import { getErrorMessage } from "@/lib/error";
+
+import { useAuth } from "@/hooks/useAuth";
+
 import {
   createActivity,
   deleteSingleActivity,
   getActivities,
   updateSingleActivity,
 } from "@/services/activity";
-import toast from "react-hot-toast";
-
-import { getErrorMessage } from "@/lib/error";
-
-import { useAuth } from "@/hooks/useAuth";
-
-import { Activity, CreateActivity } from "@/types/activity";
 
 type ActivityContextType = {
   activities: Activity[];

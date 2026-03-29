@@ -17,25 +17,25 @@ const TripHeader = () => {
     differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
 
   return (
-    <section className="top-0 right-0 left-100 z-50 fixed">
+    <section className="fixed top-0 right-0 left-100 z-50">
       {/* Header */}
-      <header className="flex justify-between items-center bg-black/80 shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)] px-6 py-4 text-white">
+      <header className="flex items-center justify-between bg-black/80 px-6 py-4 text-white shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)]">
         {/* Left */}
         <div className="w-[40%]">
-          <h1 className="font-semibold text-2xl tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             {selectedTrip?.title}
           </h1>
         </div>
 
         {/* Right */}
-        <div className="flex justify-between items-center gap-10 w-[60%]">
+        <div className="flex w-[60%] items-center justify-between gap-10">
           <div className="leading-tight">
-            <p className="text-white/60 text-sm">Duration</p>
+            <p className="text-sm text-white/60">Duration</p>
             <p className="font-semibold">{durations} Days</p>
           </div>
 
           <div className="leading-tight">
-            <p className="text-white/60 text-sm">Cost Estimate</p>
+            <p className="text-sm text-white/60">Cost Estimate</p>
             <p className="font-semibold">${selectedTrip?.budget}</p>
           </div>
 
@@ -44,7 +44,7 @@ const TripHeader = () => {
           <div className="flex gap-2">
             <Button
               size={"icon-lg"}
-              className="flex justify-center items-center bg-indigo-500 hover:bg-indigo-600 rounded-full transition"
+              className="flex items-center justify-center rounded-full bg-indigo-500 transition hover:bg-indigo-600"
             >
               <ImMagicWand />
             </Button>
@@ -52,7 +52,7 @@ const TripHeader = () => {
               <Button
                 asChild
                 size={"icon-lg"}
-                className="flex justify-center items-center border rounded-full transition"
+                className="flex items-center justify-center rounded-full border transition"
               >
                 <Link href={"/setting"}>
                   <GoGear />

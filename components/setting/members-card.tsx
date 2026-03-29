@@ -12,7 +12,7 @@ const MembersCard = () => {
   return (
     <section className="space-y-5 font-medium">
       {/* Title and add button */}
-      <div className="flex justify-between items-center px-2">
+      <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3 p-2">
           <HiUsers size={18} />
           <span>Trip Members</span>
@@ -30,7 +30,7 @@ const MembersCard = () => {
         {["John Doe", "Jane Doe", "Alex", "Michael"].map((member, index) => (
           <div
             key={index}
-            className="flex justify-between items-center px-3 py-2 border rounded-xl"
+            className="flex items-center justify-between rounded-xl border px-3 py-2"
           >
             <div className="flex items-center gap-3">
               <Avatar>

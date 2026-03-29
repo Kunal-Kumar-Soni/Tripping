@@ -4,11 +4,11 @@ import { useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
 import { LuSlash } from "react-icons/lu";
 
+import { CreateTrip, Trip } from "@/types/trip";
+
 import { formatDate, formateDateInIsoString } from "@/lib/plan-formate";
 
 import { useTrip } from "@/hooks/useTrip";
-
-import { CreateTrip, Trip } from "@/types/trip";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -117,7 +117,7 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
           <Button
             variant={"outline"}
             size="icon-lg"
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer rounded-full"
           >
             <BsPlusLg />
           </Button>
@@ -134,8 +134,8 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="gap-4 grid grid-cols-2">
-            <div className="gap-3 grid col-span-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-2 grid gap-3">
               <Label htmlFor="trip-name">Trip Name</Label>
               <Input
                 required
@@ -145,7 +145,7 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
               />
             </div>
 
-            <div className="gap-3 grid">
+            <div className="grid gap-3">
               <Label htmlFor="start-date">Start Date</Label>
               <Input
                 required
@@ -158,7 +158,7 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
               />
             </div>
 
-            <div className="gap-3 grid">
+            <div className="grid gap-3">
               <Label htmlFor="end-date">End Date</Label>
               <Input
                 required
@@ -170,7 +170,7 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
               />
             </div>
 
-            <div className="gap-3 grid col-span-2">
+            <div className="col-span-2 grid gap-3">
               <Label htmlFor="budget">Budget</Label>
               <Input
                 required
@@ -182,10 +182,10 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
             </div>
           </div>
 
-          <div className="flex gap-2 w-full">
+          <div className="flex w-full gap-2">
             <DialogClose asChild>
               <Button
-                className="flex-1 px-8 py-5 rounded-full"
+                className="flex-1 rounded-full px-8 py-5"
                 variant="outline"
               >
                 Cancel
@@ -193,7 +193,7 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
             </DialogClose>
             <Button
               disabled={isSubmitting}
-              className="flex-1 px-8 py-5 rounded-full"
+              className="flex-1 rounded-full px-8 py-5"
               type="submit"
             >
               {isCreating

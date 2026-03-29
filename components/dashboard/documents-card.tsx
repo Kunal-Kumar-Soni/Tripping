@@ -21,7 +21,7 @@ const DocumentsCard = () => {
   return (
     <section className="space-y-5 font-medium">
       {/* Title  */}
-      <div className="flex justify-between items-center p-2">
+      <div className="flex items-center justify-between p-2">
         <div className="flex items-center gap-3">
           <IoDocumentTextOutline size={18} />
           <span>Your Documents</span>
@@ -32,9 +32,9 @@ const DocumentsCard = () => {
         {data.map((el, index) => (
           <div
             key={index}
-            className="flex justify-between items-center px-3 py-2 border rounded-md"
+            className="flex items-center justify-between rounded-md border px-3 py-2"
           >
-            <div className="font-semibold text-sm leading-tight">
+            <div className="text-sm leading-tight font-semibold">
               <p>{el.title}</p>
               <p className="text-muted-foreground">{el.location}</p>
             </div>
@@ -42,7 +42,7 @@ const DocumentsCard = () => {
             <Button
               size="icon-sm"
               variant="outline"
-              className="rounded-full cursor-pointer"
+              className="cursor-pointer rounded-full"
             >
               <FiPlus />
             </Button>

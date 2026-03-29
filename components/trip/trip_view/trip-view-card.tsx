@@ -8,6 +8,8 @@ import { FaBan, FaCar, FaPlane, FaTrain } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
+import { Plan } from "@/types/plan";
+
 import {
   formatHour,
   formatHour12,
@@ -15,8 +17,6 @@ import {
 } from "@/lib/plan-formate";
 
 import { usePlan } from "@/hooks/usePlan";
-
-import { Plan } from "@/types/plan";
 
 type TripViewCardProps = {
   activity: Plan;
@@ -178,14 +178,12 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
     <div
       style={{ ...style, height, top, bottom }}
       ref={setNodeRef}
-      className={`absolute left-2 right-2 shadow rounded-lg pointer-events-auto
-          ${isUpdating ? "opacity-50 cursor-not-allowed" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} 
-          ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
+      className={`pointer-events-auto absolute right-2 left-2 rounded-lg shadow ${isUpdating ? "cursor-not-allowed opacity-50" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
     >
-      <div {...attributes} {...listeners} className={`px-4 py-2 w-full h-full`}>
+      <div {...attributes} {...listeners} className={`h-full w-full px-4 py-2`}>
         <div className="flex items-center gap-3">
           <Icon size={18} />
-          <div className="pr-12 w-full font-semibold text-sm">
+          <div className="w-full pr-12 text-sm font-semibold">
             <h1 className="line-clamp-1">{activity.title}</h1>
             <h1 className="text-muted-foreground line-clamp-1">
               {activity.location_name}
@@ -193,10 +191,10 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
           </div>
         </div>
 
-        <h1 className="top-1 right-2 absolute text-[13px] text-muted-foreground">
+        <h1 className="text-muted-foreground absolute top-1 right-2 text-[13px]">
           {formatHour12(activity.start_time)}
         </h1>
-        <h1 className="right-2 bottom-1 absolute text-[13px] text-muted-foreground">
+        <h1 className="text-muted-foreground absolute right-2 bottom-1 text-[13px]">
           {previewEndHour !== null
             ? formatHour12(formatHour(previewEndHour))
             : formatHour12(activity.end_time)}
@@ -205,21 +203,21 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
 
       <div
         onMouseDown={handleResizeStart}
-        className="bottom-0 absolute bg-transparent w-full h-2 cursor-ns-resize"
+        className="absolute bottom-0 h-2 w-full cursor-ns-resize bg-transparent"
       />
       {previewEndHour && (
-        <div className="right-2 bottom-0 left-2 absolute bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)] h-0.5" />
+        <div className="absolute right-2 bottom-0 left-2 h-0.5 bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)]" />
       )}
 
       {/* Bottom Button */}
       {showBottomPlus && (
         <div
-          className={`-bottom-4 left-1/2  absolute flex flex-col items-center -translate-x-1/2 cursor-default`}
+          className={`absolute -bottom-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center`}
           onClick={handleOpenTransport}
         >
           {openTransport && !isUpdating ? (
             <div
-              className={`flex gap-3 shadow-lg mt-2 px-2 py-1 rounded-full ${isDark ? "bg-black/80" : "bg-white/80 "} `}
+              className={`mt-2 flex gap-3 rounded-full px-2 py-1 shadow-lg ${isDark ? "bg-black/80" : "bg-white/80"} `}
             >
               <button
                 onClick={(e) => handleSelectTransport(e, "car")}
@@ -249,7 +247,7 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
           ) : (
             <button
               disabled={isUpdating}
-              className={`p-1 rounded-full cursor-pointer ${
+              className={`cursor-pointer rounded-full p-1 ${
                 isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
               }`}
             >

@@ -7,14 +7,10 @@ import {
   useState,
 } from "react";
 
-import { createActivity, deleteSingleActivity } from "@/services/activity";
-import {
-  createPlan,
-  deleteSinglePlan,
-  getPlans,
-  updateSinglePlan,
-} from "@/services/plan";
 import toast from "react-hot-toast";
+
+import { Activity, CreateActivity } from "@/types/activity";
+import { CreatePlan, Plan } from "@/types/plan";
 
 import { getErrorMessage } from "@/lib/error";
 
@@ -22,8 +18,13 @@ import { useActivity } from "@/hooks/useActivity";
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
 
-import { Activity, CreateActivity } from "@/types/activity";
-import { CreatePlan, Plan } from "@/types/plan";
+import { createActivity, deleteSingleActivity } from "@/services/activity";
+import {
+  createPlan,
+  deleteSinglePlan,
+  getPlans,
+  updateSinglePlan,
+} from "@/services/plan";
 
 type PlanContextType = {
   plans: Plan[];

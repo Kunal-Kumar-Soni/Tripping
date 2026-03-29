@@ -5,12 +5,12 @@ import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { Ellipsis } from "lucide-react";
 import { useDebounce } from "use-debounce";
 
+import { Activity } from "@/types/activity";
+import { ActivityType } from "@/types/common";
+
 import { getPlaceAutocomplete } from "@/lib/map";
 
 import { useActivity } from "@/hooks/useActivity";
-
-import { Activity } from "@/types/activity";
-import { ActivityType } from "@/types/common";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -156,7 +156,7 @@ export function ActivityFromModel({
             <Ellipsis size={18} />
           </button>
         ) : (
-          <Button className="py-6 rounded-full">Add Activity</Button>
+          <Button className="rounded-full py-6">Add Activity</Button>
         )}
       </DialogTrigger>
       <DialogContent>
@@ -171,8 +171,8 @@ export function ActivityFromModel({
                 : "Enter activity details to keep your trip organized."}
             </DialogDescription>
           </DialogHeader>
-          <div className="gap-4 grid grid-cols-2">
-            <div className="relative gap-3 grid col-span-2 w-full">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative col-span-2 grid w-full gap-3">
               <Label htmlFor="name">Name</Label>
               <Input
                 value={name}
@@ -191,14 +191,14 @@ export function ActivityFromModel({
 
               {/* Suggestions Dropdown */}
               {suggestions.length > 0 && (
-                <div className="top-17 left-0 z-50 absolute bg-background shadow-md border rounded-md w-full">
+                <div className="bg-background absolute top-17 left-0 z-50 w-full rounded-md border shadow-md">
                   {suggestions.map((suggestion) => (
                     <div
                       key={suggestion.place_id}
                       onClick={() => {
                         handleSelect(suggestion);
                       }}
-                      className="hover:bg-muted px-3 py-2 text-sm cursor-pointer"
+                      className="hover:bg-muted cursor-pointer px-3 py-2 text-sm"
                     >
                       {suggestion.description}
                     </div>
@@ -207,17 +207,17 @@ export function ActivityFromModel({
               )}
             </div>
 
-            <div className="gap-3 grid col-span-2">
+            <div className="col-span-2 grid gap-3">
               <Label>Location</Label>
               <Input
-                className="bg-muted focus-visible:border-input rounded-md focus-visible:ring-0 text-muted-foreground text-sm cursor-not-allowed"
+                className="bg-muted focus-visible:border-input text-muted-foreground cursor-not-allowed rounded-md text-sm focus-visible:ring-0"
                 readOnly
                 name="location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />
             </div>
-            <div className="gap-3 grid col-span-2">
+            <div className="col-span-2 grid gap-3">
               <Label>Category</Label>
               <Select
                 name="category"
@@ -236,7 +236,7 @@ export function ActivityFromModel({
               </Select>
             </div>
           </div>
-          <DialogFooter className="flex gap-2 w-full">
+          <DialogFooter className="flex w-full gap-2">
             {isUpdate && initialData ? (
               <Button
                 disabled={isDeleting}
@@ -244,7 +244,7 @@ export function ActivityFromModel({
                   await handleDeleteSingleActivity(initialData.id);
                   setIsOpen(false);
                 }}
-                className="flex-1 py-5 rounded-full"
+                className="flex-1 rounded-full py-5"
                 variant="outline"
                 type="button"
               >
@@ -253,7 +253,7 @@ export function ActivityFromModel({
             ) : (
               <Button
                 onClick={() => setIsOpen(false)}
-                className="flex-1 py-5 rounded-full"
+                className="flex-1 rounded-full py-5"
                 variant="outline"
                 type="button"
               >
@@ -262,7 +262,7 @@ export function ActivityFromModel({
             )}
             <Button
               disabled={isSubmitting}
-              className="flex-1 py-5 rounded-full"
+              className="flex-1 rounded-full py-5"
               type="submit"
             >
               {isCreating

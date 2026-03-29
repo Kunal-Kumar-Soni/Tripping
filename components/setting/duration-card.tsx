@@ -25,9 +25,9 @@ const DurationCard = () => {
     differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
 
   return (
-    <Card className="shadow-none py-3">
+    <Card className="py-3 shadow-none">
       <CardContent className="space-y-2 px-3">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar size="lg">
               <AvatarFallback></AvatarFallback>
@@ -41,16 +41,16 @@ const DurationCard = () => {
 
         <div className="flex items-stretch gap-6">
           {/* Duration Section */}
-          <div className="flex flex-col flex-1 justify-between">
+          <div className="flex flex-1 flex-col justify-between">
             <div className="mb-2 font-semibold">
               <h3>Duration</h3>
               <p className="text-muted-foreground text-sm"> {duration} Days</p>
             </div>
 
-            <div className="grid grid-cols-2 font-semibold text-sm">
+            <div className="grid grid-cols-2 text-sm font-semibold">
               <div>
                 <p className="text-muted-foreground text-sm">From</p>
-                <p className="font-semibold =">
+                <p className="= font-semibold">
                   {indianFormat(selectedTrip?.start_date)}
                 </p>
               </div>
@@ -65,12 +65,12 @@ const DurationCard = () => {
           </div>
 
           {/* Budget Section */}
-          <div className="flex flex-col flex-1 justify-between">
+          <div className="flex flex-1 flex-col justify-between">
             <h3 className="mb-2 font-semibold">Budget</h3>
 
-            <div className="bg-muted mb-2 rounded w-full h-4 overflow-hidden">
+            <div className="bg-muted mb-2 h-4 w-full overflow-hidden rounded">
               <div
-                className="bg-green-500 h-full transition-all duration-300"
+                className="h-full bg-green-500 transition-all duration-300"
                 style={{ width: `${percentage}%` }}
               />
             </div>

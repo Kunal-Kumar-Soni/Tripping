@@ -30,7 +30,7 @@ const Signin = () => {
   };
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative min-h-screen w-full overflow-hidden">
       <Image
         src="/images/auth/signup-bg.jpg"
         priority
@@ -39,19 +39,19 @@ const Signin = () => {
         className="-z-10 object-cover"
         loading="eager"
       />
-      <div className="flex lg:flex-row flex-col justify-center lg:justify-between items-center gap-10 px-6 md:px-10 min-h-screen">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-10 px-6 md:px-10 lg:flex-row lg:justify-between">
         <Image
           src="/images/auth/tripping.png"
           width={1000}
           height={300}
-          className="w-auto h-30"
+          className="h-30 w-auto"
           loading="eager"
           alt="tripping-logo"
         />
 
-        <Card className="py-4 rounded-3xl w-full max-w-120">
+        <Card className="w-full max-w-120 rounded-3xl py-4">
           <CardContent className="space-y-4 px-4">
-            <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+            <CardTitle className="text-center text-2xl">Sign In</CardTitle>
             {/* Inputs  */}
             <form
               onSubmit={handleSubmit}
@@ -61,27 +61,27 @@ const Signin = () => {
                 type="email"
                 name="email"
                 required
-                className="bg-muted p-4 rounded-lg outline-none text-sm"
+                className="bg-muted rounded-lg p-4 text-sm outline-none"
                 placeholder="Email"
               />
               <input
                 type="password"
                 name="password"
                 required
-                className="bg-muted p-4 rounded-lg outline-none text-sm"
+                className="bg-muted rounded-lg p-4 text-sm outline-none"
                 placeholder="Password"
               />
               {/* Primary Buttons  */}
-              <div className="flex gap-2 mt-4">
+              <div className="mt-4 flex gap-2">
                 <Button
                   type="button"
                   variant={"outline"}
-                  className="flex-1 py-6 rounded-2xl cursor-default"
+                  className="flex-1 cursor-default rounded-2xl py-6"
                   asChild
                 >
                   <Link href={"/signup"}>Create Account</Link>
                 </Button>
-                <Button type="submit" className="flex-1 py-6 rounded-2xl">
+                <Button type="submit" className="flex-1 rounded-2xl py-6">
                   Sign In
                 </Button>
               </div>
@@ -92,11 +92,11 @@ const Signin = () => {
               <Button
                 onClick={googleHandler}
                 variant={"outline"}
-                className="py-6 rounded-lg"
+                className="rounded-lg py-6"
               >
                 Sign In with Google
               </Button>
-              <Button variant={"outline"} className="py-6 rounded-lg">
+              <Button variant={"outline"} className="rounded-lg py-6">
                 Sign In with Apple
               </Button>
             </div>

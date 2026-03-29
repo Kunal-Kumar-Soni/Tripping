@@ -28,21 +28,21 @@ const Sidebar = () => {
   );
 
   return (
-    <section className="z-50 fixed space-y-6 bg-white p-6 border w-100 min-h-screen">
+    <section className="fixed z-50 min-h-screen w-100 space-y-6 border bg-white p-6">
       {/* Logo */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Image
           src="/home/Tripping.png"
           alt="tripping-logo"
           loading="eager"
           width={1000}
           height={300}
-          className="w-auto h-12"
+          className="h-12 w-auto"
         />
         <Button
           variant={"outline"}
           size="icon-lg"
-          className="rounded-full cursor-pointer"
+          className="cursor-pointer rounded-full"
         >
           <Bell />
         </Button>
@@ -53,17 +53,17 @@ const Sidebar = () => {
         <Input
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}
-          className="bg-accent py-5 pr-10 rounded-full"
+          className="bg-accent rounded-full py-5 pr-10"
           placeholder="Text"
         />
-        <span className="top-1/2 right-3 absolute text-muted-foreground -translate-y-1/2">
+        <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2">
           <Search size={18} />
         </span>
       </div>
 
       {/* Action */}
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-xl">Your Trips</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold">Your Trips</h1>
 
         {/* <SidebarModel /> */}
         <TripFormModel mode="create" />
@@ -72,11 +72,11 @@ const Sidebar = () => {
       {/* Trips List */}
       <div className="flex flex-col gap-0.5">
         {loadingTrips ? (
-          <p className="py-4 text-muted-foreground">
-            <Spinner2 className="mx-auto w-6 h-6 text-blue-600" />
+          <p className="text-muted-foreground py-4">
+            <Spinner2 className="mx-auto h-6 w-6 text-blue-600" />
           </p>
         ) : filteredTrips?.length === 0 ? (
-          <p className="py-4 text-muted-foreground text-sm text-center">
+          <p className="text-muted-foreground py-4 text-center text-sm">
             No trips found.
           </p>
         ) : (
@@ -88,7 +88,7 @@ const Sidebar = () => {
                   selectTrip(trip.id);
                 }
               }}
-              className={` flex justify-between  px-4 py-2 border rounded-xl transition-colors hover:bg-accent  ${
+              className={`hover:bg-accent flex justify-between rounded-xl border px-4 py-2 transition-colors ${
                 selectedTrip?.id === trip.id
                   ? "bg-muted cursor-default"
                   : loadingSelectedTrip
@@ -97,14 +97,14 @@ const Sidebar = () => {
               }`}
             >
               <div className="leading-snug">
-                <h1 className="font-semibold text-sm">{trip.title}</h1>
+                <h1 className="text-sm font-semibold">{trip.title}</h1>
                 <p className="text-muted-foreground text-xs">
                   {dateFormatter(trip.start_date)} -{" "}
                   {dateFormatter(trip.end_date)}
                 </p>
               </div>
-              <div className="flex justify-between items-center gap-2">
-                <h1 className="font-semibold text-sm">3</h1>
+              <div className="flex items-center justify-between gap-2">
+                <h1 className="text-sm font-semibold">3</h1>
                 <HiUsers />
               </div>
             </div>
@@ -113,10 +113,10 @@ const Sidebar = () => {
       </div>
 
       {/*User Profile */}
-      <div className="right-6 bottom-5 left-6 absolute">
+      <div className="absolute right-6 bottom-5 left-6">
         <Link
           href={"/dashboard"}
-          className="flex items-center gap-3 hover:bg-accent px-4 py-3 border rounded-xl transition cursor-pointer"
+          className="hover:bg-accent flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition"
         >
           <FaUser className="text-lg" />
           <h1 className="font-semibold">User Profile</h1>

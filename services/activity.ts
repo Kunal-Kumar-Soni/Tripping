@@ -1,7 +1,7 @@
-import axiosInstance from "@/lib/axios";
-
 import { Activity, CreateActivity } from "@/types/activity";
 import { DeleteResponse } from "@/types/common";
+
+import axiosInstance from "@/lib/axios";
 
 //! All Activities
 export const getActivities = async (): Promise<Activity[]> => {

@@ -18,7 +18,7 @@ export default function RootLayout({
             {/* Content */}
             <div className="flex min-h-screen">
               <Sidebar />
-              <main className="flex-1 ml-100">{children}</main>
+              <main className="ml-100 flex-1">{children}</main>
             </div>
           </PlanProvider>
         </ActivityProvider>

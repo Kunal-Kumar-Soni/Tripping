@@ -26,7 +26,7 @@ const DashboardHeader = () => {
             <MdArrowBackIos />
           </Button>
 
-          <span className="flex justify-center items-center gap-2 font-semibold">
+          <span className="flex items-center justify-center gap-2 font-semibold">
             <FaUser />
             Profile
           </span>

@@ -8,9 +8,9 @@ import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
-import { useActivity } from "@/hooks/useActivity";
-
 import { ActivityType } from "@/types/common";
+
+import { useActivity } from "@/hooks/useActivity";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -51,11 +51,11 @@ export function ActivityPage() {
   return (
     <Card
       ref={setNodeRef}
-      className={`top-30 z-40 right-6 fixed py-4 w-full max-w-100  ${isOver ? "bg-muted border-dashed border-blue-500" : ""}`}
+      className={`fixed top-30 right-6 z-40 w-full max-w-100 py-4 ${isOver ? "bg-muted border-dashed border-blue-500" : ""}`}
     >
       <CardContent className="px-4">
         <Collapsible defaultOpen className="rounded-md">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <IoMapOutline size={18} />
               <h1 className="font-semibold">Saved Locations</h1>
@@ -66,7 +66,7 @@ export function ActivityPage() {
                 size={"icon-lg"}
                 className="group rounded-full"
               >
-                <ChevronDownIcon className="group-data-[state=open]:rotate-180 transition-transform" />
+                <ChevronDownIcon className="transition-transform group-data-[state=open]:rotate-180" />
               </Button>
             </CollapsibleTrigger>
           </div>
@@ -94,7 +94,7 @@ export function ActivityPage() {
             {/* Locations list */}
 
             {loadingActivities ? (
-              <Spinner2 className="mx-auto w-6 h-6 text-blue-600" />
+              <Spinner2 className="mx-auto h-6 w-6 text-blue-600" />
             ) : (
               <LocationsList activities={filteredLocations} />
             )}

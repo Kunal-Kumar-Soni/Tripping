@@ -58,13 +58,13 @@ export function UserEditModel() {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="gap-4 grid grid-cols-2">
-            <div className="gap-3 grid col-span-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-2 grid gap-3">
               <Label htmlFor="user-name">User Name</Label>
               <Input required id="user-name" name="userName" />
             </div>
 
-            <div className="gap-3 grid col-span-2">
+            <div className="col-span-2 grid gap-3">
               <Label htmlFor="email-address">Email Address</Label>
               <Input
                 required
@@ -75,7 +75,7 @@ export function UserEditModel() {
               />
             </div>
 
-            <div className="gap-3 grid col-span-2">
+            <div className="col-span-2 grid gap-3">
               <Label htmlFor="phone-number">Phone</Label>
               <Input
                 required
@@ -86,16 +86,16 @@ export function UserEditModel() {
             </div>
           </div>
 
-          <div className="flex gap-2 w-full">
+          <div className="flex w-full gap-2">
             <DialogClose asChild>
               <Button
-                className="flex-1 px-8 py-5 rounded-full"
+                className="flex-1 rounded-full px-8 py-5"
                 variant="outline"
               >
                 Cancel
               </Button>
             </DialogClose>
-            <Button className="flex-1 px-8 py-5 rounded-full" type="submit">
+            <Button className="flex-1 rounded-full px-8 py-5" type="submit">
               Save
             </Button>
           </div>

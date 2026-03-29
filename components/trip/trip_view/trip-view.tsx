@@ -11,6 +11,8 @@ import {
 } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
+import { CreateActivity } from "@/types/activity";
+
 import { customCollisionStrategy } from "@/lib/custom-collision";
 import { tripFormate } from "@/lib/date";
 import {
@@ -23,8 +25,6 @@ import {
 import { useActivity } from "@/hooks/useActivity";
 import { usePlan } from "@/hooks/usePlan";
 import { useTrip } from "@/hooks/useTrip";
-
-import { CreateActivity } from "@/types/activity";
 
 import { ActivityPage } from "../activity/activity-page";
 import MapView from "../map_view/map-view";
@@ -205,18 +205,18 @@ const TripView = () => {
       {selectView === "calendar" ? (
         <>
           {/***** Calendar view *****/}
-          <div className="top-18 z-40 sticky flex">
+          <div className="sticky top-18 z-40 flex">
             {dates.map((date) => (
               <div
                 key={date}
-                className="bg-black/80 p-2 border-r min-w-100 font-medium text-white shrink-0"
+                className="min-w-100 shrink-0 border-r bg-black/80 p-2 font-medium text-white"
               >
                 {tripFormate(date)}
               </div>
             ))}
           </div>
           {/* Timeline */}
-          <div className="flex mt-18 overflow-hidden">
+          <div className="mt-18 flex overflow-hidden">
             {dates.map((date) => (
               <div
                 key={date}
@@ -238,7 +238,7 @@ const TripView = () => {
                   })}
 
                   {/* events */}
-                  <div className="absolute inset-0 pointer-events-none">
+                  <div className="pointer-events-none absolute inset-0">
                     {plans
                       .filter((item) => formatDate(item.start_date) === date)
                       .sort(

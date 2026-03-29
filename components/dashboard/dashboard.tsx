@@ -10,7 +10,7 @@ const Dashboard = () => {
 
       {/* Content Overview */}
       <UserInfoCard />
-      <div className="gap-6 grid grid-cols-1 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <DocumentsCard />
         <PaymentMethodsCard />
       </div>
