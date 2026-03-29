@@ -1,4 +1,10 @@
 "use client";
+import { useState } from "react";
+
+import { BsTrash3 } from "react-icons/bs";
+
+import { useTrip } from "@/hooks/useTrip";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -10,9 +16,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useTrip } from "@/hooks/useTrip";
-import { useState } from "react";
-import { BsTrash3 } from "react-icons/bs";
 
 export function TripDeleteModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -39,14 +42,18 @@ export function TripDeleteModel() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "
-            <span className="font-semibold">{selectedTrip?.title}</span>"? This action cannot be
-            undone.
+            Are you sure you want to delete &quot;
+            <span className="font-semibold">{selectedTrip?.title}</span>&quot;?
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button variant={"destructive"} disabled={isDeleting} onClick={handleDelete}>
+          <Button
+            variant={"destructive"}
+            disabled={isDeleting}
+            onClick={handleDelete}
+          >
             {isDeleting ? "Deleting..." : "Delete"}
           </Button>
         </AlertDialogFooter>

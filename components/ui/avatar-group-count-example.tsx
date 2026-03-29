@@ -8,7 +8,9 @@ import {
 
 export function AvatarGroupCountExample({ person }: { person: string }) {
   const changePersonType = Number(person);
-  const threePerson = Array.from({ length: changePersonType > 3 ? 3 : changePersonType });
+  const threePerson = Array.from({
+    length: changePersonType > 3 ? 3 : changePersonType,
+  });
   const restPerson = changePersonType - 3;
   return (
     <AvatarGroup>

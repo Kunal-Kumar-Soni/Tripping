@@ -1,10 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { MdArrowBackIos } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { IoLogOutOutline } from "react-icons/io5";
+
 import { FaUser } from "react-icons/fa";
+import { IoLogOutOutline } from "react-icons/io5";
+import { MdArrowBackIos } from "react-icons/md";
+
 import { useAuth } from "@/hooks/useAuth";
+
+import { Button } from "@/components/ui/button";
 
 const DashboardHeader = () => {
   const { handleLogout } = useAuth();

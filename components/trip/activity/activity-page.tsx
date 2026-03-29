@@ -1,44 +1,52 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDownIcon } from "lucide-react";
-
-import LocationsList from "./activity-list";
-import { Button } from "@/components/ui/button";
-import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
-import { BiSolidLandmark } from "react-icons/bi";
-import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import { useActivity } from "@/hooks/useActivity";
-import { ActivityFromModel } from "./activity-from-model";
-import { Spinner2 } from "@/components/ui/spinner";
 import { useDroppable } from "@dnd-kit/core";
-import { ActivityType } from "@/types/common";
+import { ChevronDownIcon } from "lucide-react";
+import { BiSolidLandmark } from "react-icons/bi";
+import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
+import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+
+import { useActivity } from "@/hooks/useActivity";
+
+import { ActivityType } from "@/types/common";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Spinner2 } from "@/components/ui/spinner";
+
+import { ActivityFromModel } from "./activity-from-model";
+import LocationsList from "./activity-list";
+
+const locationsButtons: { type: ActivityType; icon: IconType }[] = [
+  { type: "restaurant", icon: MdOutlineRestaurant },
+  { type: "hotel", icon: BiSolidLandmark },
+  { type: "activity", icon: MdHiking },
+];
 
 export function ActivityPage() {
-  const [activeCategory, setActiveCategory] = useState<ActivityType>("restaurant");
+  const [activeCategory, setActiveCategory] =
+    useState<ActivityType>("restaurant");
   const { activities, loadingActivities, mutationType } = useActivity();
 
-  const filteredLocations = activities?.filter((loc) => loc.category === activeCategory) ?? [];
-
-  const locationsButtons: { type: ActivityType; icon: IconType }[] = [
-    { type: "restaurant", icon: MdOutlineRestaurant },
-    { type: "hotel", icon: BiSolidLandmark },
-    { type: "activity", icon: MdHiking },
-  ];
+  const filteredLocations =
+    activities?.filter((loc) => loc.category === activeCategory) ?? [];
 
   const { setNodeRef, isOver } = useDroppable({ id: "activity-drop" });
 
-  //active category
   useEffect(() => {
     if (!activities || activities.length === 0) return;
     if (mutationType === "create") {
       const latestActivity = activities[0];
       setActiveCategory(latestActivity.category);
     }
-  }, [activities]);
+  }, [activities, mutationType]);
 
   return (
     <Card
@@ -53,7 +61,11 @@ export function ActivityPage() {
               <h1 className="font-semibold">Saved Locations</h1>
             </div>
             <CollapsibleTrigger asChild>
-              <Button variant={"outline"} size={"icon-lg"} className="group rounded-full">
+              <Button
+                variant={"outline"}
+                size={"icon-lg"}
+                className="group rounded-full"
+              >
                 <ChevronDownIcon className="group-data-[state=open]:rotate-180 transition-transform" />
               </Button>
             </CollapsibleTrigger>
@@ -69,7 +81,9 @@ export function ActivityPage() {
                     key={btn.type}
                     className="rounded-full"
                     size="icon-lg"
-                    variant={activeCategory === activityType ? "default" : "outline"}
+                    variant={
+                      activeCategory === activityType ? "default" : "outline"
+                    }
                     onClick={() => setActiveCategory(activityType)}
                   >
                     <Icon />
@@ -86,7 +100,10 @@ export function ActivityPage() {
             )}
 
             {/* Add new activity Model */}
-            <ActivityFromModel setActiveCategory={setActiveCategory} mode="create" />
+            <ActivityFromModel
+              setActiveCategory={setActiveCategory}
+              mode="create"
+            />
 
             {/* Drag hint */}
             <IoMenu className="mx-auto mt-3" size={20} />

@@ -1,8 +1,9 @@
 "use client";
-import { Card, CardContent } from "../ui/card";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { UserEditModel } from "./user-edit-model";
 import { useAuth } from "@/hooks/useAuth";
+
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Card, CardContent } from "../ui/card";
+import { UserEditModel } from "./user-edit-model";
 
 const UserInfoCard = () => {
   const { user } = useAuth();

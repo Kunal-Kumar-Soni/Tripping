@@ -1,12 +1,15 @@
 "use client";
-import TripSettingsHeader from "./trip-settings-header";
+import { useEffect } from "react";
+
+import { useRouter } from "next/navigation";
+
+import { useTrip } from "@/hooks/useTrip";
+
+import BlueLoader from "../loader/blue-loader";
+import DurationCard from "./duration-card";
 import MembersCard from "./members-card";
 import PreferencesCard from "./preferences-card";
-import DurationCard from "./duration-card";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useTrip } from "@/hooks/useTrip";
-import BlueLoader from "../loader/blue-loader";
+import TripSettingsHeader from "./trip-settings-header";
 
 const TripSettings = () => {
   const router = useRouter();

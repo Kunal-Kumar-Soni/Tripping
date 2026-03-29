@@ -1,9 +1,12 @@
 "use client";
-import { Activity } from "@/types/activity";
-import { IconType } from "react-icons/lib";
-import { ActivityFromModel } from "./activity-from-model";
 import { useDraggable } from "@dnd-kit/core";
+import { IconType } from "react-icons/lib";
+
 import { usePlan } from "@/hooks/usePlan";
+
+import { Activity } from "@/types/activity";
+
+import { ActivityFromModel } from "./activity-from-model";
 
 type Props = {
   activity: Activity;
@@ -13,7 +16,7 @@ type Props = {
 const ActivityCard = ({ activity, Icon }: Props) => {
   const { mutationType } = usePlan();
   const isUpdating = mutationType !== null;
-  const { setNodeRef, attributes, listeners, transform, isDragging } = useDraggable({
+  const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `activity-${activity.id}`,
     data: {
       activity,
@@ -37,7 +40,9 @@ const ActivityCard = ({ activity, Icon }: Props) => {
       {...attributes}
       {...listeners}
       className={`flex justify-between px-5 py-2 border rounded-xl ${
-        isUpdating ? "opacity-50 cursor-not-allowed bg-muted" : "hover:bg-accent"
+        isUpdating
+          ? "opacity-50 cursor-not-allowed bg-muted"
+          : "hover:bg-accent"
       }`}
     >
       <div className="flex items-center gap-3">
@@ -45,7 +50,9 @@ const ActivityCard = ({ activity, Icon }: Props) => {
 
         <div className="pr-1 leading-tight">
           <h1 className="font-semibold line-clamp-1 w">{activity.name}</h1>
-          <p className="text-muted-foreground line-clamp-1">{activity.location}</p>
+          <p className="text-muted-foreground line-clamp-1">
+            {activity.location}
+          </p>
         </div>
       </div>
 

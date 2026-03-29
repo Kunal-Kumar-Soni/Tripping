@@ -1,5 +1,6 @@
-import { TripContext } from "@/context/TripContext";
 import { useContext } from "react";
+
+import { TripContext } from "@/context/TripContext";
 
 export const useTrip = () => {
   const context = useContext(TripContext);

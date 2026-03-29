@@ -15,5 +15,11 @@ export interface Activity {
 
 export type CreateActivity = Omit<
   Activity,
-  "cost" | "created_at" | "description" | "duration" | "id" | "updated_at" | "user_id"
+  | "cost"
+  | "created_at"
+  | "description"
+  | "duration"
+  | "id"
+  | "updated_at"
+  | "user_id"
 >;

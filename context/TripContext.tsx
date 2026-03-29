@@ -1,6 +1,12 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
-import { getErrorMessage } from "@/lib/error";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import {
   createTrip,
   deleteSingleTrip,
@@ -8,9 +14,13 @@ import {
   getTrips,
   updateSingleTrip,
 } from "@/services/trip";
-import { CreateTrip, Trip } from "@/types/trip";
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+import { getErrorMessage } from "@/lib/error";
+
+import { useAuth } from "@/hooks/useAuth";
+
+import { CreateTrip, Trip } from "@/types/trip";
 
 type Mutation = "create" | "update" | "delete";
 type TripContextType = {
@@ -22,7 +32,10 @@ type TripContextType = {
   mutationType: Mutation | null;
   selectTrip: (id: number) => Promise<void>;
   handleCreateSingleTrip: (tripData: CreateTrip) => Promise<void>;
-  handleUpdateSingleTrip: (tripId: number, tripData: CreateTrip) => Promise<void>;
+  handleUpdateSingleTrip: (
+    tripId: number,
+    tripData: CreateTrip,
+  ) => Promise<void>;
   handleDeleteSingleTrip: (id: number) => Promise<void>;
 };
 
@@ -32,7 +45,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loadingTrips, setLoadingTrips] = useState<boolean>(true);
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
-  const [loadingSelectedTrip, setLoadingSelectedTrip] = useState<boolean>(false);
+  const [loadingSelectedTrip, setLoadingSelectedTrip] =
+    useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [mutationType, setMutationType] = useState<Mutation | null>(null);
 
@@ -41,7 +55,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   // Sorted Trips By Time
   const sortedTripsByTime = (trips: Trip[]) => {
     return [...trips].sort(
-      (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
+      (a, b) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
     );
   };
 
@@ -53,7 +68,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       const selectTripData = await getSingleTrip(id);
 
       setSelectedTrip(selectTripData);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
     } finally {
@@ -72,8 +87,10 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         return updated;
       });
       setSelectedTrip(newTrip);
-      toast.success(tripData ? `${tripData?.title} trip created.` : "Trip created");
-    } catch (error: any) {
+      toast.success(
+        tripData ? `${tripData?.title} trip created.` : "Trip created",
+      );
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -83,17 +100,22 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Update Trip
-  const handleUpdateSingleTrip = async (tripId: number, tripData: CreateTrip) => {
+  const handleUpdateSingleTrip = async (
+    tripId: number,
+    tripData: CreateTrip,
+  ) => {
     setError(null);
     setMutationType("update");
     try {
       const updatedTrip = await updateSingleTrip(tripId, tripData);
-      setTrips((prev) => prev.map((trip) => (trip.id === tripId ? updatedTrip : trip)));
+      setTrips((prev) =>
+        prev.map((trip) => (trip.id === tripId ? updatedTrip : trip)),
+      );
       if (selectedTrip?.id === tripId) {
         setSelectedTrip(updatedTrip);
       }
       toast.success("Trip updated.");
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -117,8 +139,10 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         }
         return updatedTrips.length === 0 ? [] : updatedTrips;
       });
-      toast.success(deletedTripTitle ? `${deletedTripTitle} trip deleted.` : "Trip deleted");
-    } catch (error: any) {
+      toast.success(
+        deletedTripTitle ? `${deletedTripTitle} trip deleted.` : "Trip deleted",
+      );
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -144,7 +168,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       if (sortedByTime.length > 0) {
         setSelectedTrip(sortedByTime[0]);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
     } finally {
@@ -162,7 +186,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
       setSelectedTrip(null);
       setError(null);
     }
-  }, [isLoading, fetchTrips]);
+  }, [isLoading, fetchTrips, user?.uid]);
 
   const value: TripContextType = {
     trips,

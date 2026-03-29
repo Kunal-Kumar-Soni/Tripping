@@ -2,8 +2,10 @@
 import { BiSolidLandmark } from "react-icons/bi";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import ActivityCard from "./activity-card";
+
 import { Activity } from "@/types/activity";
+
+import ActivityCard from "./activity-card";
 
 const categoryIconMap: { [key: string]: IconType } = {
   restaurant: MdOutlineRestaurant,
@@ -18,7 +20,9 @@ const LocationsList = ({ activities }: { activities: Activity[] }) => {
         {activities.map((activity) => {
           const Icon = categoryIconMap[activity.category];
 
-          return <ActivityCard key={activity.id} activity={activity} Icon={Icon} />;
+          return (
+            <ActivityCard key={activity.id} activity={activity} Icon={Icon} />
+          );
         })}
       </div>
     </section>

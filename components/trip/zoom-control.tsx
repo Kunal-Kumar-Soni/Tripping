@@ -1,10 +1,13 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Dispatch, SetStateAction } from "react";
+
 import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
 import { IoMapOutline } from "react-icons/io5";
-import { Dispatch, SetStateAction } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
 import { SelectViewType } from "./trip_view/trip-view";
 
 type ZoomControlProps = {
@@ -30,10 +33,18 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
 
         {/* Minus / Plus */}
         <div className="flex gap-1">
-          <Button size="icon-lg" variant="outline" className="rounded-full cursor-pointer">
+          <Button
+            size="icon-lg"
+            variant="outline"
+            className="rounded-full cursor-pointer"
+          >
             <CgMathMinus />
           </Button>
-          <Button size="icon-lg" variant="outline" className="rounded-full cursor-pointer">
+          <Button
+            size="icon-lg"
+            variant="outline"
+            className="rounded-full cursor-pointer"
+          >
             <BsPlusLg />
           </Button>
         </div>

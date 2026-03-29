@@ -1,20 +1,27 @@
 "use client";
-import { Bell, Search } from "lucide-react";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { HiUsers } from "react-icons/hi";
-import { FaUser } from "react-icons/fa";
 import { useState } from "react";
+
+import Image from "next/image";
 import Link from "next/link";
+
+import { Bell, Search } from "lucide-react";
+import { FaUser } from "react-icons/fa";
+import { HiUsers } from "react-icons/hi";
+
 import { dateFormatter } from "@/lib/date";
-import { Button } from "@/components/ui/button";
+
 import { useTrip } from "@/hooks/useTrip";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Spinner2 } from "@/components/ui/spinner";
+
 import { TripFormModel } from "./trip-form-model";
 
 const Sidebar = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const { trips, loadingTrips, selectedTrip, loadingSelectedTrip, error, selectTrip } = useTrip();
+  const { trips, loadingTrips, selectedTrip, loadingSelectedTrip, selectTrip } =
+    useTrip();
 
   const filteredTrips = trips?.filter((el) =>
     el.title.toLowerCase().includes(searchText.toLowerCase()),
@@ -32,7 +39,11 @@ const Sidebar = () => {
           height={300}
           className="w-auto h-12"
         />
-        <Button variant={"outline"} size="icon-lg" className="rounded-full cursor-pointer">
+        <Button
+          variant={"outline"}
+          size="icon-lg"
+          className="rounded-full cursor-pointer"
+        >
           <Bell />
         </Button>
       </div>
@@ -65,7 +76,9 @@ const Sidebar = () => {
             <Spinner2 className="mx-auto w-6 h-6 text-blue-600" />
           </p>
         ) : filteredTrips?.length === 0 ? (
-          <p className="py-4 text-muted-foreground text-sm text-center">No trips found.</p>
+          <p className="py-4 text-muted-foreground text-sm text-center">
+            No trips found.
+          </p>
         ) : (
           filteredTrips?.map((trip) => (
             <div
@@ -86,7 +99,8 @@ const Sidebar = () => {
               <div className="leading-snug">
                 <h1 className="font-semibold text-sm">{trip.title}</h1>
                 <p className="text-muted-foreground text-xs">
-                  {dateFormatter(trip.start_date)} - {dateFormatter(trip.end_date)}
+                  {dateFormatter(trip.start_date)} -{" "}
+                  {dateFormatter(trip.end_date)}
                 </p>
               </div>
               <div className="flex justify-between items-center gap-2">

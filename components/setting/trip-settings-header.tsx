@@ -1,9 +1,11 @@
 "use client";
-import { Button } from "../ui/button";
-import { MdArrowBackIos } from "react-icons/md";
-import { FaGear } from "react-icons/fa6";
-import { TripDeleteModel } from "./trip-delete-model";
 import { useRouter } from "next/navigation";
+
+import { FaGear } from "react-icons/fa6";
+import { MdArrowBackIos } from "react-icons/md";
+
+import { Button } from "../ui/button";
+import { TripDeleteModel } from "./trip-delete-model";
 
 const TripSettingsHeader = () => {
   const router = useRouter();

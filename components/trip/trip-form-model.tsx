@@ -1,8 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from "react";
+
+import { BsPlusLg } from "react-icons/bs";
+import { LuSlash } from "react-icons/lu";
+
+import { formatDate, formateDateInIsoString } from "@/lib/plan-formate";
+
+import { useTrip } from "@/hooks/useTrip";
+
 import { CreateTrip, Trip } from "@/types/trip";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,11 +20,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
-import { useTrip } from "@/hooks/useTrip";
-import { BsPlusLg } from "react-icons/bs";
-import { formatDate, formateDateInIsoString } from "@/lib/plan-formate";
-import { LuSlash } from "react-icons/lu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type TripsFormProps = {
   initialData?: Trip;
@@ -28,14 +33,21 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
   const [startDate, setStartDate] = useState<string>(
     initialData ? initialData?.start_date.slice(0, 10) : "",
   );
-  const { selectedTrip, handleCreateSingleTrip, handleUpdateSingleTrip, mutationType } = useTrip();
+  const {
+    selectedTrip,
+    handleCreateSingleTrip,
+    handleUpdateSingleTrip,
+    mutationType,
+  } = useTrip();
 
   const isUpdate = mode === "update";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { tripName, startDate, endDate, budget } = Object.fromEntries(formData) as {
+    const { tripName, startDate, endDate, budget } = Object.fromEntries(
+      formData,
+    ) as {
       tripName: string;
       startDate: string;
       endDate: string;
@@ -52,7 +64,8 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
     if (isUpdate && initialData) {
       const isUnchanged =
         formValue.title === initialData.title &&
-        formatDate(formValue.start_date) === formatDate(initialData.start_date) &&
+        formatDate(formValue.start_date) ===
+          formatDate(initialData.start_date) &&
         formatDate(formValue.end_date) === formatDate(initialData.end_date) &&
         formValue.budget === initialData.budget;
 
@@ -93,11 +106,19 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {isUpdate ? (
-          <Button variant={"outline"} size={"icon-sm"} className="border-foreground rounded-full">
+          <Button
+            variant={"outline"}
+            size={"icon-sm"}
+            className="border-foreground rounded-full"
+          >
             <LuSlash />
           </Button>
         ) : (
-          <Button variant={"outline"} size="icon-lg" className="rounded-full cursor-pointer">
+          <Button
+            variant={"outline"}
+            size="icon-lg"
+            className="rounded-full cursor-pointer"
+          >
             <BsPlusLg />
           </Button>
         )}
@@ -116,7 +137,12 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
           <div className="gap-4 grid grid-cols-2">
             <div className="gap-3 grid col-span-2">
               <Label htmlFor="trip-name">Trip Name</Label>
-              <Input required id="trip-name" name="tripName" defaultValue={initialData?.title} />
+              <Input
+                required
+                id="trip-name"
+                name="tripName"
+                defaultValue={initialData?.title}
+              />
             </div>
 
             <div className="gap-3 grid">
@@ -158,12 +184,25 @@ export function TripFormModel({ mode, initialData }: TripsFormProps) {
 
           <div className="flex gap-2 w-full">
             <DialogClose asChild>
-              <Button className="flex-1 px-8 py-5 rounded-full" variant="outline">
+              <Button
+                className="flex-1 px-8 py-5 rounded-full"
+                variant="outline"
+              >
                 Cancel
               </Button>
             </DialogClose>
-            <Button disabled={isSubmitting} className="flex-1 px-8 py-5 rounded-full" type="submit">
-              {isCreating ? "Creating..." : isUpdating ? "Saving..." : isUpdate ? "Save" : "Create"}
+            <Button
+              disabled={isSubmitting}
+              className="flex-1 px-8 py-5 rounded-full"
+              type="submit"
+            >
+              {isCreating
+                ? "Creating..."
+                : isUpdating
+                  ? "Saving..."
+                  : isUpdate
+                    ? "Save"
+                    : "Create"}
             </Button>
           </div>
         </form>

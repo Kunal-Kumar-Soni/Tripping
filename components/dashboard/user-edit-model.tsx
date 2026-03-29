@@ -1,8 +1,11 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
+import { LuSlash } from "react-icons/lu";
+
+import { useAuth } from "@/hooks/useAuth";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,10 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
-
-import { LuSlash } from "react-icons/lu";
-import { useAuth } from "@/hooks/useAuth";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function UserEditModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -24,7 +25,9 @@ export function UserEditModel() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const { userName, emailAddress, phoneNumber } = Object.fromEntries(formData) as {
+    const { userName, emailAddress, phoneNumber } = Object.fromEntries(
+      formData,
+    ) as {
       userName: string;
       emailAddress: string;
       phoneNumber: string;
@@ -38,7 +41,11 @@ export function UserEditModel() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} size={"icon-sm"} className="border-foreground rounded-full">
+        <Button
+          variant={"outline"}
+          size={"icon-sm"}
+          className="border-foreground rounded-full"
+        >
           <LuSlash />
         </Button>
       </DialogTrigger>
@@ -70,13 +77,21 @@ export function UserEditModel() {
 
             <div className="gap-3 grid col-span-2">
               <Label htmlFor="phone-number">Phone</Label>
-              <Input required type="number" id="phone-number" name="phoneNumber" />
+              <Input
+                required
+                type="number"
+                id="phone-number"
+                name="phoneNumber"
+              />
             </div>
           </div>
 
           <div className="flex gap-2 w-full">
             <DialogClose asChild>
-              <Button className="flex-1 px-8 py-5 rounded-full" variant="outline">
+              <Button
+                className="flex-1 px-8 py-5 rounded-full"
+                variant="outline"
+              >
                 Cancel
               </Button>
             </DialogClose>

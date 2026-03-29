@@ -13,7 +13,9 @@ export const getPlaceAutocomplete = async (input: string) => {
       },
     });
     return res.data.predictions;
-  } catch (error: any) {
-    console.error(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
   }
 };

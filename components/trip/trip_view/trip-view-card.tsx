@@ -1,14 +1,22 @@
 "use client";
-import { usePlan } from "@/hooks/usePlan";
-import { formatHour, formatHour12, formatHourToNumber } from "@/lib/plan-formate";
-import { Plan } from "@/types/plan";
-import { useDraggable } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
+
+import { useDraggable } from "@dnd-kit/core";
 import { BiSolidLandmark } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
+import { FaBan, FaCar, FaPlane, FaTrain } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
-import { FaCar, FaTrain, FaPlane, FaBan } from "react-icons/fa";
+
+import {
+  formatHour,
+  formatHour12,
+  formatHourToNumber,
+} from "@/lib/plan-formate";
+
+import { usePlan } from "@/hooks/usePlan";
+
+import { Plan } from "@/types/plan";
 
 type TripViewCardProps = {
   activity: Plan;
@@ -44,7 +52,9 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
 
   const [mouseResizeStyle, setMouseResizeStyle] = useState<boolean>(false);
   const [openTransport, setOpenTransport] = useState(false);
-  const [selectTransport, setSelectTransport] = useState<TransportInfo>(transports[0]);
+  const [selectTransport, setSelectTransport] = useState<TransportInfo>(
+    transports[0],
+  );
 
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `timelineId-${activity.id}`,
@@ -127,7 +137,8 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  const Icon: IconType = IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
+  const Icon: IconType =
+    IconsType.find((el) => el.type === activity.type)?.icon ?? MdHiking;
 
   const showBottomPlus = Boolean(nextEvent);
 
@@ -135,10 +146,17 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
     setOpenTransport((prev) => (prev ? false : true));
   };
 
-  const handleSelectTransport = (e: React.MouseEvent, selectTransportType: TransportType) => {
+  const handleSelectTransport = (
+    e: React.MouseEvent,
+    selectTransportType: TransportType,
+  ) => {
     e.stopPropagation();
-    const getTransportTypeInfo = transports.find((item) => item.type === selectTransportType);
-    setSelectTransport(getTransportTypeInfo ? getTransportTypeInfo : transports[0]);
+    const getTransportTypeInfo = transports.find(
+      (item) => item.type === selectTransportType,
+    );
+    setSelectTransport(
+      getTransportTypeInfo ? getTransportTypeInfo : transports[0],
+    );
     setOpenTransport(false);
   };
 
@@ -169,7 +187,9 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
           <Icon size={18} />
           <div className="pr-12 w-full font-semibold text-sm">
             <h1 className="line-clamp-1">{activity.title}</h1>
-            <h1 className="text-muted-foreground line-clamp-1">{activity.location_name}</h1>
+            <h1 className="text-muted-foreground line-clamp-1">
+              {activity.location_name}
+            </h1>
           </div>
         </div>
 
@@ -201,16 +221,28 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
             <div
               className={`flex gap-3 shadow-lg mt-2 px-2 py-1 rounded-full ${isDark ? "bg-black/80" : "bg-white/80 "} `}
             >
-              <button onClick={(e) => handleSelectTransport(e, "car")} className="cursor-pointer">
+              <button
+                onClick={(e) => handleSelectTransport(e, "car")}
+                className="cursor-pointer"
+              >
                 <FaCar />
               </button>
-              <button onClick={(e) => handleSelectTransport(e, "train")} className="cursor-pointer">
+              <button
+                onClick={(e) => handleSelectTransport(e, "train")}
+                className="cursor-pointer"
+              >
                 <FaTrain />
               </button>
-              <button onClick={(e) => handleSelectTransport(e, "plane")} className="cursor-pointer">
+              <button
+                onClick={(e) => handleSelectTransport(e, "plane")}
+                className="cursor-pointer"
+              >
                 <FaPlane />
               </button>
-              <button onClick={(e) => handleSelectTransport(e, "none")} className="cursor-pointer">
+              <button
+                onClick={(e) => handleSelectTransport(e, "none")}
+                className="cursor-pointer"
+              >
                 <FaBan />
               </button>
             </div>

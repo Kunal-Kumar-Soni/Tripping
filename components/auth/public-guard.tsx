@@ -1,8 +1,11 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
 import { ReactNode, useEffect } from "react";
-import GlobalLoader from "../loader/global-loader";
+
 import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/hooks/useAuth";
+
+import GlobalLoader from "../loader/global-loader";
 
 const PublicGuard = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useAuth();

@@ -1,11 +1,12 @@
 "use client";
+import { useActivity } from "@/hooks/useActivity";
 import { usePlan } from "@/hooks/usePlan";
+import { useTrip } from "@/hooks/useTrip";
+
+import BlueLoader from "../loader/blue-loader";
 import TripFallback from "../loader/trip-fallback";
 import TripHeader from "./trip_view/trip-header";
 import TripView from "./trip_view/trip-view";
-import { useTrip } from "@/hooks/useTrip";
-import { useActivity } from "@/hooks/useActivity";
-import BlueLoader from "../loader/blue-loader";
 
 const TripMain = () => {
   const { trips, loadingTrips } = useTrip();

@@ -1,8 +1,9 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { useTrip } from "@/hooks/useTrip";
 import { LiaSlidersHSolid } from "react-icons/lia";
+
+import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Select,
   SelectContent,

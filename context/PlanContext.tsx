@@ -1,23 +1,47 @@
 "use client";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import { createActivity, deleteSingleActivity } from "@/services/activity";
+import {
+  createPlan,
+  deleteSinglePlan,
+  getPlans,
+  updateSinglePlan,
+} from "@/services/plan";
+import toast from "react-hot-toast";
+
+import { getErrorMessage } from "@/lib/error";
+
 import { useActivity } from "@/hooks/useActivity";
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
-import { getErrorMessage } from "@/lib/error";
-import { createActivity, deleteSingleActivity } from "@/services/activity";
-import { createPlan, deleteSinglePlan, getPlans, updateSinglePlan } from "@/services/plan";
+
 import { Activity, CreateActivity } from "@/types/activity";
 import { CreatePlan, Plan } from "@/types/plan";
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 type PlanContextType = {
   plans: Plan[];
   loadingPlans: boolean;
   error: string | null;
   mutationType: "create" | "update" | "move" | null;
-  handleUpdateSinglePlan: (planId: number, payload: CreatePlan) => Promise<void>;
-  handlePlanActivityToTimeline: (payload: CreatePlan, activityId: number) => Promise<void>;
-  handlePlanTimelineToActivity: (payload: CreateActivity, planId: number) => Promise<void>;
+  handleUpdateSinglePlan: (
+    planId: number,
+    payload: CreatePlan,
+  ) => Promise<void>;
+  handlePlanActivityToTimeline: (
+    payload: CreatePlan,
+    activityId: number,
+  ) => Promise<void>;
+  handlePlanTimelineToActivity: (
+    payload: CreateActivity,
+    planId: number,
+  ) => Promise<void>;
 };
 
 export const PlanContext = createContext<PlanContextType | null>(null);
@@ -26,25 +50,32 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loadingPlans, setLoadingPlans] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [mutationType, setMutationType] = useState<"create" | "update" | "move" | null>(null);
+  const [mutationType, setMutationType] = useState<
+    "create" | "update" | "move" | null
+  >(null);
 
   const { user, isLoading } = useAuth();
   const { selectedTrip } = useTrip();
-  const { activities, setActivities, handleDeleteSingleActivity } = useActivity();
+  const { activities, setActivities } = useActivity();
 
-  const handleUpdateSinglePlan = async (planId: number, payload: CreatePlan) => {
+  const handleUpdateSinglePlan = async (
+    planId: number,
+    payload: CreatePlan,
+  ) => {
     if (!selectedTrip) return;
     setError(null);
     setMutationType("update");
 
     const oldPlans = plans;
 
-    setPlans((prev) => prev.map((item) => (item.id === planId ? { ...item, ...payload } : item)));
+    setPlans((prev) =>
+      prev.map((item) => (item.id === planId ? { ...item, ...payload } : item)),
+    );
 
     try {
       const res = await updateSinglePlan(selectedTrip.id, planId, payload);
       setPlans((prev) => prev.map((item) => (item.id === res.id ? res : item)));
-    } catch (error: any) {
+    } catch (error: unknown) {
       setPlans(oldPlans);
 
       const message = getErrorMessage(error);
@@ -59,7 +90,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     if (!selectedTrip) return;
     try {
       await deleteSinglePlan(selectedTrip.id, planId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -67,7 +98,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handlePlanActivityToTimeline = async (payload: CreatePlan, activityId: number) => {
+  const handlePlanActivityToTimeline = async (
+    payload: CreatePlan,
+    activityId: number,
+  ) => {
     if (!selectedTrip) return;
     setError(null);
     setMutationType("create");
@@ -86,8 +120,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await createPlan(selectedTrip.id, payload);
       await deleteSingleActivity(activityId);
-      setPlans((prev) => prev.map((item) => (item.id === optimisticPlan.id ? res : item)));
-    } catch (error: any) {
+      setPlans((prev) =>
+        prev.map((item) => (item.id === optimisticPlan.id ? res : item)),
+      );
+    } catch (error: unknown) {
       setPlans(oldPlans);
       setActivities(oldActivities);
 
@@ -99,7 +135,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handlePlanTimelineToActivity = async (payload: CreateActivity, planId: number) => {
+  const handlePlanTimelineToActivity = async (
+    payload: CreateActivity,
+    planId: number,
+  ) => {
     if (!selectedTrip) return;
     setError(null);
     setMutationType("move");
@@ -119,8 +158,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       await safelyDeletePlan(planId);
       const res = await createActivity(payload);
 
-      setActivities((prev) => prev.map((item) => (item.id === optimisticActivity.id ? res : item)));
-    } catch (error: any) {
+      setActivities((prev) =>
+        prev.map((item) => (item.id === optimisticActivity.id ? res : item)),
+      );
+    } catch (error: unknown) {
       setPlans(oldPlans);
       setActivities(oldActivities);
 
@@ -144,7 +185,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await getPlans(selectedTrip.id);
       setPlans(res ?? []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
     } finally {
@@ -161,7 +202,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       setPlans([]);
       setError(null);
     }
-  }, [isLoading, fetchPlans]);
+  }, [isLoading, fetchPlans, user?.uid]);
 
   const value: PlanContextType = {
     plans,

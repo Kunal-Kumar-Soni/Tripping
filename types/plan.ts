@@ -19,7 +19,10 @@ export interface Plan {
   updated_at: string;
 }
 
-export type CreatePlan = Omit<Plan, "created_at" | "id" | "trip_id" | "updated_at">;
+export type CreatePlan = Omit<
+  Plan,
+  "created_at" | "id" | "trip_id" | "updated_at"
+>;
 
 export type DragType = "activity" | "timeline";
 

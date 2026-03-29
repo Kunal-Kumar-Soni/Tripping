@@ -1,11 +1,12 @@
 "use client";
 
+import { X } from "lucide-react";
+import { FaUser } from "react-icons/fa";
+import { FiPlus } from "react-icons/fi";
+import { HiUsers } from "react-icons/hi";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import { HiUsers } from "react-icons/hi";
-import { FiPlus } from "react-icons/fi";
-import { FaUser } from "react-icons/fa";
 
 const MembersCard = () => {
   return (
@@ -16,7 +17,11 @@ const MembersCard = () => {
           <HiUsers size={18} />
           <span>Trip Members</span>
         </div>
-        <Button size="icon-sm" variant="outline" className="border-foreground rounded-full">
+        <Button
+          size="icon-sm"
+          variant="outline"
+          className="border-foreground rounded-full"
+        >
           <FiPlus />
         </Button>
       </div>

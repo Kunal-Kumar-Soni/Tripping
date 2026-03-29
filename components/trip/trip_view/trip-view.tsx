@@ -1,7 +1,6 @@
 "use client";
-import { tripFormate } from "@/lib/date";
-import TripViewCard from "./trip-view-card";
-import TripRow from "./trip-row";
+import { useState } from "react";
+
 import {
   DndContext,
   DragEndEvent,
@@ -10,18 +9,28 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+
+import { customCollisionStrategy } from "@/lib/custom-collision";
+import { tripFormate } from "@/lib/date";
+import {
+  formatDate,
+  formatHour,
+  formatHourToNumber,
+  getDays,
+} from "@/lib/plan-formate";
+
+import { useActivity } from "@/hooks/useActivity";
 import { usePlan } from "@/hooks/usePlan";
-import { formatDate, formatHour, formatHourToNumber, getDays } from "@/lib/plan-formate";
 import { useTrip } from "@/hooks/useTrip";
 
 import { CreateActivity } from "@/types/activity";
+
 import { ActivityPage } from "../activity/activity-page";
-import ZoomControl from "../zoom-control";
-import { useState } from "react";
 import MapView from "../map_view/map-view";
-import { useActivity } from "@/hooks/useActivity";
-import { restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { customCollisionStrategy } from "@/lib/custom-collision";
+import ZoomControl from "../zoom-control";
+import TripRow from "./trip-row";
+import TripViewCard from "./trip-view-card";
 
 export type SelectViewType = "calendar" | "map";
 
@@ -67,7 +76,12 @@ const TripView = () => {
     }
   };
 
-  const isSlotOccupied = (date: string, start: number, end: number, ignoreId?: number) => {
+  const isSlotOccupied = (
+    date: string,
+    start: number,
+    end: number,
+    ignoreId?: number,
+  ) => {
     return plans.some((item) => {
       if (item.id === ignoreId) return false;
       if (formatDate(item.start_date) !== date) return false;
@@ -204,7 +218,11 @@ const TripView = () => {
           {/* Timeline */}
           <div className="flex mt-18 overflow-hidden">
             {dates.map((date) => (
-              <div key={date} className="relative min-w-100 shrink-0" data-timeline>
+              <div
+                key={date}
+                className="relative min-w-100 shrink-0"
+                data-timeline
+              >
                 <div className="relative">
                   {hours.map((hour) => {
                     const isDark = hour <= 7 || hour >= 19;
@@ -225,7 +243,8 @@ const TripView = () => {
                       .filter((item) => formatDate(item.start_date) === date)
                       .sort(
                         (a, b) =>
-                          formatHourToNumber(a.start_time) - formatHourToNumber(b.start_time),
+                          formatHourToNumber(a.start_time) -
+                          formatHourToNumber(b.start_time),
                       )
                       .map((item, index, arr) => {
                         const hour = formatHourToNumber(item.start_time);

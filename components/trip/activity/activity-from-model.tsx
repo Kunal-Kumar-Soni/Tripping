@@ -1,4 +1,17 @@
 "use client";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
+import { Ellipsis } from "lucide-react";
+import { useDebounce } from "use-debounce";
+
+import { getPlaceAutocomplete } from "@/lib/map";
+
+import { useActivity } from "@/hooks/useActivity";
+
+import { Activity } from "@/types/activity";
+import { ActivityType } from "@/types/common";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +23,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -20,13 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useActivity } from "@/hooks/useActivity";
-import { Activity } from "@/types/activity";
-import { Ellipsis } from "lucide-react";
-import { ActivityType } from "@/types/common";
-import { useDebounce } from "use-debounce";
-import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
-import { getPlaceAutocomplete } from "@/lib/map";
 
 type ActivityFromModelProps = {
   mode: "create" | "update";
@@ -98,7 +103,8 @@ export function ActivityFromModel({
   const handleSelect = (selectedData: PlaceAutocompleteResult) => {
     const { structured_formatting } = selectedData;
 
-    const SelectedName = structured_formatting?.main_text || selectedData.description;
+    const SelectedName =
+      structured_formatting?.main_text || selectedData.description;
     setName(SelectedName);
     setIsSelected(SelectedName);
     setLocation(structured_formatting?.secondary_text || "no location");
@@ -117,25 +123,33 @@ export function ActivityFromModel({
       try {
         const res = await getPlaceAutocomplete(debounceInput);
         setSuggestions(res ?? []);
-      } catch (error: any) {
-        console.error(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(error.message);
+        }
       }
     };
     fetchAutoCompleteSuggestions();
   }, [debounceInput, isTyped, isSelected]);
 
-  useEffect(() => {
-    if (!isOpen) {
-      setName(initialData?.name || "");
-      setLocation(initialData?.location || "");
-      setSuggestions([]);
-      setIsSelected(null);
-      setIsTyped(false);
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+
+    if (open) {
+      if (isUpdate && initialData?.category && setActiveCategory) {
+        setActiveCategory(initialData?.category);
+      } else {
+        setName(initialData?.name || "");
+        setLocation(initialData?.location || "");
+        setSuggestions([]);
+        setIsSelected(null);
+        setIsTyped(false);
+      }
     }
-  }, [isOpen, initialData]);
+  };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger className="w-full" asChild>
         {isUpdate ? (
           <button className="cursor-pointer">
@@ -148,7 +162,9 @@ export function ActivityFromModel({
       <DialogContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
-            <DialogTitle>{isUpdate ? "Edit Activity" : "Add Activity"}</DialogTitle>
+            <DialogTitle>
+              {isUpdate ? "Edit Activity" : "Add Activity"}
+            </DialogTitle>
             <DialogDescription>
               {isUpdate
                 ? "Update the activity details to keep your trip organized."
@@ -203,7 +219,10 @@ export function ActivityFromModel({
             </div>
             <div className="gap-3 grid col-span-2">
               <Label>Category</Label>
-              <Select name="category" defaultValue={initialData?.category || "restaurant"}>
+              <Select
+                name="category"
+                defaultValue={initialData?.category || "restaurant"}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
@@ -241,7 +260,11 @@ export function ActivityFromModel({
                 Cancel
               </Button>
             )}
-            <Button disabled={isSubmitting} className="flex-1 py-5 rounded-full" type="submit">
+            <Button
+              disabled={isSubmitting}
+              className="flex-1 py-5 rounded-full"
+              type="submit"
+            >
               {isCreating
                 ? "Adding..."
                 : isUpdating

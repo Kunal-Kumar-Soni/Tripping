@@ -1,7 +1,7 @@
 import DashboardHeader from "./dashboard-header";
-import UserInfoCard from "./user-info-card";
 import DocumentsCard from "./documents-card";
 import PaymentMethodsCard from "./payment-method-card";
+import UserInfoCard from "./user-info-card";
 
 const Dashboard = () => {
   return (

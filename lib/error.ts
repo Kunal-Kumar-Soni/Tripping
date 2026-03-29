@@ -1,33 +1,36 @@
-export const getErrorMessage = (error: any): string => {
-  if (error.response?.data?.message) {
-    return error.response.data.message;
+import axios from "axios";
+import { FirebaseError } from "firebase/app";
+
+export const getErrorMessage = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    return error?.response?.data?.message || "Server error occurred";
   }
 
-  const code = error?.code;
+  if (error instanceof FirebaseError) {
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        return "Email already in use";
 
-  switch (code) {
-    case "auth/email-already-in-use":
-      return "Email already in use";
+      case "auth/invalid-email":
+        return "Invalid email";
 
-    case "auth/invalid-email":
-      return "Invalid email";
+      case "auth/user-not-found":
+        return "User not found";
 
-    case "auth/user-not-found":
-      return "User not found";
+      case "auth/invalid-credential":
+        return "Incorrect password";
 
-    case "auth/invalid-credential":
-      return "Incorrect password";
+      case "auth/weak-password":
+        return "Password should be at least 6 characters";
 
-    case "auth/weak-password":
-      return "Password should be at least 6 characters";
+      case "auth/too-many-requests":
+        return "Too many attempts, try again later";
 
-    case "auth/too-many-requests":
-      return "Too many attempts, try again later";
+      case "auth/network-request-failed":
+        return "Check your internet connection";
 
-    case "auth/network-request-failed":
-      return "Check your internet connection";
-
-    default:
-      return "Something went wrong";
+      default:
+        return "Something went wrong";
+    }
   }
 };

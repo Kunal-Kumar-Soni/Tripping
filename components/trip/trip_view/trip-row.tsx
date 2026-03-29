@@ -1,5 +1,6 @@
-import { useDroppable } from "@dnd-kit/core";
 import { ReactNode } from "react";
+
+import { useDroppable } from "@dnd-kit/core";
 
 type TripRowProps = {
   children?: ReactNode;

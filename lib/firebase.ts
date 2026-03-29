@@ -1,3 +1,6 @@
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
 import {
   apiKey,
   appId,
@@ -6,8 +9,6 @@ import {
   projectId,
   storageBucket,
 } from "@/config/firebase.config";
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey,

@@ -5,4 +5,11 @@ const storageBucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!;
 const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!;
 const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID!;
 
-export { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId };
+export {
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+};

@@ -1,10 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
+
 import toast from "react-hot-toast";
+
+import { useAuth } from "@/hooks/useAuth";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 type SignupFormData = {
   email: string;
@@ -58,7 +61,10 @@ const Signup = () => {
           <CardContent className="space-y-4 px-4">
             <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
             {/* Inputs  */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-1 rounded-lg">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-1 rounded-lg"
+            >
               {/* <input
                 type="text"
                 name="name"
@@ -105,7 +111,11 @@ const Signup = () => {
 
             {/* Social Auth */}
             <div className="flex flex-col gap-1">
-              <Button onClick={googleHandler} variant={"outline"} className="py-6 rounded-lg">
+              <Button
+                onClick={googleHandler}
+                variant={"outline"}
+                className="py-6 rounded-lg"
+              >
                 Sign In with Google
               </Button>
               <Button variant={"outline"} className="py-6 rounded-lg">

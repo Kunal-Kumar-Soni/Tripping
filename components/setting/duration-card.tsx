@@ -1,9 +1,13 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useTrip } from "@/hooks/useTrip";
-import { indianFormat } from "@/lib/date";
 import { differenceInDays } from "date-fns";
+
+import { indianFormat } from "@/lib/date";
+
+import { useTrip } from "@/hooks/useTrip";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+
 import { TripFormModel } from "../trip/trip-form-model";
 
 const DurationCard = () => {
@@ -17,7 +21,8 @@ const DurationCard = () => {
   const percentage = (estimate / totalBudget) * 100;
 
   //Duration
-  const duration = differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
+  const duration =
+    differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
 
   return (
     <Card className="shadow-none py-3">
@@ -45,12 +50,16 @@ const DurationCard = () => {
             <div className="grid grid-cols-2 font-semibold text-sm">
               <div>
                 <p className="text-muted-foreground text-sm">From</p>
-                <p className="font-semibold =">{indianFormat(selectedTrip?.start_date)}</p>
+                <p className="font-semibold =">
+                  {indianFormat(selectedTrip?.start_date)}
+                </p>
               </div>
 
               <div>
                 <p className="text-muted-foreground text-sm">To</p>
-                <p className="font-semibold">{indianFormat(selectedTrip?.end_date)}</p>
+                <p className="font-semibold">
+                  {indianFormat(selectedTrip?.end_date)}
+                </p>
               </div>
             </div>
           </div>

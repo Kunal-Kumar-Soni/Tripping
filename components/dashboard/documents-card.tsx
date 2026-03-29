@@ -1,6 +1,7 @@
-import { Button } from "../ui/button";
 import { FiPlus } from "react-icons/fi";
 import { IoDocumentTextOutline } from "react-icons/io5";
+
+import { Button } from "../ui/button";
 
 const DocumentsCard = () => {
   const data = [
@@ -38,7 +39,11 @@ const DocumentsCard = () => {
               <p className="text-muted-foreground">{el.location}</p>
             </div>
 
-            <Button size="icon-sm" variant="outline" className="rounded-full cursor-pointer">
+            <Button
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full cursor-pointer"
+            >
               <FiPlus />
             </Button>
           </div>

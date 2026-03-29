@@ -1,8 +1,9 @@
-import Sidebar from "@/components/trip/sidebar";
-import ProtectedGuard from "@/components/auth/protected-guard";
-import { TripProvider } from "@/context/TripContext";
 import { ActivityProvider } from "@/context/ActivityContext";
 import { PlanProvider } from "@/context/PlanContext";
+import { TripProvider } from "@/context/TripContext";
+
+import ProtectedGuard from "@/components/auth/protected-guard";
+import Sidebar from "@/components/trip/sidebar";
 
 export default function RootLayout({
   children,

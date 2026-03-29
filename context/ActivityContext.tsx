@@ -1,23 +1,27 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
-import { getErrorMessage } from "@/lib/error";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import {
   createActivity,
   deleteSingleActivity,
   getActivities,
   updateSingleActivity,
 } from "@/services/activity";
-import { Activity, CreateActivity } from "@/types/activity";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
 import toast from "react-hot-toast";
+
+import { getErrorMessage } from "@/lib/error";
+
+import { useAuth } from "@/hooks/useAuth";
+
+import { Activity, CreateActivity } from "@/types/activity";
 
 type ActivityContextType = {
   activities: Activity[];
@@ -25,9 +29,14 @@ type ActivityContextType = {
   loadingActivities: boolean;
   error: string | null;
   mutationType: "create" | "update" | "delete" | null;
-  setMutationType: Dispatch<SetStateAction<"create" | "update" | "delete" | null>>;
+  setMutationType: Dispatch<
+    SetStateAction<"create" | "update" | "delete" | null>
+  >;
   handleCreateSingleActivity: (activityData: CreateActivity) => Promise<void>;
-  handleUpdateSingleActivity: (activityId: number, activityData: CreateActivity) => Promise<void>;
+  handleUpdateSingleActivity: (
+    activityId: number,
+    activityData: CreateActivity,
+  ) => Promise<void>;
   handleDeleteSingleActivity: (activityId: number) => Promise<void>;
 };
 
@@ -37,7 +46,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [mutationType, setMutationType] = useState<"create" | "update" | "delete" | null>(null);
+  const [mutationType, setMutationType] = useState<
+    "create" | "update" | "delete" | null
+  >(null);
 
   const { isLoading, user } = useAuth();
 
@@ -49,7 +60,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       const newActivity = await createActivity(activityData);
       setActivities((prev) => [newActivity, ...(prev ?? [])]);
       toast.success("Activity Added");
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -59,16 +70,24 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Update Activity
-  const handleUpdateSingleActivity = async (activityId: number, activityData: CreateActivity) => {
+  const handleUpdateSingleActivity = async (
+    activityId: number,
+    activityData: CreateActivity,
+  ) => {
     setError(null);
     setMutationType("update");
     try {
-      const updateActivity = await updateSingleActivity(activityId, activityData);
+      const updateActivity = await updateSingleActivity(
+        activityId,
+        activityData,
+      );
       setActivities((prev) =>
-        prev.map((activity) => (activity.id === activityId ? updateActivity : activity)),
+        prev.map((activity) =>
+          activity.id === activityId ? updateActivity : activity,
+        ),
       );
       toast.success("Activity Updated");
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -83,8 +102,10 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     setMutationType("delete");
     try {
       await deleteSingleActivity(activityId);
-      setActivities((prev) => prev.filter((activity) => activity.id !== activityId));
-    } catch (error: any) {
+      setActivities((prev) =>
+        prev.filter((activity) => activity.id !== activityId),
+      );
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
       toast.error(message);
@@ -104,7 +125,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await getActivities();
       setActivities(res ?? []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
     } finally {
@@ -121,7 +142,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
       setActivities([]);
       setError(null);
     }
-  }, [isLoading, fetchActivities]);
+  }, [isLoading, fetchActivities, user?.uid]);
 
   const value: ActivityContextType = {
     activities,
@@ -134,5 +155,9 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
     handleUpdateSingleActivity,
     handleDeleteSingleActivity,
   };
-  return <ActivityContext.Provider value={value}>{children}</ActivityContext.Provider>;
+  return (
+    <ActivityContext.Provider value={value}>
+      {children}
+    </ActivityContext.Provider>
+  );
 };
