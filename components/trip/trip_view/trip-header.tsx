@@ -1,9 +1,10 @@
 "use client";
+import { GoGear } from "react-icons/go";
+import { ImMagicWand } from "react-icons/im";
+
 import Link from "next/link";
 
 import { differenceInDays } from "date-fns";
-import { GoGear } from "react-icons/go";
-import { ImMagicWand } from "react-icons/im";
 
 import { useTrip } from "@/hooks/useTrip";
 

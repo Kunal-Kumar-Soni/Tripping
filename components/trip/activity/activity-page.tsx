@@ -1,16 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import { useDroppable } from "@dnd-kit/core";
-import { ChevronDownIcon } from "lucide-react";
 import { BiSolidLandmark } from "react-icons/bi";
 import { IoMapOutline, IoMenu } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
-import { ActivityType } from "@/types/common";
-
-import { useActivity } from "@/hooks/useActivity";
+import { useDroppable } from "@dnd-kit/core";
+import { ChevronDownIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +16,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Spinner2 } from "@/components/ui/spinner";
+import { useActivity } from "@/hooks/useActivity";
+import { ActivityType } from "@/types/common";
 
 import { ActivityFromModel } from "./activity-from-model";
 import LocationsList from "./activity-list";

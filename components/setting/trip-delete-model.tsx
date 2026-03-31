@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-
 import { BsTrash3 } from "react-icons/bs";
-
-import { useTrip } from "@/hooks/useTrip";
 
 import {
   AlertDialog,
@@ -16,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useTrip } from "@/hooks/useTrip";
 
 export function TripDeleteModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

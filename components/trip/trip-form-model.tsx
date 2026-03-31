@@ -1,14 +1,7 @@
 "use client";
 import { useState } from "react";
-
 import { BsPlusLg } from "react-icons/bs";
 import { LuSlash } from "react-icons/lu";
-
-import { CreateTrip, Trip } from "@/types/trip";
-
-import { formatDate, formateDateInIsoString } from "@/lib/plan-formate";
-
-import { useTrip } from "@/hooks/useTrip";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +15,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTrip } from "@/hooks/useTrip";
+import { formatDate, formateDateInIsoString } from "@/lib/plan-formate";
+import { CreateTrip, Trip } from "@/types/trip";
 
 type TripsFormProps = {
   initialData?: Trip;

@@ -1,20 +1,18 @@
 "use client";
 import { useState } from "react";
+import { FaUser } from "react-icons/fa";
+import { HiUsers } from "react-icons/hi";
 
 import Image from "next/image";
 import Link from "next/link";
 
 import { Bell, Search } from "lucide-react";
-import { FaUser } from "react-icons/fa";
-import { HiUsers } from "react-icons/hi";
-
-import { dateFormatter } from "@/lib/date";
-
-import { useTrip } from "@/hooks/useTrip";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner2 } from "@/components/ui/spinner";
+import { useTrip } from "@/hooks/useTrip";
+import { dateFormatter } from "@/lib/date";
 
 import { TripFormModel } from "./trip-form-model";
 

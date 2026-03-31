@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-
 import { LuSlash } from "react-icons/lu";
-
-import { useAuth } from "@/hooks/useAuth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/useAuth";
 
 export function UserEditModel() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

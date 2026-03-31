@@ -1,20 +1,15 @@
 "use client";
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useEffect,
   useState,
 } from "react";
-
 import toast from "react-hot-toast";
 
-import { CreateTrip, Trip } from "@/types/trip";
-
-import { getErrorMessage } from "@/lib/error";
-
 import { useAuth } from "@/hooks/useAuth";
-
+import { getErrorMessage } from "@/lib/error";
 import {
   createTrip,
   deleteSingleTrip,
@@ -22,6 +17,7 @@ import {
   getTrips,
   updateSingleTrip,
 } from "@/services/trip";
+import { CreateTrip, Trip } from "@/types/trip";
 
 type Mutation = "create" | "update" | "delete";
 type TripContextType = {

@@ -1,12 +1,10 @@
 "use client";
 import { differenceInDays } from "date-fns";
 
-import { indianFormat } from "@/lib/date";
-
-import { useTrip } from "@/hooks/useTrip";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTrip } from "@/hooks/useTrip";
+import { indianFormat } from "@/lib/date";
 
 import { TripFormModel } from "../trip/trip-form-model";
 

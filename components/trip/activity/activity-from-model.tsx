@@ -5,13 +5,6 @@ import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { Ellipsis } from "lucide-react";
 import { useDebounce } from "use-debounce";
 
-import { Activity } from "@/types/activity";
-import { ActivityType } from "@/types/common";
-
-import { getPlaceAutocomplete } from "@/lib/map";
-
-import { useActivity } from "@/hooks/useActivity";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -32,6 +25,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useActivity } from "@/hooks/useActivity";
+import { getPlaceAutocomplete } from "@/lib/map";
+import { Activity } from "@/types/activity";
+import { ActivityType } from "@/types/common";
 
 type ActivityFromModelProps = {
   mode: "create" | "update";

@@ -1,9 +1,10 @@
 "use client";
 
-import { X } from "lucide-react";
 import { FaUser } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { HiUsers } from "react-icons/hi";
+
+import { X } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

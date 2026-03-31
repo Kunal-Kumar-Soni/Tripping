@@ -1,28 +1,24 @@
 "use client";
 import {
+  createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
-  createContext,
   useCallback,
   useEffect,
   useState,
 } from "react";
-
 import toast from "react-hot-toast";
 
-import { Activity, CreateActivity } from "@/types/activity";
-
-import { getErrorMessage } from "@/lib/error";
-
 import { useAuth } from "@/hooks/useAuth";
-
+import { getErrorMessage } from "@/lib/error";
 import {
   createActivity,
   deleteSingleActivity,
   getActivities,
   updateSingleActivity,
 } from "@/services/activity";
+import { Activity, CreateActivity } from "@/types/activity";
 
 type ActivityContextType = {
   activities: Activity[];

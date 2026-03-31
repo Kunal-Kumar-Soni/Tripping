@@ -5,8 +5,8 @@ import * as React from "react";
 import {
   CheckIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
   ChevronsUpDown,
+  ChevronUpIcon,
 } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 

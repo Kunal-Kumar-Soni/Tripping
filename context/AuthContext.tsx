@@ -1,15 +1,15 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import axios from "axios";
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import toast from "react-hot-toast";
 
 import axiosInstance from "@/lib/axios";
 import { getErrorMessage } from "@/lib/error";

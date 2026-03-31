@@ -1,23 +1,17 @@
 "use client";
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useEffect,
   useState,
 } from "react";
-
 import toast from "react-hot-toast";
-
-import { Activity, CreateActivity } from "@/types/activity";
-import { CreatePlan, Plan } from "@/types/plan";
-
-import { getErrorMessage } from "@/lib/error";
 
 import { useActivity } from "@/hooks/useActivity";
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/hooks/useTrip";
-
+import { getErrorMessage } from "@/lib/error";
 import { createActivity, deleteSingleActivity } from "@/services/activity";
 import {
   createPlan,
@@ -25,6 +19,8 @@ import {
   getPlans,
   updateSinglePlan,
 } from "@/services/plan";
+import { Activity, CreateActivity } from "@/types/activity";
+import { CreatePlan, Plan } from "@/types/plan";
 
 type PlanContextType = {
   plans: Plan[];

@@ -11,8 +11,9 @@ import {
 } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
-import { CreateActivity } from "@/types/activity";
-
+import { useActivity } from "@/hooks/useActivity";
+import { usePlan } from "@/hooks/usePlan";
+import { useTrip } from "@/hooks/useTrip";
 import { customCollisionStrategy } from "@/lib/custom-collision";
 import { tripFormate } from "@/lib/date";
 import {
@@ -21,10 +22,7 @@ import {
   formatHourToNumber,
   getDays,
 } from "@/lib/plan-formate";
-
-import { useActivity } from "@/hooks/useActivity";
-import { usePlan } from "@/hooks/usePlan";
-import { useTrip } from "@/hooks/useTrip";
+import { CreateActivity } from "@/types/activity";
 
 import { ActivityPage } from "../activity/activity-page";
 import MapView from "../map_view/map-view";

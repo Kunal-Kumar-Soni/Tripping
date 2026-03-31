@@ -1,10 +1,10 @@
 "use client";
-import { useDraggable } from "@dnd-kit/core";
 import { IconType } from "react-icons/lib";
 
-import { Activity } from "@/types/activity";
+import { useDraggable } from "@dnd-kit/core";
 
 import { usePlan } from "@/hooks/usePlan";
+import { Activity } from "@/types/activity";
 
 import { ActivityFromModel } from "./activity-from-model";
 

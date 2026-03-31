@@ -1,7 +1,6 @@
+import axiosInstance from "@/lib/axios";
 import { DeleteResponse } from "@/types/common";
 import { CreateTrip, Trip } from "@/types/trip";
-
-import axiosInstance from "@/lib/axios";
 
 //! All Trips
 export const getTrips = async (): Promise<Trip[]> => {

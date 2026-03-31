@@ -1,8 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
-
 import { FaGear } from "react-icons/fa6";
 import { MdArrowBackIos } from "react-icons/md";
+
+import { useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
 import { TripDeleteModel } from "./trip-delete-model";

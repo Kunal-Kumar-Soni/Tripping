@@ -1,22 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import { useDraggable } from "@dnd-kit/core";
 import { BiSolidLandmark } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
 import { FaBan, FaCar, FaPlane, FaTrain } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
-import { Plan } from "@/types/plan";
+import { useDraggable } from "@dnd-kit/core";
 
+import { usePlan } from "@/hooks/usePlan";
 import {
   formatHour,
   formatHour12,
   formatHourToNumber,
 } from "@/lib/plan-formate";
-
-import { usePlan } from "@/hooks/usePlan";
+import { Plan } from "@/types/plan";
 
 type TripViewCardProps = {
   activity: Plan;

@@ -1,6 +1,6 @@
 import {
-  CollisionDetection,
   closestCenter,
+  CollisionDetection,
   pointerWithin,
   rectIntersection,
 } from "@dnd-kit/core";
