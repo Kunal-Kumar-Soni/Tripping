@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useActivity } from "@/hooks/useActivity";
-import { getPlaceAutocomplete } from "@/lib/map";
+import { getPlaceAutocomplete, getPlaceDetails } from "@/lib/map";
 import { Activity } from "@/types/activity";
 import { ActivityType } from "@/types/common";
 
@@ -42,6 +42,12 @@ type ActivityFormData = {
   category: ActivityType;
 };
 
+type AdditionalData = {
+  place_id: string;
+  lat: number;
+  lng: number;
+};
+
 export function ActivityFromModel({
   mode,
   initialData,
@@ -53,6 +59,9 @@ export function ActivityFromModel({
   const [suggestions, setSuggestions] = useState<PlaceAutocompleteResult[]>([]);
   const [isSelected, setIsSelected] = useState<string | null>(null);
   const [isTyped, setIsTyped] = useState<boolean>(false);
+  const [additionalData, setAdditionalData] = useState<AdditionalData | null>(
+    null,
+  );
   const {
     handleCreateSingleActivity,
     handleUpdateSingleActivity,
@@ -83,11 +92,17 @@ export function ActivityFromModel({
     if (isUpdate && initialData) {
       await handleUpdateSingleActivity(initialData.id, formValue);
     } else {
-      await handleCreateSingleActivity(formValue);
+      if (!additionalData) {
+        alert("Please select a valid location from suggestions");
+        return;
+      }
+      const fromCreateValue = { ...formValue, ...additionalData };
+      await handleCreateSingleActivity(fromCreateValue);
       if (setActiveCategory) {
         setActiveCategory(formValue.category);
       }
     }
+    setAdditionalData(null);
     setIsOpen(false);
   };
 
@@ -97,9 +112,10 @@ export function ActivityFromModel({
 
   const isSubmitting = isCreating || isUpdating;
 
-  const handleSelect = (selectedData: PlaceAutocompleteResult) => {
+  const handleSelect = async (selectedData: PlaceAutocompleteResult) => {
     const { structured_formatting } = selectedData;
 
+    //Active Form
     const SelectedName =
       structured_formatting?.main_text || selectedData.description;
     setName(SelectedName);
@@ -107,6 +123,23 @@ export function ActivityFromModel({
     setLocation(structured_formatting?.secondary_text || "no location");
     setIsTyped(false);
     setSuggestions([]);
+
+    //Set Additional Data
+    try {
+      const res = await getPlaceDetails(selectedData?.place_id);
+      if (res) {
+        const { lat, lng } = res;
+        setAdditionalData({
+          place_id: selectedData.place_id,
+          lat,
+          lng,
+        });
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -176,6 +209,7 @@ export function ActivityFromModel({
                 onChange={(e) => {
                   setName(e.target.value);
                   setIsTyped(true);
+                  setAdditionalData(null);
                 }}
                 onBlur={() => {
                   setTimeout(() => setSuggestions([]), 100);

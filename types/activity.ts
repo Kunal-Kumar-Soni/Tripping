@@ -7,19 +7,16 @@ export interface Activity {
   description?: string;
   duration?: number;
   id: number;
+  lat?: number;
+  lng?: number;
   location: string;
   name: string;
+  place_id?: string;
   updated_at: string;
   user_id: string;
 }
 
-export type CreateActivity = Omit<
+export type CreateActivity = Pick<
   Activity,
-  | "cost"
-  | "created_at"
-  | "description"
-  | "duration"
-  | "id"
-  | "updated_at"
-  | "user_id"
+  "category" | "lat" | "lng" | "location" | "name" | "place_id"
 >;

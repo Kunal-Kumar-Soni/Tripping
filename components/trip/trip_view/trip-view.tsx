@@ -103,9 +103,10 @@ const TripView = () => {
     // Drag Timeline → Activity Panel
     if (dragType === "timeline" && over.id === "activity-drop") {
       setMutationType("create");
-      const { id, title, location_name, type } = activity;
+      const { id, title, location_name, type, ...rest } = activity;
 
       const payload: CreateActivity = {
+        ...rest,
         name: title,
         location: location_name,
         category: type,
@@ -115,7 +116,7 @@ const TripView = () => {
       return;
     }
 
-    // Activity → Activity Panel (do nothing)
+    // Drag Activity → Activity Panel (do nothing)
     if (dragType === "activity" && over.id === "activity-drop") {
       return;
     }
@@ -131,7 +132,6 @@ const TripView = () => {
 
       let finalHour = hourNumber;
 
-      // --- NEW BOUNDARY CHECK ---
       if (finalHour + duration > 24) {
         finalHour = 24 - duration;
       }
@@ -178,6 +178,7 @@ const TripView = () => {
 
       const { id, created_at, updated_at, user_id, ...rest } = activity;
       const payload = {
+        ...rest,
         location_name: rest.location,
         type: rest.category,
         title: rest.name,
