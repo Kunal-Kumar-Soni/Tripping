@@ -1,5 +1,5 @@
 "use server";
-import { Client } from "@googlemaps/google-maps-services-js";
+import { Client, TravelMode } from "@googlemaps/google-maps-services-js";
 
 const client = new Client();
 
@@ -33,6 +33,38 @@ export const getPlaceDetails = async (placeId: string) => {
     return {
       lat: data?.lat,
       lng: data?.lng,
+    };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+};
+
+export const getDistance = async (origins: string, destinations: string) => {
+  try {
+    const [driving, walking] = await Promise.all([
+      client.distancematrix({
+        params: {
+          origins: [origins],
+          destinations: [destinations],
+          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+          mode: TravelMode.driving,
+        },
+      }),
+      client.distancematrix({
+        params: {
+          origins: [origins],
+          destinations: [destinations],
+          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+          mode: TravelMode.walking,
+        },
+      }),
+    ]);
+
+    return {
+      driving: driving.data.rows[0].elements[0],
+      walking: walking.data.rows[0].elements[0],
     };
   } catch (error: unknown) {
     if (error instanceof Error) {

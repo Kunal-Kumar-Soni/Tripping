@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { BiSolidLandmark } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
-import { FaBan, FaCar, FaPlane, FaTrain } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
@@ -16,10 +15,13 @@ import {
 } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
 
+import { TransportModel } from "./transport-model";
+
 type TripViewCardProps = {
   activity: Plan;
   isDark: boolean;
   nextEvent?: Plan;
+  onOpenTransport: (current: Plan, next?: Plan) => void;
 };
 
 const ROW_HEIGHT = 100;
@@ -33,26 +35,17 @@ const IconsType: ActivityInfo[] = [
   { type: "activity", icon: MdHiking },
 ];
 
-type TransportType = "none" | "car" | "train" | "plane";
-type TransportInfo = { type: TransportType; icon: IconType };
-
-const transports: TransportInfo[] = [
-  { type: "none", icon: BsPlusLg },
-  { type: "car", icon: FaCar },
-  { type: "train", icon: FaTrain },
-  { type: "plane", icon: FaPlane },
-];
-
-const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
+const TripViewCard = ({
+  activity,
+  isDark,
+  nextEvent,
+  onOpenTransport,
+}: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
   const isUpdating = mutationType !== null;
 
   const [mouseResizeStyle, setMouseResizeStyle] = useState<boolean>(false);
-  const [openTransport, setOpenTransport] = useState(false);
-  const [selectTransport, setSelectTransport] = useState<TransportInfo>(
-    transports[0],
-  );
 
   const { setNodeRef, attributes, listeners, transform } = useDraggable({
     id: `timelineId-${activity.id}`,
@@ -140,26 +133,6 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
 
   const showBottomPlus = Boolean(nextEvent);
 
-  const handleOpenTransport = () => {
-    setOpenTransport((prev) => (prev ? false : true));
-  };
-
-  const handleSelectTransport = (
-    e: React.MouseEvent,
-    selectTransportType: TransportType,
-  ) => {
-    e.stopPropagation();
-    const getTransportTypeInfo = transports.find(
-      (item) => item.type === selectTransportType,
-    );
-    setSelectTransport(
-      getTransportTypeInfo ? getTransportTypeInfo : transports[0],
-    );
-    setOpenTransport(false);
-  };
-
-  const SelectedTransportIcon = selectTransport.icon;
-
   useEffect(() => {
     if (mouseResizeStyle) {
       document.body.style.cursor = "ns-resize";
@@ -211,47 +184,15 @@ const TripViewCard = ({ activity, isDark, nextEvent }: TripViewCardProps) => {
       {showBottomPlus && (
         <div
           className={`absolute -bottom-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center`}
-          onClick={handleOpenTransport}
         >
-          {openTransport && !isUpdating ? (
-            <div
-              className={`mt-2 flex gap-3 rounded-full px-2 py-1 shadow-lg ${isDark ? "bg-black/80" : "bg-white/80"} `}
-            >
-              <button
-                onClick={(e) => handleSelectTransport(e, "car")}
-                className="cursor-pointer"
-              >
-                <FaCar />
-              </button>
-              <button
-                onClick={(e) => handleSelectTransport(e, "train")}
-                className="cursor-pointer"
-              >
-                <FaTrain />
-              </button>
-              <button
-                onClick={(e) => handleSelectTransport(e, "plane")}
-                className="cursor-pointer"
-              >
-                <FaPlane />
-              </button>
-              <button
-                onClick={(e) => handleSelectTransport(e, "none")}
-                className="cursor-pointer"
-              >
-                <FaBan />
-              </button>
-            </div>
-          ) : (
-            <button
-              disabled={isUpdating}
-              className={`cursor-pointer rounded-full p-1 ${
-                isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
-              }`}
-            >
-              <SelectedTransportIcon />
-            </button>
-          )}
+          <button
+            onClick={() => onOpenTransport(activity, nextEvent)}
+            className={`cursor-pointer rounded-full p-1 ${
+              isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
+            }`}
+          >
+            <BsPlusLg />
+          </button>
         </div>
       )}
     </div>

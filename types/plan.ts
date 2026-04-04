@@ -6,9 +6,12 @@ export interface Plan {
   end_date: string;
   end_time: string;
   id: number;
+  lat?: number;
+  lng?: number;
   location_name?: string;
   notes?: string;
   order_index?: number;
+  place_id?: string;
   section?: string;
   start_date: string;
   start_time: string;

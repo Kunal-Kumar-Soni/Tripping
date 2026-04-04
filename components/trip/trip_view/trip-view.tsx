@@ -23,10 +23,12 @@ import {
   getDays,
 } from "@/lib/plan-formate";
 import { CreateActivity } from "@/types/activity";
+import { Plan } from "@/types/plan";
 
 import { ActivityPage } from "../activity/activity-page";
 import MapView from "../map_view/map-view";
 import ZoomControl from "../zoom-control";
+import { TransportModel } from "./transport-model";
 import TripRow from "./trip-row";
 import TripViewCard from "./trip-view-card";
 
@@ -35,6 +37,12 @@ export type SelectViewType = "calendar" | "map";
 const TripView = () => {
   const [activeDuration, setActiveDuration] = useState<number>(1);
   const [selectView, setSelectView] = useState<SelectViewType>("calendar");
+
+  const [selectedPair, setSelectedPair] = useState<{
+    current: Plan;
+    next?: Plan;
+  } | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
 
   const { selectedTrip } = useTrip();
   const {
@@ -256,6 +264,10 @@ const TripView = () => {
                             activity={item}
                             isDark={isDark}
                             nextEvent={nextEvent}
+                            onOpenTransport={(current, next) => {
+                              setSelectedPair({ current, next });
+                              setOpen(true);
+                            }}
                           />
                         );
                       })}
@@ -274,6 +286,15 @@ const TripView = () => {
 
       <ActivityPage />
       <ZoomControl selectView={selectView} setSelectView={setSelectView} />
+
+      {selectedPair && (
+        <TransportModel
+          currentEvent={selectedPair.current}
+          nextEvent={selectedPair.next}
+          open={open}
+          setOpen={setOpen}
+        />
+      )}
     </DndContext>
   );
 };
