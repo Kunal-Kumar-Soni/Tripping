@@ -21,7 +21,7 @@ const TripRow = ({ children, isDark, date, hour, duration }: TripRowProps) => {
   return (
     <div
       ref={setNodeRef}
-      className={`relative h-25 border transition-all ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}`}
+      className={`relative h-25 transition-all ${isDark ? "bg-[#B2B2B2]" : "bg-[#E6E6E6]"}`}
     >
       {isOver && (
         <div

@@ -1,6 +1,8 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { BsBusFront } from "react-icons/bs";
 import { FaCar, FaMapPin, FaWalking } from "react-icons/fa";
+import { IoAirplane } from "react-icons/io5";
 
 import { DistanceMatrixRowElement } from "@googlemaps/google-maps-services-js";
 
@@ -18,15 +20,46 @@ import { Plan } from "@/types/plan";
 
 type TransportModelProps = {
   currentEvent: Plan;
-  nextEvent: Plan | undefined;
+  nextEvent?: Plan;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 type DistanceResult = {
   driving: DistanceMatrixRowElement;
-  walking: DistanceMatrixRowElement;
+  walking?: DistanceMatrixRowElement;
+  publicTransport?: DistanceMatrixRowElement;
+  flight: Omit<DistanceMatrixRowElement, "status"> & { status: string };
 };
+
+const TRANSPORT_MODES: Record<
+  string,
+  { label: string; icon: React.ReactNode }
+> = {
+  driving: {
+    label: "Driving",
+    icon: <FaCar />,
+  },
+  walking: {
+    label: "Walking",
+    icon: <FaWalking />,
+  },
+  publicTransport: {
+    label: "Transit",
+    icon: <BsBusFront />,
+  },
+  flight: {
+    label: "Flight",
+    icon: <IoAirplane />,
+  },
+};
+
+const TRANSPORT_KEYS = [
+  "driving",
+  "walking",
+  "publicTransport",
+  "flight",
+] as const;
 
 export function TransportModel({
   currentEvent,
@@ -62,7 +95,10 @@ export function TransportModel({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <form>
-        <DialogContent aria-describedby={undefined} className="sm:max-w-sm">
+        <DialogContent
+          aria-describedby={undefined}
+          className="w-[95vw] sm:max-w-3xl"
+        >
           <DialogHeader>
             <DialogTitle>Connection</DialogTitle>
           </DialogHeader>
@@ -71,32 +107,31 @@ export function TransportModel({
               <FaMapPin /> <span>{currentEvent.title}</span>
             </div>
             <div className="flex gap-1">
-              <div className="flex flex-1 items-center gap-3 rounded-md border px-4 py-2">
-                <FaCar />
-                <div className="w-full text-sm leading-tight">
-                  <h1 className="font-bold">Driving</h1>
-                  {isLoading ? (
-                    <Skeleton className="h-5" />
-                  ) : (
-                    <h2 className="text-muted-foreground">
-                      {distance?.driving?.duration?.text || "Not available"}
-                    </h2>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-1 items-center gap-3 rounded-md border px-4 py-2">
-                <FaWalking />
-                <div className="w-full text-sm leading-tight">
-                  <h1 className="font-bold">Walking</h1>
-                  {isLoading ? (
-                    <Skeleton className="h-5" />
-                  ) : (
-                    <h2 className="text-muted-foreground">
-                      {distance?.walking?.duration?.text || "Not available"}
-                    </h2>
-                  )}
-                </div>
-              </div>
+              {TRANSPORT_KEYS.map((key) => {
+                const mode = TRANSPORT_MODES[key];
+                const data = distance
+                  ? (distance as DistanceResult)[key as keyof DistanceResult]
+                  : null;
+
+                return (
+                  <div
+                    key={key}
+                    className="hover:bg-muted flex flex-1 cursor-pointer items-center gap-3 rounded-md border px-4 py-2 transition"
+                  >
+                    <div className="text-xl">{mode?.icon}</div>
+                    <div className="w-full text-sm leading-tight">
+                      <h1 className="font-bold">{mode.label}</h1>
+                      {isLoading ? (
+                        <Skeleton className="h-5" />
+                      ) : (
+                        <h2 className="text-muted-foreground">
+                          {data?.duration?.text || "Not available"}
+                        </h2>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             <div className="flex items-center gap-3">
               <FaMapPin /> <span>{nextEvent?.title}</span>

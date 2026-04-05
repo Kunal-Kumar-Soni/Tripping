@@ -1,5 +1,10 @@
 "use server";
-import { Client, TravelMode } from "@googlemaps/google-maps-services-js";
+import {
+  Client,
+  DistanceMatrixRowElement,
+  Status,
+  TravelMode,
+} from "@googlemaps/google-maps-services-js";
 
 const client = new Client();
 
@@ -43,7 +48,7 @@ export const getPlaceDetails = async (placeId: string) => {
 
 export const getDistance = async (origins: string, destinations: string) => {
   try {
-    const [driving, walking] = await Promise.all([
+    const [driving, walking, publicTransport] = await Promise.all([
       client.distancematrix({
         params: {
           origins: [origins],
@@ -60,11 +65,25 @@ export const getDistance = async (origins: string, destinations: string) => {
           mode: TravelMode.walking,
         },
       }),
+      client.distancematrix({
+        params: {
+          origins: [origins],
+          destinations: [destinations],
+          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+          mode: TravelMode.transit,
+        },
+      }),
     ]);
 
     return {
       driving: driving.data.rows[0].elements[0],
       walking: walking.data.rows[0].elements[0],
+      publicTransport: publicTransport.data.rows[0].elements[0],
+      flight: {
+        status: Status.ZERO_RESULTS,
+        duration: { text: "Not available", value: 0 },
+        distance: { text: "N/A", value: 0 },
+      } as DistanceMatrixRowElement,
     };
   } catch (error: unknown) {
     if (error instanceof Error) {
