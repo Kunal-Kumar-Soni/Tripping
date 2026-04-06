@@ -28,24 +28,3 @@ export type CreatePlan = Omit<
 >;
 
 export type DragType = "activity" | "timeline";
-
-export interface PlanTransport {
-  arrive_date: string;
-  arrive_time: string;
-  created_at: string;
-  depart_date: string;
-  depart_time: string;
-  from_item_id: number;
-  id: number;
-  mode: string;
-  notes: string;
-  order_index: number;
-  to_item_id: number;
-  trip_id: number;
-  updated_at: string;
-}
-
-export type CreatePlanTransport = Omit<
-  PlanTransport,
-  "created_at" | "id" | "trip_id" | "updated_at"
->;
