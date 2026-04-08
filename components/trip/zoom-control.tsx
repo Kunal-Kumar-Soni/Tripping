@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { BsCalendar3 } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import { CgMathMinus } from "react-icons/cg";
@@ -7,8 +7,6 @@ import { IoMapOutline } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { usePlan } from "@/hooks/usePlan";
-import { getDistance } from "@/lib/map";
 
 import { SelectViewType } from "./trip_view/trip-view";
 

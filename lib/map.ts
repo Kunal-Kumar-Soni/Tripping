@@ -78,7 +78,7 @@ export const getDistance = async (origins: string, destinations: string) => {
     return {
       driving: driving.data.rows[0].elements[0],
       walking: walking.data.rows[0].elements[0],
-      publicTransport: publicTransport.data.rows[0].elements[0],
+      transit: publicTransport.data.rows[0].elements[0],
       flight: {
         status: Status.ZERO_RESULTS,
         duration: { text: "Not available", value: 0 },

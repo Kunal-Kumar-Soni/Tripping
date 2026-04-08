@@ -1,4 +1,4 @@
-export type TransportType = "driving | walking | transit | flight";
+export type TransportType = "driving" | "walking" | "transit" | "flight";
 export interface Transport {
   arrive_date: string;
   arrive_time: string;
@@ -12,8 +12,8 @@ export interface Transport {
   from_item_id: number;
   id: number;
   mode: TransportType;
-  notes: string;
-  order_index: number;
+  notes?: string;
+  order_index?: number;
   to_item_id: number;
   trip_id: number;
   updated_at: string;

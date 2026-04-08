@@ -1,7 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BsBusFront } from "react-icons/bs";
-import { FaCar, FaMapPin, FaWalking } from "react-icons/fa";
+import { FaBusAlt, FaCar, FaMapPin, FaWalking } from "react-icons/fa";
 import { IoAirplane } from "react-icons/io5";
 
 import { DistanceMatrixRowElement } from "@googlemaps/google-maps-services-js";
@@ -28,7 +27,7 @@ type TransportModelProps = {
 type DistanceResult = {
   driving: DistanceMatrixRowElement;
   walking?: DistanceMatrixRowElement;
-  publicTransport?: DistanceMatrixRowElement;
+  transit?: DistanceMatrixRowElement;
   flight: Omit<DistanceMatrixRowElement, "status"> & { status: string };
 };
 
@@ -44,9 +43,9 @@ const TRANSPORT_MODES: Record<
     label: "Walking",
     icon: <FaWalking />,
   },
-  publicTransport: {
+  transit: {
     label: "Transit",
-    icon: <BsBusFront />,
+    icon: <FaBusAlt />,
   },
   flight: {
     label: "Flight",
@@ -54,12 +53,7 @@ const TRANSPORT_MODES: Record<
   },
 };
 
-const TRANSPORT_KEYS = [
-  "driving",
-  "walking",
-  "publicTransport",
-  "flight",
-] as const;
+const TRANSPORT_KEYS = ["driving", "walking", "transit", "flight"] as const;
 
 export function TransportModel({
   currentEvent,
@@ -80,7 +74,6 @@ export function TransportModel({
         const { lat: lat2, lng: lng2 } = nextEvent;
         const origins = `${lat1},${lng1}`;
         const destinations = `${lat2},${lng2}`;
-
         const res = await getDistance(origins, destinations);
         setDistance(res ?? null);
       } catch (error) {
@@ -106,7 +99,7 @@ export function TransportModel({
             <div className="flex items-center gap-3">
               <FaMapPin /> <span>{currentEvent.title}</span>
             </div>
-            <div className="flex gap-1">
+            <div className="flex justify-between gap-1">
               {TRANSPORT_KEYS.map((key) => {
                 const mode = TRANSPORT_MODES[key];
                 const data = distance
@@ -114,9 +107,11 @@ export function TransportModel({
                   : null;
 
                 return (
-                  <div
+                  <Button
+                    disabled={data?.status !== "OK"}
+                    variant={"outline"}
+                    className={`flex-1 cursor-pointer py-6 text-start`}
                     key={key}
-                    className="hover:bg-muted flex flex-1 cursor-pointer items-center gap-3 rounded-md border px-4 py-2 transition"
                   >
                     <div className="text-xl">{mode?.icon}</div>
                     <div className="w-full text-sm leading-tight">
@@ -129,7 +124,7 @@ export function TransportModel({
                         </h2>
                       )}
                     </div>
-                  </div>
+                  </Button>
                 );
               })}
             </div>
