@@ -14,14 +14,18 @@ import {
   formatHourToNumber,
 } from "@/lib/plan-formate";
 import { Plan } from "@/types/plan";
+import { Transport } from "@/types/transport";
 
-import { TransportModel } from "./transport-model";
+import { TRANSPORT_MODES_ICONS } from "./transport-model";
 
 type TripViewCardProps = {
   activity: Plan;
   isDark: boolean;
   nextEvent?: Plan;
   onOpenTransport: (current: Plan, next?: Plan) => void;
+  transport?: Transport;
+  showTopIcon: boolean;
+  topTransport?: Transport;
 };
 
 const ROW_HEIGHT = 100;
@@ -40,6 +44,9 @@ const TripViewCard = ({
   isDark,
   nextEvent,
   onOpenTransport,
+  transport,
+  showTopIcon,
+  topTransport,
 }: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
@@ -180,18 +187,34 @@ const TripViewCard = ({
         <div className="absolute right-2 bottom-0 left-2 h-0.5 bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)]" />
       )}
 
+      {showTopIcon && topTransport && (
+        <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center">
+          <div className="rounded-full bg-yellow-400 p-1 text-white">
+            {TRANSPORT_MODES_ICONS[topTransport.mode].icon}
+          </div>
+        </div>
+      )}
+
       {/* Bottom Button */}
       {showBottomPlus && (
         <div
-          className={`absolute -bottom-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center`}
+          className={`absolute -bottom-4 left-1/2 z-10 flex -translate-x-1/2 cursor-default flex-col items-center`}
         >
           <button
             onClick={() => onOpenTransport(activity, nextEvent)}
             className={`cursor-pointer rounded-full p-1 ${
-              isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"
+              transport
+                ? "bg-yellow-400 text-white"
+                : isDark
+                  ? "bg-black/80 text-white"
+                  : "bg-white/80 text-black"
             }`}
           >
-            <BsPlusLg />
+            {transport ? (
+              TRANSPORT_MODES_ICONS[transport?.mode].icon
+            ) : (
+              <BsPlusLg />
+            )}
           </button>
         </div>
       )}

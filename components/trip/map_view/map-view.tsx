@@ -6,10 +6,12 @@ import {
   DirectionsRenderer,
   DirectionsService,
   GoogleMap,
+  MarkerClustererF,
   MarkerF,
 } from "@react-google-maps/api";
 import { useJsApiLoader } from "@react-google-maps/api";
 
+import BlueLoader from "@/components/loader/blue-loader";
 import { usePlan } from "@/hooks/usePlan";
 import {
   getTravelMode,
@@ -24,10 +26,11 @@ import {
 } from "@/lib/mapView";
 
 const containerStyle = { width: "100%", height: "calc(100vh - 72px)" };
-
-export default function CleanMap() {
+const SHOW_DETAILS_ZOOM = 10;
+export default function MapView() {
   const { plans } = usePlan();
   const { transports } = useTransportWithCoords();
+  const [zoom, setZoom] = useState<number>(6);
 
   const [directionsList, setDirectionsList] = useState<
     google.maps.DirectionsResult[]
@@ -74,30 +77,42 @@ export default function CleanMap() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
 
-  if (!isLoaded) return <div>Loading Map...</div>;
+  if (!isLoaded) return <BlueLoader />;
 
   return (
     <div className="mt-18">
       <GoogleMap
         mapContainerStyle={containerStyle}
-        onLoad={onMapLoad}
+        onLoad={(map) => {
+          onMapLoad(map);
+
+          map.addListener("zoom_changed", () => {
+            const currentZoom = map.getZoom() || 6;
+            setZoom(currentZoom);
+          });
+        }}
         zoom={6}
         options={mapOptions}
       >
         {/*  Markers */}
-        {plans.map((plan) => {
-          return (
-            <MarkerF
-              key={plan.id}
-              position={{ lat: plan.lat!, lng: plan.lng! }}
-              title={plan.title}
-              icon={getActivityMarkerIcon(
-                plan.title || "",
-                ActivityIconPaths[plan.type],
-              )}
-            />
-          );
-        })}
+        <MarkerClustererF>
+          {(clusterer) => (
+            <>
+              {plans.map((plan) => (
+                <MarkerF
+                  key={plan.id}
+                  position={{ lat: plan.lat!, lng: plan.lng! }}
+                  title={plan.title}
+                  clusterer={clusterer} // ⭐ IMPORTANT
+                  icon={getActivityMarkerIcon(
+                    plan.title || "",
+                    ActivityIconPaths[plan.type],
+                  )}
+                />
+              ))}
+            </>
+          )}
+        </MarkerClustererF>
 
         {/* DirectionsService  */}
         {transports.map((t, index) => {
@@ -117,37 +132,41 @@ export default function CleanMap() {
         })}
 
         {/* DirectionsRenderer  */}
-        {directionsList.map((dir, index) => {
-          const routeLeg = dir.routes[0]?.legs[0];
-          if (!routeLeg) return null;
+        {zoom > SHOW_DETAILS_ZOOM && (
+          <>
+            {directionsList.map((dir, index) => {
+              const routeLeg = dir.routes[0]?.legs[0];
+              if (!routeLeg) return null;
 
-          const path = dir.routes[0].overview_path;
-          const midPoint = path[Math.floor(path.length / 2)];
+              const path = dir.routes[0].overview_path;
+              const midPoint = path[Math.floor(path.length / 2)];
 
-          return (
-            <div key={`route-${index}`}>
-              <DirectionsRenderer
-                directions={dir}
-                options={{
-                  suppressMarkers: true,
-                  preserveViewport: true,
-                  polylineOptions: {
-                    strokeColor: "#8B5CF6",
-                    strokeWeight: 5,
-                  },
-                }}
-              />
-              <MarkerF
-                position={midPoint}
-                icon={getTimeBadgeIcon(
-                  transports[index].duration_text || "No Time",
-                  ModeIconPath[transports[index].travelMode] ||
-                    ModeIconPath["driving"],
-                )}
-              />
-            </div>
-          );
-        })}
+              return (
+                <div key={`route-${index}`}>
+                  <DirectionsRenderer
+                    directions={dir}
+                    options={{
+                      suppressMarkers: true,
+                      preserveViewport: true,
+                      polylineOptions: {
+                        strokeColor: "#8B5CF6",
+                        strokeWeight: 5,
+                      },
+                    }}
+                  />
+                  <MarkerF
+                    position={midPoint}
+                    icon={getTimeBadgeIcon(
+                      transports[index].duration_text || "No Time",
+                      ModeIconPath[transports[index].travelMode] ||
+                        ModeIconPath["driving"],
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </>
+        )}
       </GoogleMap>
     </div>
   );

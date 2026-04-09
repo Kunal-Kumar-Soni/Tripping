@@ -13,6 +13,7 @@ import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 import { useActivity } from "@/hooks/useActivity";
 import { usePlan } from "@/hooks/usePlan";
+import { useTransport } from "@/hooks/useTransport";
 import { useTrip } from "@/hooks/useTrip";
 import { customCollisionStrategy } from "@/lib/custom-collision";
 import { tripFormate } from "@/lib/date";
@@ -43,6 +44,7 @@ const TripView = () => {
     next?: Plan;
   } | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [activeItemId, setActiveItemId] = useState<number | null>(null);
 
   const { selectedTrip } = useTrip();
   const {
@@ -53,6 +55,7 @@ const TripView = () => {
   } = usePlan();
 
   const { setMutationType } = useActivity();
+  const { transports } = useTransport();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -71,6 +74,7 @@ const TripView = () => {
     const { active } = event;
 
     const activity = active.data.current?.activity;
+    setActiveItemId(activity?.id ?? null);
 
     if (activity && activity.start_time && activity.end_time) {
       const start = formatHourToNumber(activity.start_time);
@@ -102,6 +106,7 @@ const TripView = () => {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
+    setActiveItemId(null);
 
     const dragType = active?.data?.current?.type;
     const activity = active?.data?.current?.activity;
@@ -258,17 +263,72 @@ const TripView = () => {
                         const nextEvent = arr[index + 1];
                         const isDark = hour <= 7 || hour >= 19;
 
+                        const transport = transports.find(
+                          (t) =>
+                            t.from_item_id === item.id &&
+                            t.to_item_id === nextEvent?.id,
+                        );
+
+                        const incomingTransport = transports.find(
+                          (t) =>
+                            arr.some((prev) => prev.id === t.from_item_id) &&
+                            t.to_item_id === item.id,
+                        );
+
+                        const showTopIcon = Boolean(incomingTransport);
+
+                        const ROW_HEIGHT = 100;
+
+                        const currentEnd = formatHourToNumber(item.end_time);
+
+                        const nextStart = nextEvent
+                          ? formatHourToNumber(nextEvent.start_time)
+                          : null;
+
+                        const gap =
+                          nextStart !== null
+                            ? (nextStart - currentEnd) * ROW_HEIGHT
+                            : 0;
+
                         return (
-                          <TripViewCard
-                            key={item.id}
-                            activity={item}
-                            isDark={isDark}
-                            nextEvent={nextEvent}
-                            onOpenTransport={(current, next) => {
-                              setSelectedPair({ current, next });
-                              setOpen(true);
-                            }}
-                          />
+                          <div key={item.id}>
+                            <TripViewCard
+                              activity={item}
+                              isDark={isDark}
+                              nextEvent={nextEvent}
+                              onOpenTransport={(current, next) => {
+                                setSelectedPair({ current, next });
+                                setOpen(true);
+                              }}
+                              transport={transport}
+                              showTopIcon={showTopIcon}
+                              topTransport={incomingTransport}
+                            />
+                            {transport &&
+                              nextEvent &&
+                              gap > 0 &&
+                              activeItemId !== item.id &&
+                              activeItemId !== nextEvent?.id && (
+                                <div
+                                  className="absolute left-1/2 -translate-x-1/2"
+                                  style={{
+                                    top: currentEnd * ROW_HEIGHT - 10,
+                                  }}
+                                >
+                                  <div
+                                    className="relative w-0.5 bg-yellow-400"
+                                    style={{
+                                      height: gap + 20,
+                                    }}
+                                  >
+                                    {/* CENTER BADGE */}
+                                    <div className="absolute top-1/2 left-1/2 w-20 -translate-x-1/2 -translate-y-1/2 rounded bg-yellow-400 px-2 py-1 text-center text-xs font-medium shadow">
+                                      {transport.duration_text}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                          </div>
                         );
                       })}
                   </div>

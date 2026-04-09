@@ -16,6 +16,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDistance } from "@/lib/map";
 import { Plan } from "@/types/plan";
+import { TransportType } from "@/types/transport";
 
 type TransportModelProps = {
   currentEvent: Plan;
@@ -31,7 +32,7 @@ type DistanceResult = {
   flight: Omit<DistanceMatrixRowElement, "status"> & { status: string };
 };
 
-const TRANSPORT_MODES: Record<
+export const TRANSPORT_MODES_ICONS: Record<
   string,
   { label: string; icon: React.ReactNode }
 > = {
@@ -85,6 +86,42 @@ export function TransportModel({
     fetchDistance();
   }, [currentEvent, nextEvent]);
 
+  const handleSelectTransport = async (
+    data:
+      | (Omit<DistanceMatrixRowElement, "status"> & {
+          status: string;
+        })
+      | null
+      | undefined,
+    mode: TransportType,
+  ) => {
+    if (!nextEvent || !data) return;
+
+    const payload = {
+      from_item_id: currentEvent.id,
+      to_item_id: nextEvent.id,
+
+      depart_date: currentEvent.end_date,
+      depart_time: currentEvent.end_time,
+
+      arrive_date: nextEvent?.start_date,
+      arrive_time: nextEvent?.start_time,
+
+      distance_meters: data?.distance.value || 0,
+      distance_text: data?.distance.text || "",
+
+      duration_seconds: data?.duration.value || 0,
+      duration_text: data?.duration.text || "",
+
+      mode: mode,
+    };
+
+    console.log(payload);
+  };
+
+  const handleDeleteTransport = () => {};
+  const handleUpdateTransport = () => {};
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <form>
@@ -101,13 +138,14 @@ export function TransportModel({
             </div>
             <div className="flex justify-between gap-1">
               {TRANSPORT_KEYS.map((key) => {
-                const mode = TRANSPORT_MODES[key];
+                const mode = TRANSPORT_MODES_ICONS[key];
                 const data = distance
                   ? (distance as DistanceResult)[key as keyof DistanceResult]
                   : null;
 
                 return (
                   <Button
+                    onClick={() => handleSelectTransport(data, key)}
                     disabled={data?.status !== "OK"}
                     variant={"outline"}
                     className={`flex-1 cursor-pointer py-6 text-start`}
