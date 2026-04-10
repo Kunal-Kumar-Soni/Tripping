@@ -31,7 +31,7 @@ A modern and interactive **trip planning application** that helps users organize
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**
   - Next.js
@@ -50,7 +50,7 @@ A modern and interactive **trip planning application** that helps users organize
 
 ---
 
-## 👨 My Contribution
+## My Contribution
 
 - Implemented complete **frontend UI and logic**
 - Integrated **backend APIs (Firebase-based)**
