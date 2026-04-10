@@ -34,6 +34,7 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
         {/* Minus / Plus */}
         <div className="flex gap-1">
           <Button
+            disabled
             size="icon-lg"
             variant="outline"
             className="cursor-pointer rounded-full"
@@ -41,6 +42,7 @@ const ZoomControl = ({ selectView, setSelectView }: ZoomControlProps) => {
             <CgMathMinus />
           </Button>
           <Button
+            disabled
             size="icon-lg"
             variant="outline"
             className="cursor-pointer rounded-full"

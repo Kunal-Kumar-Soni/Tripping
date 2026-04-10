@@ -1,14 +1,14 @@
 export type TransportType = "driving" | "walking" | "transit" | "flight";
 export interface Transport {
-  arrive_date: string;
-  arrive_time: string;
+  arrive_date?: string;
+  arrive_time?: string;
   created_at: string;
-  depart_date: string;
-  depart_time: string;
-  distance_meters: number;
-  distance_text: string;
-  duration_seconds: number;
-  duration_text: string;
+  depart_date?: string;
+  depart_time?: string;
+  distance_meters?: number;
+  distance_text?: string;
+  duration_seconds?: number;
+  duration_text?: string;
   from_item_id: number;
   id: number;
   mode: TransportType;

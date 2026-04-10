@@ -76,7 +76,9 @@ export const TransportProvider = ({ children }: { children: ReactNode }) => {
         transportId,
         transportData,
       );
-      setTransports((prev) => [...prev, res]);
+      setTransports((prev) =>
+        prev.map((t) => (t.id === transportId ? res : t)),
+      );
     } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
@@ -95,6 +97,7 @@ export const TransportProvider = ({ children }: { children: ReactNode }) => {
     } catch (error: unknown) {
       const message = getErrorMessage(error);
       setError(message);
+    } finally {
       setMutationType(null);
     }
   };

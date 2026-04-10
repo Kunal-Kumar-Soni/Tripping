@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { BiSolidLandmark } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
+import { GoAlertFill } from "react-icons/go";
 import { IconType } from "react-icons/lib";
-import { MdHiking, MdOutlineRestaurant } from "react-icons/md";
+import { MdError, MdHiking, MdOutlineRestaurant } from "react-icons/md";
 
 import { useDraggable } from "@dnd-kit/core";
 
@@ -26,6 +27,8 @@ type TripViewCardProps = {
   transport?: Transport;
   showTopIcon: boolean;
   topTransport?: Transport;
+  isError: boolean;
+  isIncomingError: boolean;
 };
 
 const ROW_HEIGHT = 100;
@@ -47,6 +50,8 @@ const TripViewCard = ({
   transport,
   showTopIcon,
   topTransport,
+  isError,
+  isIncomingError,
 }: TripViewCardProps) => {
   const [previewEndHour, setPreviewEndHour] = useState<number | null>(null);
   const { mutationType, handleUpdateSinglePlan } = usePlan();
@@ -156,7 +161,7 @@ const TripViewCard = ({
     <div
       style={{ ...style, height, top, bottom }}
       ref={setNodeRef}
-      className={`pointer-events-auto absolute right-2 left-2 rounded-lg shadow ${isUpdating ? "cursor-not-allowed opacity-50" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} ${isDark ? "bg-black/80 text-white" : "bg-white/80 text-black"}`}
+      className={`pointer-events-auto absolute right-2 left-2 z-30 rounded-lg shadow ${isUpdating ? "cursor-not-allowed opacity-50" : mouseResizeStyle ? "cursor-ns-resize" : "cursor-move"} ${isDark ? "bg-header text-white" : "bg-white/80 text-black"}`}
     >
       <div {...attributes} {...listeners} className={`h-full w-full px-4 py-2`}>
         <div className="flex items-center gap-3">
@@ -187,10 +192,19 @@ const TripViewCard = ({
         <div className="absolute right-2 bottom-0 left-2 h-0.5 bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)]" />
       )}
 
+      {/* Top Icon */}
       {showTopIcon && topTransport && (
-        <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center">
-          <div className="rounded-full bg-yellow-400 p-1 text-white">
-            {TRANSPORT_MODES_ICONS[topTransport.mode].icon}
+        <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 flex-col items-center">
+          <div
+            className={`rounded-full p-1 text-white ${
+              isIncomingError ? "bg-red-500" : "bg-purple-500"
+            }`}
+          >
+            {isIncomingError ? (
+              <GoAlertFill />
+            ) : (
+              TRANSPORT_MODES_ICONS[topTransport.mode].icon
+            )}
           </div>
         </div>
       )}
@@ -198,20 +212,26 @@ const TripViewCard = ({
       {/* Bottom Button */}
       {showBottomPlus && (
         <div
-          className={`absolute -bottom-4 left-1/2 z-10 flex -translate-x-1/2 cursor-default flex-col items-center`}
+          className={`absolute -bottom-4 left-1/2 flex -translate-x-1/2 cursor-default flex-col items-center`}
         >
           <button
             onClick={() => onOpenTransport(activity, nextEvent)}
             className={`cursor-pointer rounded-full p-1 ${
               transport
-                ? "bg-yellow-400 text-white"
+                ? isError
+                  ? "bg-red-500 text-white"
+                  : "bg-purple-500 text-white"
                 : isDark
-                  ? "bg-black/80 text-white"
+                  ? "bg-header text-white"
                   : "bg-white/80 text-black"
             }`}
           >
             {transport ? (
-              TRANSPORT_MODES_ICONS[transport?.mode].icon
+              isError ? (
+                <GoAlertFill />
+              ) : (
+                TRANSPORT_MODES_ICONS[transport?.mode].icon
+              )
             ) : (
               <BsPlusLg />
             )}

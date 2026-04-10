@@ -26,7 +26,7 @@ import {
 } from "@/lib/mapView";
 
 const containerStyle = { width: "100%", height: "calc(100vh - 72px)" };
-const SHOW_DETAILS_ZOOM = 10;
+const SHOW_DETAILS_ZOOM = 5;
 export default function MapView() {
   const { plans } = usePlan();
   const { transports } = useTransportWithCoords();

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   DndContext,
@@ -45,6 +45,7 @@ const TripView = () => {
   } | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [activeItemId, setActiveItemId] = useState<number | null>(null);
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
 
   const { selectedTrip } = useTrip();
   const {
@@ -55,7 +56,7 @@ const TripView = () => {
   } = usePlan();
 
   const { setMutationType } = useActivity();
-  const { transports } = useTransport();
+  const { transports, handleDeleteSingleTransport } = useTransport();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -64,6 +65,40 @@ const TripView = () => {
       },
     }),
   );
+
+  useEffect(() => {
+    if (!plans.length || !transports.length) return;
+
+    const sortedPlans = [...plans].sort(
+      (a, b) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime() ||
+        formatHourToNumber(a.start_time) - formatHourToNumber(b.start_time),
+    );
+
+    sortedPlans.forEach((current, index) => {
+      const next = sortedPlans[index + 1];
+
+      const transport = transports.find((t) => t.from_item_id === current.id);
+
+      if (!transport) return;
+
+      const isInvalid = transport.to_item_id !== next?.id;
+
+      const isDeleting = deletingIds.has(transport.id);
+
+      if (isInvalid && !isDeleting) {
+        setDeletingIds((prev) => new Set(prev).add(transport.id));
+
+        handleDeleteSingleTransport(transport.id).finally(() => {
+          setDeletingIds((prev) => {
+            const updated = new Set(prev);
+            updated.delete(transport.id);
+            return updated;
+          });
+        });
+      }
+    });
+  }, [plans, transports, deletingIds, handleDeleteSingleTransport]);
 
   if (!selectedTrip) return null;
 
@@ -205,6 +240,8 @@ const TripView = () => {
     }
   };
 
+  console.log(transports);
+
   return (
     <DndContext
       collisionDetection={customCollisionStrategy}
@@ -221,7 +258,7 @@ const TripView = () => {
             {dates.map((date) => (
               <div
                 key={date}
-                className="min-w-100 shrink-0 border-r bg-black/80 p-2 font-medium text-white"
+                className="bg-header z-50 min-w-100 shrink-0 border-r p-2 font-medium text-white"
               >
                 {tripFormate(date)}
               </div>
@@ -271,9 +308,31 @@ const TripView = () => {
 
                         const incomingTransport = transports.find(
                           (t) =>
+                            !deletingIds.has(t.id) &&
                             arr.some((prev) => prev.id === t.from_item_id) &&
                             t.to_item_id === item.id,
                         );
+
+                        const prevItem = arr[index - 1];
+
+                        const prevEnd = prevItem
+                          ? formatHourToNumber(prevItem.end_time)
+                          : null;
+
+                        const currentStart = formatHourToNumber(
+                          item.start_time,
+                        );
+
+                        const incomingGapSeconds =
+                          prevEnd !== null
+                            ? (currentStart - prevEnd) * 3600
+                            : 0;
+
+                        const incomingTransportSeconds =
+                          incomingTransport?.duration_seconds ?? 0;
+
+                        const isIncomingError =
+                          incomingTransportSeconds > incomingGapSeconds;
 
                         const showTopIcon = Boolean(incomingTransport);
 
@@ -290,6 +349,16 @@ const TripView = () => {
                             ? (nextStart - currentEnd) * ROW_HEIGHT
                             : 0;
 
+                        const gapSeconds =
+                          nextStart !== null
+                            ? (nextStart - currentEnd) * 3600
+                            : 0;
+
+                        const transportSeconds =
+                          transport?.duration_seconds ?? 0;
+
+                        const isError = transportSeconds > gapSeconds;
+
                         return (
                           <div key={item.id}>
                             <TripViewCard
@@ -303,6 +372,8 @@ const TripView = () => {
                               transport={transport}
                               showTopIcon={showTopIcon}
                               topTransport={incomingTransport}
+                              isError={isError}
+                              isIncomingError={isIncomingError}
                             />
                             {transport &&
                               nextEvent &&
@@ -310,20 +381,31 @@ const TripView = () => {
                               activeItemId !== item.id &&
                               activeItemId !== nextEvent?.id && (
                                 <div
-                                  className="absolute left-1/2 -translate-x-1/2"
+                                  onClick={() => {
+                                    setSelectedPair({
+                                      current: item,
+                                      next: nextEvent,
+                                    });
+                                    setOpen(true);
+                                  }}
+                                  className="pointer-events-auto absolute left-1/2 -translate-x-1/2 cursor-pointer"
                                   style={{
                                     top: currentEnd * ROW_HEIGHT - 10,
                                   }}
                                 >
                                   <div
-                                    className="relative w-0.5 bg-yellow-400"
+                                    className={`relative w-0.5 ${isError ? "bg-red-500 text-white" : "bg-purple-500 text-white"}`}
                                     style={{
                                       height: gap + 20,
                                     }}
                                   >
                                     {/* CENTER BADGE */}
-                                    <div className="absolute top-1/2 left-1/2 w-20 -translate-x-1/2 -translate-y-1/2 rounded bg-yellow-400 px-2 py-1 text-center text-xs font-medium shadow">
-                                      {transport.duration_text}
+                                    <div
+                                      className={`absolute top-1/2 left-1/2 w-30 -translate-x-1/2 -translate-y-1/2 rounded px-2 py-1 text-center text-xs font-medium shadow ${isError ? "bg-red-500 text-white" : "bg-purple-500 text-white"}`}
+                                    >
+                                      {isError
+                                        ? "Error"
+                                        : transport.duration_text}
                                     </div>
                                   </div>
                                 </div>

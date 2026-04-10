@@ -1,5 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaBusAlt, FaCar, FaMapPin, FaWalking } from "react-icons/fa";
 import { IoAirplane } from "react-icons/io5";
 
@@ -14,9 +15,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTransport } from "@/hooks/useTransport";
 import { getDistance } from "@/lib/map";
 import { Plan } from "@/types/plan";
-import { TransportType } from "@/types/transport";
+import { CreateTransport, Transport, TransportType } from "@/types/transport";
 
 type TransportModelProps = {
   currentEvent: Plan;
@@ -64,6 +66,16 @@ export function TransportModel({
 }: TransportModelProps) {
   const [distance, setDistance] = useState<DistanceResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedTransport, setSelectedTransport] =
+    useState<CreateTransport | null>(null);
+
+  const {
+    transports,
+    mutationType,
+    handleCreateSingleTransport,
+    handleUpdateSingleTransport,
+    handleDeleteSingleTransport,
+  } = useTransport();
 
   useEffect(() => {
     if (!currentEvent || !nextEvent) return;
@@ -71,10 +83,8 @@ export function TransportModel({
       setDistance(null);
       setIsLoading(true);
       try {
-        const { lat: lat1, lng: lng1 } = currentEvent;
-        const { lat: lat2, lng: lng2 } = nextEvent;
-        const origins = `${lat1},${lng1}`;
-        const destinations = `${lat2},${lng2}`;
+        const origins = `${currentEvent.lat},${currentEvent.lng}`;
+        const destinations = `${nextEvent.lat},${nextEvent.lng}`;
         const res = await getDistance(origins, destinations);
         setDistance(res ?? null);
       } catch (error) {
@@ -86,6 +96,21 @@ export function TransportModel({
     fetchDistance();
   }, [currentEvent, nextEvent]);
 
+  const existingTransport = transports.find(
+    (t) =>
+      t.from_item_id === currentEvent?.id && t.to_item_id === nextEvent?.id,
+  );
+
+  useEffect(() => {
+    if (!open) return;
+
+    if (existingTransport) {
+      setSelectedTransport(existingTransport);
+    } else {
+      setSelectedTransport(null);
+    }
+  }, [open, existingTransport]);
+
   const handleSelectTransport = async (
     data:
       | (Omit<DistanceMatrixRowElement, "status"> & {
@@ -95,17 +120,11 @@ export function TransportModel({
       | undefined,
     mode: TransportType,
   ) => {
-    if (!nextEvent || !data) return;
+    if (!currentEvent || !nextEvent || !data) return;
 
     const payload = {
       from_item_id: currentEvent.id,
       to_item_id: nextEvent.id,
-
-      depart_date: currentEvent.end_date,
-      depart_time: currentEvent.end_time,
-
-      arrive_date: nextEvent?.start_date,
-      arrive_time: nextEvent?.start_time,
 
       distance_meters: data?.distance.value || 0,
       distance_text: data?.distance.text || "",
@@ -116,11 +135,41 @@ export function TransportModel({
       mode: mode,
     };
 
-    console.log(payload);
+    setSelectedTransport(payload);
   };
 
-  const handleDeleteTransport = () => {};
-  const handleUpdateTransport = () => {};
+  const handleDeleteTransport = async () => {
+    if (!existingTransport) return;
+
+    await handleDeleteSingleTransport(existingTransport.id);
+    setOpen(false);
+  };
+  const handleUpdateTransport = async () => {
+    if (!selectedTransport) return;
+
+    const isSameTransport =
+      existingTransport &&
+      existingTransport.mode === selectedTransport.mode &&
+      existingTransport.duration_seconds ===
+        selectedTransport.duration_seconds &&
+      existingTransport.distance_meters === selectedTransport.distance_meters;
+
+    if (isSameTransport) return;
+
+    if (existingTransport) {
+      await handleUpdateSingleTransport(
+        existingTransport.id,
+        selectedTransport,
+      );
+    } else {
+      await handleCreateSingleTransport(selectedTransport);
+    }
+    setOpen(false);
+  };
+
+  const isCreating = mutationType === "create";
+  const isUpdating = mutationType === "update";
+  const isRemoving = mutationType === "delete";
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -148,7 +197,7 @@ export function TransportModel({
                     onClick={() => handleSelectTransport(data, key)}
                     disabled={data?.status !== "OK"}
                     variant={"outline"}
-                    className={`flex-1 cursor-pointer py-6 text-start`}
+                    className={`flex-1 cursor-pointer py-6 text-start ${selectedTransport?.mode === key ? "bg-muted" : ""}`}
                     key={key}
                   >
                     <div className="text-xl">{mode?.icon}</div>
@@ -172,12 +221,29 @@ export function TransportModel({
           </div>
 
           <DialogFooter className="flex">
-            <Button className="flex-1 rounded-full" variant="outline">
-              Remove
+            <Button
+              onClick={handleDeleteTransport}
+              disabled={isRemoving}
+              type="button"
+              className="flex-1 rounded-full"
+              variant="outline"
+            >
+              {isRemoving ? "Removing..." : "Remove"}
             </Button>
 
-            <Button className="flex-1 rounded-full" type="submit">
-              Update
+            <Button
+              onClick={handleUpdateTransport}
+              disabled={isCreating || isUpdating}
+              className="flex-1 rounded-full"
+              type="button"
+            >
+              {isCreating
+                ? "Creating..."
+                : isUpdating
+                  ? "Updating..."
+                  : existingTransport
+                    ? "Update"
+                    : "Create"}
             </Button>
           </DialogFooter>
         </DialogContent>

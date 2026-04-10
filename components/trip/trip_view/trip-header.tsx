@@ -20,7 +20,7 @@ const TripHeader = () => {
   return (
     <section className="fixed top-0 right-0 left-100 z-50">
       {/* Header */}
-      <header className="flex items-center justify-between bg-black/80 px-6 py-4 text-white shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)]">
+      <header className="bg-header flex items-center justify-between px-6 py-4 text-white shadow-[0_1px_0_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.3)]">
         {/* Left */}
         <div className="w-[40%]">
           <h1 className="text-2xl font-semibold tracking-tight">

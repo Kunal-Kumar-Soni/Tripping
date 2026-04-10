@@ -14,6 +14,7 @@ export const useTransportWithCoords = () => {
     const to = planMap.get(t.to_item_id);
 
     return {
+      id: t.id,
       fromLat: from?.lat,
       fromLng: from?.lng,
       toLat: to?.lat,
