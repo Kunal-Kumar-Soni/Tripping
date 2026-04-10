@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Preview
 
-## Getting Started
+<p align="center">
+  <img src="public/preview/calendar_view.png" width="400" />
+  <img src="public/preview/map_view.png" width="400" />
 
-First, run the development server:
+# Tripping App
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A modern and interactive **trip planning application** that helps users organize activities, manage timelines, and visualize routes on a map — all in a smooth drag-and-drop experience.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Drag & Drop Planning**
+  - Move activities between timeline and activity panel
+  - Smooth and interactive UI
 
-## Learn More
+- **Timeline Management**
+  - Plan your day hour-by-hour
+  - Automatic duration handling
 
-To learn more about Next.js, take a look at the following resources:
+- **Transport Integration**
+  - Add transport between activities
+  - Distance calculation between locations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Google Maps Integration**
+  - Route visualization
+  - Marker clustering
+  - Zoom-based rendering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend**
+  - Next.js
+  - TypeScript
+  - Tailwind CSS
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Libraries & Tools**
+  - dnd-kit
+  - Shadcn/Ui
+
+- **Backend (Integration)**
+  - firebase
+
+- **Maps**
+  - Google Maps API
+
+---
+
+## 👨 My Contribution
+
+- Implemented complete **frontend UI and logic**
+- Integrated **backend APIs (Firebase-based)**
+- Built **drag-and-drop system using dnd-kit**
+- Managed **state and optimized API calls**
+- Implemented **Google Maps routes and clustering**

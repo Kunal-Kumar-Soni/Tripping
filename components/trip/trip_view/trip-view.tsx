@@ -240,8 +240,6 @@ const TripView = () => {
     }
   };
 
-  console.log(transports);
-
   return (
     <DndContext
       collisionDetection={customCollisionStrategy}

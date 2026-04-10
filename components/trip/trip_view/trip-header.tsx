@@ -7,6 +7,7 @@ import Link from "next/link";
 import { differenceInDays } from "date-fns";
 
 import { useTrip } from "@/hooks/useTrip";
+import { getDays } from "@/lib/plan-formate";
 
 import { AvatarGroupCountExample } from "../../ui/avatar-group-count-example";
 import { Button } from "../../ui/button";
@@ -15,7 +16,7 @@ const TripHeader = () => {
   const { selectedTrip } = useTrip();
   if (!selectedTrip) return null;
   const durations =
-    differenceInDays(selectedTrip?.end_date, selectedTrip?.start_date) + 1;
+    getDays(selectedTrip?.start_date, selectedTrip?.end_date).length ?? 0;
 
   return (
     <section className="fixed top-0 right-0 left-100 z-50">
