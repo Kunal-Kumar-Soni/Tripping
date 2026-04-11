@@ -197,7 +197,7 @@ export function TransportModel({
                     onClick={() => handleSelectTransport(data, key)}
                     disabled={data?.status !== "OK"}
                     variant={"outline"}
-                    className={`flex-1 cursor-pointer py-6 text-start ${selectedTransport?.mode === key ? "bg-muted" : ""}`}
+                    className={`flex-1 cursor-pointer py-6 text-start ${selectedTransport?.mode === key ? "border border-black" : ""}`}
                     key={key}
                   >
                     <div className="text-xl">{mode?.icon}</div>

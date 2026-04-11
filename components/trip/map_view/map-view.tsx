@@ -52,23 +52,26 @@ export default function MapView() {
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {
-      if (plans.length > 0) {
-        const bounds = new window.google.maps.LatLngBounds();
-        plans.forEach((plan) => {
-          if (plan.lat && plan.lng) {
-            bounds.extend({ lat: plan.lat, lng: plan.lng });
-          }
-        });
-        map.fitBounds(bounds);
-        const listener = window.google.maps.event.addListener(
-          map,
-          "idle",
-          () => {
-            if (map.getZoom()! > 10) map.setZoom(10);
-            window.google.maps.event.removeListener(listener);
-          },
-        );
+      if (plans.length === 0) {
+        map.setCenter({ lat: 20, lng: 0 });
+        map.setZoom(2);
+        return;
       }
+
+      const bounds = new window.google.maps.LatLngBounds();
+
+      plans.forEach((plan) => {
+        if (plan.lat && plan.lng) {
+          bounds.extend({ lat: plan.lat, lng: plan.lng });
+        }
+      });
+
+      map.fitBounds(bounds);
+
+      const listener = window.google.maps.event.addListener(map, "idle", () => {
+        if (map.getZoom()! > 10) map.setZoom(10);
+        window.google.maps.event.removeListener(listener);
+      });
     },
     [plans],
   );

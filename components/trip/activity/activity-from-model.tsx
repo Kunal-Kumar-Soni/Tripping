@@ -7,6 +7,13 @@ import { useDebounce } from "use-debounce";
 
 import { Button } from "@/components/ui/button";
 import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -203,39 +210,44 @@ export function ActivityFromModel({
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
             <div className="relative col-span-2 grid w-full gap-3">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  setIsTyped(true);
-                  setAdditionalData(null);
-                }}
-                onBlur={() => {
-                  setTimeout(() => setSuggestions([]), 100);
-                }}
-                required
-                id="name"
-                name="name"
-                autoComplete="off"
-              />
+              <Command>
+                <Label htmlFor="name" className="mb-3">
+                  Name
+                </Label>
+                <CommandInput
+                  value={name}
+                  onValueChange={(value) => {
+                    setName(value);
+                    setIsTyped(true);
+                    setAdditionalData(null);
+                  }}
+                  onBlur={() => {
+                    setTimeout(() => setSuggestions([]), 100);
+                  }}
+                  required
+                  id="name"
+                  name="name"
+                  autoComplete="off"
+                />
 
-              {/* Suggestions Dropdown */}
-              {suggestions.length > 0 && (
-                <div className="bg-background absolute top-17 left-0 z-50 w-full rounded-md border shadow-md">
-                  {suggestions.map((suggestion) => (
-                    <div
-                      key={suggestion.place_id}
-                      onClick={() => {
-                        handleSelect(suggestion);
-                      }}
-                      className="hover:bg-muted cursor-pointer px-3 py-2 text-sm"
-                    >
-                      {suggestion.description}
-                    </div>
-                  ))}
-                </div>
-              )}
+                {/* Suggestions Dropdown */}
+                {suggestions.length > 0 && (
+                  <div className="bg-background absolute top-17 left-0 z-50 w-full rounded-md border shadow-md">
+                    <CommandList>
+                      <CommandGroup>
+                        {suggestions.map((suggestion) => (
+                          <CommandItem
+                            key={suggestion.place_id}
+                            onSelect={() => handleSelect(suggestion)}
+                          >
+                            {suggestion.description}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </div>
+                )}
+              </Command>
             </div>
 
             <div className="col-span-2 grid gap-3">
