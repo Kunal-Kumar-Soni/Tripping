@@ -41,7 +41,7 @@ const TripHeader = () => {
             <p className="font-semibold">${selectedTrip?.budget}</p>
           </div>
 
-          <AvatarGroupCountExample person={"4"} />
+          <AvatarGroupCountExample person={"1"} />
 
           <div className="flex gap-2">
             <Button

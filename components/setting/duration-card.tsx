@@ -4,7 +4,7 @@ import { differenceInDays } from "date-fns";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTrip } from "@/hooks/useTrip";
-import { indianFormat } from "@/lib/date";
+import { dateFormatter } from "@/lib/date";
 
 import { TripFormModel } from "../trip/trip-form-model";
 
@@ -49,14 +49,14 @@ const DurationCard = () => {
               <div>
                 <p className="text-muted-foreground text-sm">From</p>
                 <p className="= font-semibold">
-                  {indianFormat(selectedTrip?.start_date)}
+                  {dateFormatter(selectedTrip?.start_date)}
                 </p>
               </div>
 
               <div>
                 <p className="text-muted-foreground text-sm">To</p>
                 <p className="font-semibold">
-                  {indianFormat(selectedTrip?.end_date)}
+                  {dateFormatter(selectedTrip?.end_date)}
                 </p>
               </div>
             </div>

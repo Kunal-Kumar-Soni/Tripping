@@ -399,7 +399,7 @@ const TripView = () => {
                                   >
                                     {/* CENTER BADGE */}
                                     <div
-                                      className={`absolute top-1/2 left-1/2 w-30 -translate-x-1/2 -translate-y-1/2 rounded px-2 py-1 text-center text-xs font-medium shadow ${isError ? "bg-red-500 text-white" : "bg-purple-500 text-white"}`}
+                                      className={`absolute top-1/2 left-1/2 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full p-2 text-center text-xs font-medium shadow ${isError ? "bg-red-500 text-white" : "bg-purple-500 text-white"}`}
                                     >
                                       {isError
                                         ? "Error"

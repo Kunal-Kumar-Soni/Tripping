@@ -139,7 +139,10 @@ export function TransportModel({
   };
 
   const handleDeleteTransport = async () => {
-    if (!existingTransport) return;
+    if (!existingTransport) {
+      setOpen(false);
+      return;
+    }
 
     await handleDeleteSingleTransport(existingTransport.id);
     setOpen(false);
@@ -228,7 +231,11 @@ export function TransportModel({
               className="flex-1 rounded-full"
               variant="outline"
             >
-              {isRemoving ? "Removing..." : "Remove"}
+              {!existingTransport
+                ? "Cancel"
+                : isRemoving
+                  ? "Removing..."
+                  : "Remove"}
             </Button>
 
             <Button

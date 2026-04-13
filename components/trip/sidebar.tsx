@@ -102,7 +102,7 @@ const Sidebar = () => {
                 </p>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <h1 className="text-sm font-semibold">3</h1>
+                <h1 className="text-sm font-semibold">1</h1>
                 <HiUsers />
               </div>
             </div>

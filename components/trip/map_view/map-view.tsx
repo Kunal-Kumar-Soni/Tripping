@@ -138,8 +138,10 @@ export default function MapView() {
         {zoom > SHOW_DETAILS_ZOOM && (
           <>
             {directionsList.map((dir, index) => {
-              const routeLeg = dir.routes[0]?.legs[0];
-              if (!routeLeg) return null;
+              const route = dir?.routes?.[0];
+              const routeLeg = route?.legs?.[0];
+
+              if (!route || !routeLeg) return null;
 
               const path = dir.routes[0].overview_path;
               const midPoint = path[Math.floor(path.length / 2)];

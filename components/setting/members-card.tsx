@@ -26,29 +26,6 @@ const MembersCard = () => {
           <FiPlus />
         </Button>
       </div>
-
-      <div className="space-y-1">
-        {["John Doe", "Jane Doe", "Alex", "Michael"].map((member, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between rounded-xl border px-3 py-2"
-          >
-            <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarFallback className="bg-background border">
-                  <FaUser size={12} className="text-foreground" />
-                </AvatarFallback>
-              </Avatar>
-
-              <span className="text-sm">{member}</span>
-            </div>
-
-            <Button size="icon-sm" variant="link" className="cursor-pointer">
-              <X size={16} />
-            </Button>
-          </div>
-        ))}
-      </div>
     </section>
   );
 };
