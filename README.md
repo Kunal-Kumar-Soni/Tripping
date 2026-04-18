@@ -60,4 +60,4 @@ A modern and interactive **trip planning application** that helps users organize
 
 ## Author
 
-Built with dedication by **Kunal Kumar Soni**
+Built by **Kunal Kumar Soni**
