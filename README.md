@@ -50,14 +50,6 @@ A modern and interactive **trip planning application** that helps users organize
 
 ---
 
-## My Contribution
-
-- Implemented complete **frontend UI and logic**
-- Integrated **backend APIs (Firebase-based)**
-- Built **drag-and-drop system using dnd-kit**
-- Managed **state and optimized API calls**
-- Implemented **Google Maps routes and clustering**
-
 ## Author
 
 Built by **Kunal Kumar Soni**
