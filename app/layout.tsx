@@ -1,6 +1,7 @@
 import { Toaster } from "react-hot-toast";
 
 import type { Metadata } from "next";
+import Script from "next/script";
 
 import { AuthProvider } from "@/context/AuthContext";
 
@@ -23,6 +24,10 @@ export default function RootLayout({
       <body className="antialiased" suppressHydrationWarning>
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
+        <Script
+          src="https://t.contentsquare.net/uxa/8e85352ab85d9.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
