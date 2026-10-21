@@ -61,18 +61,6 @@ A modern, interactive **trip planning application** designed to help users organ
 
 ---
 
-## Why This Project?
-
-This project focuses on delivering a **real-world, user-friendly planning experience** by combining:
-
-- Interactive UI/UX
-- Efficient state management
-- Map-based visualization
-
-It reflects practical frontend engineering skills and attention to user experience.
-
----
-
 ## Author
 
 **Kunal Kumar Soni**
